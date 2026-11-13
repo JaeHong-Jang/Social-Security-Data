@@ -65,8 +65,10 @@ h2 small, h2 i { font-style: normal; font-family: var(--font); font-weight: 400;
 .huge { display: block; font-weight: 900; font-size: 240px; line-height: .82; letter-spacing: -.06em; margin: 12px 0 0 -8px; color: var(--text); text-decoration: none; }
 .huge small { font-size: 40px; letter-spacing: 0; font-weight: 700; margin-left: 8px; }
 .tally { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 22px; border-top: 2px solid var(--rule-ink); }
-.tally a { padding: 8px 0 0 18px; border-right: 1px solid var(--rule-hair); display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; min-height: 44px; }
-.tally a:first-child { padding-left: 0; } .tally a:last-child { border: 0; }
+.tally a { padding: 10px 0 0 20px; border-left: 1px solid var(--rule-hair); display: flex; flex-direction: column; align-items: flex-start; gap: 2px; color: var(--text); text-decoration: none; min-height: 44px; }
+.tally a:first-child { padding-left: 0; border-left: 0; }
+.tally .tlab { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
+.tally .t-긴급 .tlab { color: var(--siren-700); } .tally .t-주의 .tlab { color: var(--warn-700); } .tally .t-관찰 .tlab { color: var(--observe-700); }
 .tally .v { font-family: var(--font-serif); font-weight: 900; font-size: 52px; line-height: 1; }
 .demo { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; color: var(--text-subtle); text-decoration: none; min-height: 44px; }
 .demo b { color: var(--primary); }
@@ -75,11 +77,18 @@ h2 small, h2 i { font-style: normal; font-family: var(--font); font-weight: 400;
 .ill img { position: absolute; left: 22px; top: 38px; width: 396px; height: 297px; max-width: calc(100% - 24px); }
 .ill .tag { position: absolute; left: 20px; top: 14px; font-size: 15px; color: var(--text-subtle); }
 .scraps { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 20px; align-content: start; margin-top: 10px; }
-.scr { height: 128px; padding: 16px 18px; }
-.scr .v { display: block; font-size: 46px; font-weight: 900; line-height: 1.05; }
-.scr .v.t { font-size: 28px; padding-top: 10px; }
-.scr .l { font-size: 15px; color: var(--text-subtle); display: flex; gap: 6px; align-items: center; margin-top: 2px; }
-.scr .spark { position: absolute; right: 16px; top: 18px; width: 64px; height: 22px; color: var(--wood-700); }
+.scr { height: 140px; padding: 14px 18px 12px; display: flex; flex-direction: column; }
+.scr .l { font-size: 14px; font-weight: 700; letter-spacing: .06em; color: var(--text-subtle); padding-bottom: 6px; border-bottom: 1px solid var(--rule-hair); }
+.scr .v { display: flex; align-items: baseline; gap: 4px; font-size: 44px; font-weight: 900; line-height: 1; margin-top: 10px; }
+.scr .v small { font-family: var(--font); font-size: 16px; font-weight: 600; color: var(--text-subtle); letter-spacing: 0; }
+.scr .v.t { font-size: 30px; margin-top: 14px; }
+.scr .nt { margin-top: auto; font-size: 14px; color: var(--text-subtle); display: flex; align-items: flex-end; min-height: 20px; }
+.spark { display: inline-flex; align-items: flex-end; gap: 7px; }
+.sp-c { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
+.sp-b { width: 10px; background: var(--wood-700); border-radius: 1px; } .sp-b.z { background: var(--rule-hair); }
+.sp-d { font-size: 11px; line-height: 1; color: var(--text-subtle); }
+.scraps .pw, .scraps .pw:hover, .scraps .pw:focus-within { filter: drop-shadow(var(--paper-edge)) drop-shadow(0 6px 10px rgba(60, 40, 20, .10)); }
+.scraps .pw:hover, .scraps .pw:focus-within { filter: drop-shadow(var(--paper-edge)) drop-shadow(0 8px 12px rgba(60, 40, 20, .16)); }
 .strip-w { display: flex; align-items: flex-end; gap: 28px; border-top: 1px solid var(--rule-ink); margin-top: 10px; padding-top: 6px; }
 .strip-w .l { font-size: 15px; color: var(--text-subtle); letter-spacing: .1em; white-space: nowrap; padding-bottom: 22px; }
 .strip { list-style: none; display: flex; gap: 11px; align-items: flex-end; flex-wrap: wrap; margin: 0; padding: 0; }
@@ -287,7 +296,7 @@ a.kpi:hover { background: none; }
   .huge { font-size: 170px; margin-left: -6px; } .huge small { font-size: 30px; }
   .tally .v { font-size: 36px; } .tally a { padding-left: 12px; }
   .ill { height: 250px; transform: rotate(-.8deg); } .ill img { width: calc(100% - 28px); height: auto; left: 14px; top: 12px; }
-  .hero .scraps { grid-template-columns: 1fr 1fr; gap: 16px; } .scr { height: 92px; padding: 12px 14px; } .scr .v { font-size: 36px; } .scr .v.t { font-size: 22px; padding-top: 6px; }
+  .hero .scraps { grid-template-columns: 1fr 1fr; gap: 16px; } .scr { height: 120px; padding: 12px 14px 10px; } .scr .v { font-size: 34px; margin-top: 8px; } .scr .v.t { font-size: 22px; margin-top: 10px; } .scr .nt { font-size: 13px; }
   .strip-w { flex-direction: column; align-items: flex-start; gap: 4px; } .strip-w .l { padding-bottom: 0; } .strip { gap: 6px; }
   .notes { grid-template-columns: minmax(0, 1fr); gap: 18px; } .note { height: auto; padding-bottom: 14px; }
   .home-cols { grid-template-columns: minmax(0, 1fr); }
@@ -319,7 +328,7 @@ a.kpi:hover { background: none; }
   .subnav { margin-left: 0; width: 100%; }
 }
 @media print { .mast-wrap, .tabbar-m, .footer, .toasts { display: none; } }
-.note > span, .scr > span.v { display: block; }
+.note > span { display: block; }
 .note .n2, .note .n3 { display: flex; }
 .note .rk { display: block; }
 .sec-head { flex-wrap: wrap; gap: 0 var(--sp-3); } .sec-head h2.sec { white-space: nowrap; }
@@ -400,7 +409,7 @@ sup.mk:focus-visible { box-shadow: var(--focus-ring); }
   .hero { grid-template-columns: 360px 380px minmax(0, 1fr); gap: 32px; min-height: 320px; }
   .huge { font-size: 200px; } .huge small { font-size: 34px; }
   .ill { height: 300px; } .ill img { width: calc(100% - 40px); height: auto; max-width: none; }
-  .scr { height: 118px; } .scr .v { font-size: 42px; }
+  .scr { height: 132px; } .scr .v { font-size: 40px; }
   .layout { grid-template-columns: minmax(0, 1fr) 340px; }
   .file { border: 0; box-shadow: none; border-radius: 0; padding: 20px 0 28px; min-height: 560px; border-top: 1px solid var(--tab-edge); }
   .file::before, .hole { display: none; }

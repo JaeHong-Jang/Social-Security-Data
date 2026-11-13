@@ -154,6 +154,12 @@
       "accessCount": 1,
       "lastAccessed": 1794577608952,
       "type": "file"
+    },
+    {
+      "path": "src/Home.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1794579935435,
+      "type": "file"
     }
   ],
   "userDirectives": []

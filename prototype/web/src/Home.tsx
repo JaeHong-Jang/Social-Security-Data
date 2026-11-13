@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, CircleAlert, History, ScanText } from 'lucide-react'
 import { ACTION_LABEL, byPriority, decisionRecords, fmtTime, place, topItems, useData, weekRecords } from './data'
-import { EmptyState, HBar, LampIcon, LevelBadge, LevelMark, Skeleton, type BarRow } from './ui'
+import { EmptyState, HBar, LevelBadge, LevelMark, Skeleton, type BarRow } from './ui'
 import familyUrl from '../../../design/assets/family-papercut.svg'
 
 const ignoreCause = new Set(['해당없음', '미확인'])
@@ -19,12 +19,14 @@ function House({ level, urgent }: { level: '긴급' | '주의' | '관찰'; urgen
   )
 }
 
-function Spark({ v }: { v: number[] }) {
+function Spark({ v, days }: { v: number[]; days: string[] }) {
   const m = Math.max(1, ...v)
   return (
-    <svg className="spark" viewBox="0 0 70 24" role="img" aria-label={`최근 7일 처리 건수 ${v.join(', ')}`}>
-      {v.map((x, i) => <rect key={i} x={i * 10 + 1} y={24 - (x / m) * 22 - 1} width={8} height={(x / m) * 22 + 1} rx={1} fill="currentColor" opacity={x ? 1 : 0.3} />)}
-    </svg>
+    <span className="spark" role="img" aria-label={`최근 7일 처리 건수 ${v.join(', ')}`}>
+      {v.map((x, i) => (
+        <span key={i} className="sp-c"><span className={`sp-b${x ? '' : ' z'}`} style={{ height: `${x ? 4 + (x / m) * 18 : 2}px` }} /><span className="sp-d" aria-hidden="true">{days[i]}</span></span>
+      ))}
+    </span>
   )
 }
 
@@ -39,6 +41,10 @@ export default function Home() {
   const due = cases.filter((c) => (!c.decided || c.decision.status === '재확인 예약') && new Date(c.f2.next_check_due).getTime() <= ref + 7 * DAY)
   const recs = decisionRecords(cases, log)
   const week = weekRecords(recs, meta.reference_date)
+  const WD = '일월화수목금토'
+  const sparkDays = Array.from({ length: 7 }, (_, i) => WD[new Date(ref - (6 - i) * DAY).getDay()])
+  const dueBy = new Date(ref + 7 * DAY)
+  const safety = cases.filter((c) => !!c.action.safety_check).length
   const spark = Array.from({ length: 7 }, (_, i) => { const d = new Date(ref - (6 - i) * DAY).toISOString().slice(0, 10); return week.filter((r) => r.at.slice(0, 10) === d).length })
 
   const cause = new Map<string, number>()
@@ -64,18 +70,21 @@ export default function Home() {
           <div className="eyebrow">다시 찾아갈 가구</div>
           <Link to="/queue?status=미검토" className="huge num" aria-label={`재검토 대상 ${waiting.length}가구, 대기열 보기`}>{waiting.length}<small>가구</small></Link>
           <div className="tally">
-            <Link to="/queue?tab=긴급&status=미검토" aria-label={`긴급 ${byLevel('긴급')}`}><LevelMark level="긴급" /><span className="v num">{byLevel('긴급')}</span></Link>
-            <Link to="/queue?tab=주의&status=미검토" aria-label={`주의 ${byLevel('주의')}`}><LevelMark level="주의" /><span className="v num">{byLevel('주의')}</span></Link>
-            <Link to="/queue?tab=관찰&status=미검토" aria-label={`관찰 ${byLevel('관찰')}`}><LevelMark level="관찰" /><span className="v num">{byLevel('관찰')}</span></Link>
+            {(['긴급', '주의', '관찰'] as const).map((lv) => (
+              <Link key={lv} to={`/queue?tab=${lv}&status=미검토`} className={`t-${lv}`} aria-label={`${lv} ${byLevel(lv)}가구`}>
+                <span className="tlab"><LevelMark level={lv} size={16} />{lv}</span>
+                <span className="v num">{byLevel(lv)}</span>
+              </Link>
+            ))}
           </div>
           <Link className="demo" to="/analyze?auto=1"><ScanText size={18} aria-hidden="true" />메모 두 건으로 재검토 과정 보기 <b>데모 실행</b><ArrowRight size={16} aria-hidden="true" /></Link>
         </div>
         <div className="ill"><div className="paper cut1"><span className="tag num">미검토 {waiting.length} · 전체 {cases.length}</span><img src={familyUrl} alt="" /></div></div>
         <div className="scraps">
-          <Scrap i={0} to="/queue?due=1" v={due.length} l="재확인 도래" />
-          <Scrap i={1} to="/records?week=1" v={week.length} l="이번 주 처리" extra={<Spark v={spark} />} />
-          <Scrap i={2} to="/queue?tab=긴급&status=미검토" v={byLevel('긴급')} l="긴급" lamp />
-          <Scrap i={3} to="/queue?reason=반복 장벽" v={topCause} l="반복 장벽 1위" text />
+          <Scrap i={0} to="/queue?due=1" l="재확인 도래" v={due.length} u="가구" note={`${dueBy.getMonth() + 1}.${dueBy.getDate()}까지`} />
+          <Scrap i={1} to="/records?week=1" l="이번 주 처리" v={week.length} u="건" note={<Spark v={spark} days={sparkDays} />} />
+          <Scrap i={2} to="/queue?safety=1" l="안전 확인 경로" v={safety} u="가구" note="주변 경로로 확인" />
+          <Scrap i={3} to="/queue?reason=반복 장벽" l="반복 장벽 1위" v={topCause} text note={`${cause.get(topCause) ?? 0}가구 · 반복 ${repeated.get(topCause) ?? 0}가구`} />
         </div>
       </section>
 
@@ -131,13 +140,13 @@ export default function Home() {
   )
 }
 
-function Scrap({ i, to, v, l, lamp, text, extra }: { i: number; to: string; v: number | string; l: string; lamp?: boolean; text?: boolean; extra?: React.ReactNode }) {
+function Scrap({ i, to, l, v, u, text, note }: { i: number; to: string; l: string; v: number | string; u?: string; text?: boolean; note?: React.ReactNode }) {
   return (
     <div className="pw" style={{ transform: `rotate(${TILT[i]})` }}>
       <Link to={to} className={`paper ${CUT[(i + 1) % 3]} scr`}>
-        <span className={`v serif num${text ? ' t' : ''}`}>{v}</span>
-        <span className="l">{lamp && <LampIcon lit size={20} />}{l}</span>
-        {extra}
+        <span className="l">{l}</span>
+        <span className={`v serif num${text ? ' t' : ''}`}>{v}{u && <small>{u}</small>}</span>
+        {note && <span className="nt">{note}</span>}
       </Link>
     </div>
   )
