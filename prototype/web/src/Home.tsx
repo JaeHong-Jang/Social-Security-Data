@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, CircleAlert, History, ScanText } from 'lucide-react'
+import { ArrowRight, CircleAlert, ScanText } from 'lucide-react'
 import { ACTION_LABEL, byPriority, decisionRecords, fmtTime, place, topItems, useData, weekRecords } from './data'
 import { EmptyState, LevelBadge, LevelMark, Skeleton, type BarRow } from './ui'
 import familyUrl from '../../../design/assets/family-papercut.svg'
@@ -61,8 +61,8 @@ export default function Home() {
   const inLog = new Set(log.filter((e) => e.kind === 'decision').map((e) => e.caseId))
   const seed = recs.filter((r) => !inLog.has(r.caseId)).map((r) => ({ id: `s-${r.caseId}`, at: r.at, text: `${r.caseId} 판단 저장: ${ACTION_LABEL(r.status as never)}`, by: r.by }))
   const feed = [...log.map((e) => ({ id: e.id, at: e.at, text: e.text, by: e.by ?? '' })), ...seed].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 5)
-  const causeMax = Math.max(1, ...causeRows.map((r) => r.value))
-  const dayMax = Math.max(1, ...days.map((r) => r.value))
+  const scale = Math.max(5, ...causeRows.map((r) => r.value), ...days.map((r) => r.value))
+  const causeHouseholds = cases.filter((c) => c.household.memos.some((m) => !ignoreCause.has(m.f1.barrier_cause))).length
 
   return (
     <>
@@ -90,9 +90,9 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="strip-w">
-        <span className="l">전체 {cases.length}가구 · 점수</span>
-        <ul className="strip">
+      <div className="top">
+        <h2 className="sec">오늘 먼저 볼 가구 <small>점수 순 · <Link to="/queue" className="lnk">대기열 전체 보기</Link></small></h2>
+        <ul className="strip" aria-label={`전체 ${cases.length}가구 점수 순`}>
           {ranked.map((c) => (
             <li key={c.household.id}>
               <Link to={`/case/${c.household.id}`} className="hm" data-tip={`${c.household.id} · ${c.f2.total}점`} aria-label={`${c.household.id} ${c.f2.level} ${c.f2.total}점`}>
@@ -102,75 +102,71 @@ export default function Home() {
           ))}
         </ul>
       </div>
-
-      <div className="sec-head"><h2 className="sec">오늘 먼저 볼 가구 <i>점수 순</i></h2><Link to="/queue">대기열 전체 보기<ArrowRight size={16} aria-hidden="true" /></Link></div>
       {top.length === 0 ? <EmptyState title="미검토 가구 없음" /> : (
-        <ul className="notes">
+        <ul className="ncs">
           {top.map((c, n) => (
-            <li key={c.household.id} className="pw" style={{ transform: `rotate(${TILT[n % 4]})` }}>
-              <Link to={`/case/${c.household.id}`} className={`paper ${CUT[n % 3]} note`}>
-                <span className="clip" aria-hidden="true" />
+            <li key={c.household.id}>
+              <Link to={`/case/${c.household.id}`} className="nc">
                 <span className="rk serif">{n + 1}</span>
                 <span className="nid num">{c.household.id}</span>
                 <span className="nloc">{place(c)} · {c.household.household_type}</span>
-                <span className="n2"><span className="sc serif num">{c.f2.total}</span><span className="why">{topItems(c)[0]?.chip}</span></span>
-                <span className="n3"><LevelBadge level={c.f2.level} /><span className="act">{ACTION_LABEL(c.action.outreach)}</span></span>
+                <span className="n2"><b className="serif num">{c.f2.total}</b><span>{topItems(c)[0]?.chip}</span></span>
+                <span className="n3"><LevelBadge level={c.f2.level} /><span className="lnk">{ACTION_LABEL(c.action.outreach)}</span></span>
               </Link>
             </li>
           ))}
         </ul>
       )}
 
-      <div className="home-cols">
-        <section aria-labelledby="feed">
-          <div className="hc-head"><h2 className="sec" id="feed"><History size={18} aria-hidden="true" /> 최근 활동</h2><Link to="/records">기록 전체<ArrowRight size={14} aria-hidden="true" /></Link></div>
-          {feed.length === 0 ? <p className="muted">활동 없음</p> : (
-            <ol className="log">
+      <div className="modwrap">
+        <div className="modgrid">
+          <section className="mod" aria-labelledby="feed">
+            <div className="mh"><h3 id="feed" className="serif">최근 활동</h3><span className="c num">{feed.length}</span></div>
+            <ol className="rows">
               {feed.map((e) => {
                 const m = e.text.match(/^([AH]-\d+)\s+(.*)$/)
-                const [d, t] = fmtTime(e.at).split(' ')
+                const [d] = fmtTime(e.at).split(' ')
+                const rest = (m ? m[2] : e.text).replace(/^판단 저장: /, '').replace(/: /, ' · ')
                 return (
-                  <li key={e.id}>
-                    <time dateTime={e.at}><b className="num">{d.slice(5).replace('-', '.')}</b><span className="num">{t}</span></time>
-                    <span className="lg-t">{m ? <><Link to={`/case/${m[1]}`} className="num">{m[1]}</Link> {m[2].replace(/: /, ' · ')}</> : e.text}</span>
+                  <li key={e.id} className="rw lg">
+                    <span className="d num">{d.slice(5).replace('-', '.')}</span>
+                    {m ? <Link to={`/case/${m[1]}`} className="lnk num">{m[1]}</Link> : <span />}
+                    <span className="v" title={rest}>{rest}</span>
                   </li>
                 )
               })}
+              {Array.from({ length: Math.max(0, 5 - feed.length) }, (_, i) => <li key={`e${i}`} className="rw rw-e" aria-hidden="true" />)}
             </ol>
-          )}
-        </section>
-        <section aria-labelledby="c1">
-          <div className="hc-head"><h2 className="sec" id="c1">장벽 원인</h2><span className="lg-key"><i className="k-rep" />반복 <i className="k-one" />1회</span></div>
-          {causeRows.length === 0 ? <p className="muted">없음</p> : (
-            <ul className="tallyrows" aria-label="장벽 원인별 가구 수">
-              {causeRows.map((r) => {
-                const rep = repeated.get(r.label) ?? 0
-                return (
-                  <li key={r.label} aria-label={`${r.label} ${r.value}가구, 반복 ${rep}가구`}>
-                    <span className="tr-l">{r.label}</span>
-                    <span className="tr-bar" aria-hidden="true">
-                      <span className="seg rep" style={{ width: `${(rep / causeMax) * 100}%` }} />
-                      <span className="seg one" style={{ width: `${((r.value - rep) / causeMax) * 100}%` }} />
-                    </span>
-                    <span className="tr-v serif num">{r.value}<small>가구</small></span>
-                  </li>
-                )
-              })}
+            <div className="mf"><Link to="/records" className="lnk">기록 전체</Link></div>
+          </section>
+          <section className="mod" aria-labelledby="c1">
+            <div className="mh"><h3 id="c1" className="serif">장벽 원인</h3><span className="c num">{causeHouseholds}가구</span></div>
+            <ul className="rows" aria-label="장벽 원인별 가구 수">
+              {causeRows.slice(0, 5).map((r) => (
+                <li key={r.label} className="rw br" aria-label={`${r.label} ${r.value}가구${repeated.get(r.label) ? `, 반복 ${repeated.get(r.label)}가구` : ''}`}>
+                  <span className="lb">{r.label}{repeated.get(r.label) ? <em>반복</em> : null}</span>
+                  <span className="trk" aria-hidden="true"><i style={{ width: `${(r.value / scale) * 100}%` }} /></span>
+                  <b className="num">{r.value}</b>
+                </li>
+              ))}
+              {Array.from({ length: Math.max(0, 5 - causeRows.length) }, (_, i) => <li key={`e${i}`} className="rw rw-e" aria-hidden="true" />)}
             </ul>
-          )}
-        </section>
-        <section aria-labelledby="c3">
-          <div className="hc-head"><h2 className="sec" id="c3">종결 후 경과</h2><span className="muted sm">전체 {cases.length}가구</span></div>
-          <ul className="histo" aria-label="종결 후 경과일별 가구 수">
-            {days.map((r) => (
-              <li key={r.label} aria-label={`${r.label} ${r.value}가구`}>
-                <span className="h-v serif num">{r.value}</span>
-                <span className="h-b" style={{ height: `${Math.max(3, (r.value / dayMax) * 116)}px` }} aria-hidden="true" />
-                <span className="h-l">{r.label.replace('일 이내', '일↓').replace('일 이상', '일↑')}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+            <div className="mf"><Link to="/data" className="lnk">근거 보기</Link></div>
+          </section>
+          <section className="mod" aria-labelledby="c3">
+            <div className="mh"><h3 id="c3" className="serif">종결 후 경과</h3><span className="c num">{cases.length}가구</span></div>
+            <ul className="rows" aria-label="종결 후 경과일별 가구 수">
+              {days.map((r) => (
+                <li key={r.label} className="rw br" aria-label={`${r.label} ${r.value}가구`}>
+                  <span className="lb">{r.label}</span>
+                  <span className="trk" aria-hidden="true"><i style={{ width: `${(r.value / scale) * 100}%` }} /></span>
+                  <b className="num">{r.value}</b>
+                </li>
+              ))}
+            </ul>
+            <div className="mf"><Link to="/queue" className="lnk">대기열에서 보기</Link></div>
+          </section>
+        </div>
       </div>
     </>
   )

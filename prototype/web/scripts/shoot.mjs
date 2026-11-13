@@ -1,9 +1,9 @@
 // 사용법: npm run build && npm run preview -- --port 4173 --strictPort &  →  node scripts/shoot.mjs
-// 모든 화면을 실제로 눌러 보며 스크린샷(screenshots/v7), 콘솔 에러, 가로 스크롤을 검사한다.
+// 모든 화면을 실제로 눌러 보며 스크린샷(screenshots/v8), 콘솔 에러, 가로 스크롤을 검사한다.
 import { chromium } from 'playwright'
 
 const base = process.env.BASE ?? 'http://localhost:4173/'
-const out = 'screenshots/v7'
+const out = 'screenshots/v8'
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM })
 let bad = 0
 const fail = (m) => { bad++; console.log('실패:', m) }
@@ -26,6 +26,29 @@ const noScroll = async (page, name, width) => {
   if (sw > width) fail(`가로 스크롤 ${name}@${width} scrollWidth=${sw}`)
 }
 const shot = (page, name) => page.screenshot({ path: `${out}/${name}.png`, fullPage: true })
+const BLUE = ['rgb(0, 90, 170)', 'rgb(0, 73, 138)', 'rgb(232, 240, 248)']
+const blueHits = []
+/** 화면에 보이는 모든 요소의 color/background/border/outline/밑줄/svg 색 중 파랑(--primary 계열)을 찾는다. 도장(.stamp)과 포커스 링(box-shadow)은 제외. */
+async function blueAudit(page, tag) {
+  const hits = await page.evaluate((BLUE) => {
+    const out = []
+    for (const e of document.querySelectorAll('body *')) {
+      const r = e.getBoundingClientRect()
+      if (!r.width || !r.height) continue
+      const cs = getComputedStyle(e)
+      if (cs.visibility === 'hidden' || cs.display === 'none') continue
+      if (e.closest('.stamp') || e.closest('.sr-only')) continue
+      const props = { color: cs.color, background: cs.backgroundColor }
+      for (const side of ['Top', 'Right', 'Bottom', 'Left']) if (parseFloat(cs[`border${side}Width`]) > 0 && cs[`border${side}Style`] !== 'none') props[`border${side}`] = cs[`border${side}Color`]
+      if (parseFloat(cs.outlineWidth) > 0 && cs.outlineStyle !== 'none') props.outline = cs.outlineColor
+      if (cs.textDecorationLine.includes('underline')) props.underline = cs.textDecorationColor
+      if (e instanceof SVGElement) { props.fill = cs.fill; props.stroke = cs.stroke }
+      for (const [k, v] of Object.entries(props)) if (BLUE.includes(v)) out.push(`${e.tagName.toLowerCase()}.${String(e.className?.baseVal ?? e.className).split(' ')[0]} ${k}=${v}`)
+    }
+    return out
+  }, BLUE)
+  hits.forEach((h) => blueHits.push(`${tag}: ${h}`))
+}
 const ROUTES = ['#/', '#/queue', '#/case/H-0412', '#/case/H-0412/reguide', '#/analyze', '#/records', '#/data', '#/rules']
 
 // ---------- 1440: 모든 화면 클릭 ----------
@@ -48,7 +71,7 @@ await session(1440, async (page) => {
   // 홈 hover: 큰 숫자·카운트·타일·집·쪽지는 파랑으로 바뀌지 않는다
   await go(page, '#/')
   const BLUE = ['rgb(0, 90, 170)', 'rgb(0, 73, 138)']
-  const targets = [['큰 숫자', 'a.huge'], ['레벨 카운트', '.tally a .v'], ['KPI 타일', '.scraps a.scr .v'], ['집 스트립', '.hm span'], ['쪽지 카드', '.note .nid']]
+  const targets = [['큰 숫자', 'a.huge'], ['레벨 카운트', '.tally a .v'], ['KPI 타일', '.scraps a.scr .v'], ['집 스트립', '.hm span'], ['쪽지 카드', '.nc .nid']]
   for (const [label, sel] of targets) {
     const el = page.locator(sel).first(); const host = sel.startsWith('.hm') ? page.locator('.hm').first() : (sel.startsWith('a.huge') ? el : el)
     await host.hover(); await page.waitForTimeout(120)
@@ -58,8 +81,9 @@ await session(1440, async (page) => {
   }
   // A1 KPI 숫자 = 도착한 목록 행 수
   const kp = [['재검토 대상', () => page.locator('a.huge'), (l) => l.innerText().then((t) => +t.replace(/\D/g, ''))],
-    ['긴급', () => page.locator('.scraps a.scr', { hasText: '긴급' }), (l) => l.locator('.v').innerText().then(Number)],
-    ['재확인 도래', () => page.locator('.scraps a.scr', { hasText: '재확인 도래' }), (l) => l.locator('.v').innerText().then(Number)]]
+    ['긴급', () => page.locator('.tally .t-긴급'), (l) => l.locator('.v').innerText().then(Number)],
+    ['안전 확인 경로', () => page.locator('.scraps a.scr', { hasText: '안전 확인' }), (l) => l.locator('.v').innerText().then((t) => +t.replace(/\D/g, ''))],
+    ['재확인 도래', () => page.locator('.scraps a.scr', { hasText: '재확인 도래' }), (l) => l.locator('.v').innerText().then((t) => +t.replace(/\D/g, ''))]]
   for (const [label, loc, val] of kp) {
     await go(page, '#/')
     const card = loc(); const n = await val(card)
@@ -86,7 +110,7 @@ await session(1440, async (page) => {
   ok(Math.max(...hts) <= 80, `B1 행 높이 ${Math.min(...hts)}–${Math.max(...hts)}px`)
   await go(page, '#/'); await shot(page, 'home-1440')
   // 홈 상위 카드 클릭 → 상세
-  await page.locator('.note').first().click()
+  await page.locator('.nc').first().click()
   await page.waitForURL(/#\/case\//)
   ok(true, '오늘 먼저 볼 가구 카드 클릭 → 상세')
 
@@ -135,18 +159,29 @@ await session(1440, async (page) => {
 
   // 상세
   await go(page, '#/case/H-0412')
-  await page.getByRole('button', { name: '해석 확인' }).first().click()
-  await page.getByRole('button', { name: '수정 필요' }).nth(1).click()
-  await page.locator('.fixrow').first().getByRole('button', { name: '장벽 원인' }).click()
-  ok(await page.locator('.rv.ok').count() >= 1 && await page.locator('.chip-f.on').count() >= 1, '해석 확인 / 수정 필요(항목 표시)')
+  await shot(page, 'detail-clean-1440')
+  await page.getByRole('button', { name: '이 회차 해석 확정' }).click()
+  ok(await page.getByRole('button', { name: '해석 확정됨' }).count() === 1, '이 회차 해석 확정 → 확정됨')
+  await page.getByRole('button', { name: /근거 전체/ }).click()
+  await page.getByRole('button', { name: '수정 필요' }).click()
+  await page.locator('.fixrow').getByRole('button', { name: '장벽 원인' }).click()
+  ok(await page.locator('.evrows > div').count() === 6 && await page.locator('.chip-f.on').count() === 1, '근거 전체: 6개 항목 + 수정 필요 칩')
+  // 회차 타임라인: 클릭·방향키
+  await page.locator('.tline .tr').first().click(); const t1 = await page.locator('.passage p').first().innerText()
+  await page.locator('.tline .tr').first().press('ArrowDown'); const sel2 = await page.locator('.tline .tr[aria-selected=true]').innerText()
+  ok(sel2.includes('2회차'), '회차 타임라인 방향키 이동')
+  await page.locator('.tline .tr').nth(2).click()
+  ok((await page.locator('.passage mark').count()) >= 1, '선택 회차에 장벽 인용 강조')
+  await page.locator('.radio.op').nth(1).click()
+  ok(await page.locator('.dec textarea').evaluate((e) => e === document.activeElement), '제안과 다른 판단 → 사유란 자동 열림+포커스')
+  await page.locator('.radio.op').first().click()
   await shot(page, 'detail-1440')
   await page.getByRole('button', { name: '판단 저장' }).click()
   ok(await page.locator('.toast').filter({ hasText: '판단을 저장' }).count() > 0, '판단 저장 → 토스트')
   { // A2 피드 중복 없음, A3 KST
     await go(page, '#/')
-    const feed = await page.locator('.feed li span').allInnerTexts()
-    const decFeed = feed.filter((t) => t.includes('판단 저장')); ok(new Set(decFeed).size === decFeed.length, `A2 활동 피드 중복 없음 (${decFeed.length}건)`); console.log(feed.join(' | '))
-    const t = await page.locator('.feed li small').first().innerText(); console.log('최근 활동 첫 시각:', t, '(현재 KST', new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 16), ')')
+    const feed = (await page.locator('.rw.lg').allInnerTexts()).map((t) => t.replace(/\s+/g, ' '))
+    const decFeed = feed.filter((t) => /심층상담|재방문|재확인|동행|안부|문자/.test(t)); ok(new Set(decFeed).size === decFeed.length, `A2 활동 피드 중복 없음 (${decFeed.length}건)`); console.log(feed.join(' | '))
     await go(page, '#/case/H-0412')
   }
   await page.getByRole('link', { name: /다음 가구/ }).click()
@@ -237,12 +272,24 @@ await session(1440, async (page) => {
   await go(page, '#/records')
   ok(await page.locator('table.rec tbody tr').count() <= 3, '데모 초기화 후 기록 초기 상태')
 
-  for (const r of ROUTES) { await go(page, r); await noScroll(page, r, 1440) }
+  for (const r of ROUTES) { await go(page, r); await noScroll(page, r, 1440); await blueAudit(page, `${r}@1440`) }
+  // 상태가 다른 화면도 감사: 대기열 시트·상세 탭·근거 펼침·분석 결과·데이터 탭·모바일 필터
+  await go(page, '#/queue'); await page.locator('tr.click').nth(1).locator('.c-reason').click(); await page.waitForSelector('.sheet'); await blueAudit(page, 'queue+sheet@1440'); await page.keyboard.press('Escape')
+  await go(page, '#/queue'); await page.locator('.filter-toggle').click(); await page.locator('.fchip').first().click(); await blueAudit(page, 'queue+filters@1440')
+  await go(page, '#/case/H-0412')
+  await page.getByRole('button', { name: /근거 전체/ }).click(); await page.getByRole('button', { name: '수정 필요' }).first().click(); await blueAudit(page, 'detail+evidence@1440')
+  await page.locator('.radio.op').nth(1).click(); await blueAudit(page, 'detail+reason@1440')
+  for (const t of ['점수', '조건 대조', '기록']) { await page.getByRole('tab', { name: t, exact: true }).click(); await blueAudit(page, `detail+${t}@1440`) }
+  await go(page, '#/analyze?auto=1'); await page.waitForSelector('text=분석 결과', { timeout: 30000 }); await blueAudit(page, 'analyze+result@1440')
+  await go(page, '#/data'); await page.getByRole('tab', { name: '생애주기 빈칸' }).click(); await blueAudit(page, 'data+tab@1440')
+  await go(page, '#/case/H-0412/reguide'); for (const l of await page.locator('.notice input[type=checkbox]').all()) await l.check(); await blueAudit(page, 'reguide+checked@1440')
+  ok(blueHits.length === 0, `파랑 감사(1440): 도장·포커스 외 파랑 ${blueHits.length}건 ${blueHits.slice(0, 8).join(' | ')}`)
 })
 
 // ---------- 390: 대기열·분석·셸 ----------
 await session(390, async (page) => {
-  for (const r of ROUTES) { await go(page, r); await noScroll(page, r, 390) }
+  for (const r of ROUTES) { await go(page, r); await noScroll(page, r, 390); await blueAudit(page, `${r}@390`) }
+  ok(blueHits.length === 0, `파랑 감사(390 포함): ${blueHits.length}건 ${blueHits.slice(0, 8).join(' | ')}`)
   await go(page, '#/')
   await shot(page, 'home-390')
   ok(await page.locator('.tabbar-m').isVisible(), '모바일 하단 탭바 표시')

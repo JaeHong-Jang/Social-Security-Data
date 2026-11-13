@@ -1,53 +1,49 @@
-import { Fragment, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, Ban, ChevronLeft, ChevronRight, CircleAlert, CircleCheck, CircleX, Repeat2, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Ban, ChevronLeft, ChevronRight, CircleAlert, CircleCheck, CircleX, ShieldCheck } from 'lucide-react'
 import {
-  ACTION_LABEL, OUTREACH, byPriority, confirmInterpretation, fmtTime, md, place, reviewKey, saveDecision, setReview, setReviewMany, shortReason, sourceLabel, topItems, useData,
-  type Case, type LogEntry, type Meta, type Outreach, type Review, type View,
+  ACTION_LABEL, OUTREACH, byPriority, confirmInterpretation, fmtTime, md, place, reviewKey, saveDecision, setReview, setReviewMany, shortReason, sourceLabel, useData,
+  type LogEntry, type Memo, type Meta, type Outreach, type Review, type View,
 } from './data'
-import { EmptyState, FairnessNote, Hint, LampIcon, LevelBadge, ScoreBar, Skeleton, Stamp, StatusTag, Tag, useToast } from './ui'
+import { EmptyState, FairnessNote, LampIcon, LevelBadge, ScoreBar, Skeleton, Stamp, StatusTag, Tag, useToast } from './ui'
 
-const FIELD_LABEL: Record<string, string> = {
-  work_status: '업무 상태', closure_type: '종결 유형', support_network: '도움 관계망',
-  barrier_cause: '장벽 원인',
-  'consent.신청': '신청 의사', 'consent.문자': '문자 연락 의사', 'consent.방문': '방문 연락 의사', 'consent.전화': '전화 연락 의사',
-}
-const fieldLabel = (f: string) => FIELD_LABEL[f] ?? (f.startsWith('isolation_signals.') ? `고립 징후(${f.slice(18)})` : f)
-const mark = (n: number) => String.fromCharCode(0x2460 + n) // ①②③…
-const bmark = (n: number) => String.fromCharCode(0x2776 + n) // ❶❷❸…
 const VISIT: Outreach[] = ['동행 신청 지원(재방문)', '심층상담(재방문)', '재방문']
+const IGN = new Set(['해당없음', '미확인'])
+const GROUPS = ['업무·종결', '장벽 원인', '연락 의사', '관계망·고립'] as const
 
-/** 메모 안의 강조 구간. 같은 구간을 가리키는 근거는 하나로 합친다. */
-interface Span { start: number; end: number; quote: string; labels: string[]; barrier?: number }
-function memoSpans(c: Case, mi: number): Span[] {
-  const m = c.household.memos[mi]
-  const map = new Map<string, Span>()
-  const add = (start: number, end: number, label: string, barrier?: number) => {
-    const k = `${start}-${end}`
-    const s = map.get(k) ?? { start, end, quote: m.text.slice(start, end), labels: [] }
-    if (!s.labels.includes(label)) s.labels.push(label)
-    if (barrier !== undefined) s.barrier = barrier
-    map.set(k, s)
+/** 문장 경계(오프셋). 마침표 뒤에 공백·끝이 올 때만 끊어 "10.29" 같은 숫자는 자르지 않는다. */
+function sentences(t: string) {
+  const out: { start: number; end: number }[] = []
+  let s = 0
+  const re = /[.!?。]+(?=\s|$)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(t))) {
+    const e = m.index + m[0].length
+    out.push({ start: s, end: e })
+    s = e
+    while (t[s] === ' ') s++
   }
-  m.f1.evidence.forEach((e) => add(e.start, e.end, fieldLabel(e.field)))
-  c.household.repeated_barrier?.quotes.forEach((q, n) => { if (q.memo_index === mi) add(q.start, q.end, '반복 장벽', n) })
-  c.f2.items.filter((it) => it.key !== 'B').forEach((it) => it.evidence.forEach((q) => {
-    const at = m.text.indexOf(q)
-    if (at >= 0) add(at, at + q.length, `점수 근거 ${it.key}`)
-  }))
-  return [...map.values()].sort((a, b) => a.start - b.start || b.end - a.end)
+  if (s < t.length) out.push({ start: s, end: t.length })
+  return out
 }
 
-function segments(text: string, sp: Span[]) {
-  const cuts = [...new Set([0, text.length, ...sp.flatMap((e) => [e.start, e.end])])].sort((a, b) => a - b)
-  return cuts.slice(0, -1).map((s, k) => {
-    const e = cuts[k + 1]
-    return {
-      text: text.slice(s, e),
-      ids: sp.flatMap((x, n) => (x.start <= s && e <= x.end ? [n] : [])),
-      ends: sp.flatMap((x, n) => (x.end === e ? [n] : [])),
-    }
+interface Note { k: string; v: string; strong?: boolean }
+/** 근거 오프셋이 시작하는 문장에 여백 주석을 붙인다(문자열 검색 없음). */
+function notesBySentence(m: Memo, sents: { start: number; end: number }[], labels: Record<string, string>) {
+  const out: Note[][] = sents.map(() => [])
+  const f = m.f1
+  m.f1.evidence.forEach((e) => {
+    const i = sents.findIndex((s) => e.start >= s.start && e.start < s.end)
+    if (i < 0) return
+    let n: Note | null = null
+    if (e.field === 'barrier_cause' && !IGN.has(f.barrier_cause)) n = { k: '장벽', v: f.barrier_cause, strong: true }
+    else if (e.field === 'closure_type' && f.closure_type) n = { k: '종결', v: labels[f.closure_type] ?? f.closure_type }
+    else if (e.field.startsWith('consent.')) { const x = e.field.slice(8) as '신청'; n = { k: x, v: f.consent[x] } }
+    else if (e.field === 'support_network' && !IGN.has(f.support_network)) n = { k: '관계망', v: f.support_network }
+    else if (e.field.startsWith('isolation_signals.')) n = { k: '고립', v: e.field.slice(18) }
+    if (n && !out[i].some((x) => x.k === n!.k && x.v === n!.v)) out[i].push(n)
   })
+  return out.map((a) => [...a].sort((x, y) => Number(!!y.strong) - Number(!!x.strong)))
 }
 
 export default function Detail() {
@@ -67,40 +63,87 @@ export default function Detail() {
 const TABS = [{ k: 'memos', l: '회차별 메모' }, { k: 'score', l: '점수' }, { k: 'cond', l: '조건 대조' }, { k: 'log', l: '기록' }] as const
 type TabKey = (typeof TABS)[number]['k']
 
-function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View; labels: Record<string, string>; meta: Meta; review: Record<string, Review>; log: LogEntry[]; prev: string | null; next: string | null; pos: string }) {
+function DetailBody({ c, labels, review, log, prev, next, pos }: { c: View; labels: Record<string, string>; meta: Meta; review: Record<string, Review>; log: LogEntry[]; prev: string | null; next: string | null; pos: string }) {
   const toast = useToast()
-  const [tab, setTab] = useState<TabKey>('memos')
-  const [fix, setFix] = useState<Record<number, boolean>>({})
   const h = c.household
   const urgent = c.f2.level === '긴급' && !c.decided
-  const [active, setActive] = useState<string | null>(null)
+  const [tab, setTab] = useState<TabKey>('memos')
+  const [sel, setSel] = useState(Math.max(0, h.memos.length - 1))
+  const [flash, setFlash] = useState<{ mi: number; start: number; end: number } | null>(null)
+  const [evOpen, setEvOpen] = useState(false)
+  const [fix, setFix] = useState<Record<number, boolean>>({})
+  const trRefs = useRef<(HTMLButtonElement | null)[]>([])
   const markRefs = useRef<Record<string, HTMLElement | null>>({})
-  const spans = h.memos.map((_, mi) => memoSpans(c, mi))
   const rb = h.repeated_barrier
   const B = c.f2.items.find((i) => i.key === 'B')
 
-  /** 인용 문장이 들어 있는 가장 최근 메모의 강조 구간 키 */
-  const locate = (quote: string) => {
-    for (let mi = spans.length - 1; mi >= 0; mi--) {
-      const n = spans[mi].findIndex((s) => s.quote === quote)
-      if (n >= 0) return `${mi}:${n}`
-    }
-    return null
+  const m = h.memos[sel]
+  const sents = sentences(m.text)
+  const notes = notesBySentence(m, sents, labels)
+  const barrier = !IGN.has(m.f1.barrier_cause)
+  /** 선택한 회차에서 강조할 구간: 장벽 근거만 */
+  const hl = [
+    ...m.f1.evidence.filter((e) => e.field === 'barrier_cause').map((e) => ({ start: e.start, end: e.end })),
+    ...(rb?.quotes.filter((q) => q.memo_index === sel).map((q) => ({ start: q.start, end: q.end })) ?? []),
+  ]
+  if (flash && flash.mi === sel) hl.push({ start: flash.start, end: flash.end })
+  const cuts = (s: { start: number; end: number }) => {
+    const pts = new Set([s.start, s.end])
+    hl.forEach((r) => { if (r.end > s.start && r.start < s.end) { pts.add(Math.max(r.start, s.start)); pts.add(Math.min(r.end, s.end)) } })
+    const a = [...pts].sort((x, y) => x - y)
+    return a.slice(0, -1).map((from, k) => {
+      const to = a[k + 1]
+      return { from, to, on: hl.some((r) => r.start <= from && to <= r.end), flash: !!flash && flash.mi === sel && flash.start <= from && to <= flash.end }
+    })
   }
-  const jump = (key: string | null) => {
-    if (!key) return
-    const go = () => { setActive(key); markRefs.current[key]?.scrollIntoView({ block: 'center' }) }
-    if (tab !== 'memos') { setTab('memos'); setTimeout(go, 60) } else go()
-  }
-  const spanKey = (mi: number, start: number, end: number) => `${mi}:${spans[mi].findIndex((s) => s.start === start && s.end === end)}`
 
-  const nMemo = new Set(rb?.quotes.map((q) => q.memo_index)).size
-  const tl = [
-    ...h.discoveries.map((d, n) => ({ k: `d${n}`, date: d.date.slice(5).replace('-', '.'), sort: d.date, label: `발굴 ${n + 1}`, cls: '', memo: n < h.memos.length ? n : undefined })),
-    ...h.post_closure_signals.map((sg) => ({ k: `s${sg.date}${sg.kind}`, date: sg.date.slice(5).replace('-', '.'), sort: sg.date, label: sg.kind, cls: 'sig', memo: undefined as number | undefined })),
-    { k: 'now', date: meta.reference_date.slice(5).replace('-', '.'), sort: meta.reference_date, label: '오늘', cls: 'now', memo: undefined as number | undefined },
-  ].sort((a, b) => a.sort.localeCompare(b.sort))
+  const selectMemo = (i: number, focusBtn = false) => { setSel(i); setFlash(null); if (focusBtn) setTimeout(() => trRefs.current[i]?.focus(), 0) }
+  const quotesOf = (i: number) => (rb?.quotes.filter((q) => q.memo_index === i) ?? [])
+  const goMemo = (i: number, q?: { start: number; end: number }) => {
+    setTab('memos'); setSel(i)
+    const qq = q ?? quotesOf(i)[0] ?? h.memos[i].f1.evidence.find((e) => e.field === 'barrier_cause')
+    if (qq) setFlash({ mi: i, start: qq.start, end: qq.end }); else setFlash(null)
+    setTimeout(() => document.querySelector('.passage mark.on, .passage')?.scrollIntoView({ block: 'center' }), 80)
+  }
+  const focusQuote = (quote: string) => {
+    for (let i = h.memos.length - 1; i >= 0; i--) {
+      const at = h.memos[i].text.indexOf(quote)
+      if (at >= 0) { goMemo(i, { start: at, end: at + quote.length }); return }
+    }
+  }
+  const locate = (quote: string) => h.memos.some((x) => x.text.includes(quote))
+
   const caseLog = [...log.filter((e) => e.caseId === h.id)].reverse()
+  const repMemos = [...new Set(rb?.quotes.map((q) => q.memo_index) ?? [])].sort((a, b) => a - b)
+
+  // 선택 회차 해석 검토
+  const gKey = (g: string) => reviewKey(h.id, sel, g)
+  const st = GROUPS.map((g) => review[gKey(g)])
+  const allOk = st.every((x) => x === 'approved')
+  const anyBad = st.some((x) => x === 'rejected')
+  const fixOpen = !!fix[sel] || anyBad
+  const confirmMemo = () => {
+    if (allOk) { setReviewMany(h.id, sel, [...GROUPS], null, ''); return }
+    setReviewMany(h.id, sel, [...GROUPS], 'approved', '해석 확인'); setFix({ ...fix, [sel]: false })
+    const others = h.memos.every((_, i) => i === sel || GROUPS.every((g) => review[reviewKey(h.id, i, g)] === 'approved'))
+    if (others) confirmInterpretation(h.id)
+    toast(`${sel + 1}회차 해석을 확인했습니다.`)
+  }
+  const evRows: [string, string, string[]][] = [
+    ['업무 상태', m.f1.work_status, m.f1.evidence.filter((e) => e.field === 'work_status').map((e) => e.quote)],
+    ['종결 유형', m.f1.closure_type ? labels[m.f1.closure_type] : '판단 못함', m.f1.evidence.filter((e) => e.field === 'closure_type').map((e) => e.quote)],
+    ['장벽 원인', m.f1.barrier_cause, m.f1.evidence.filter((e) => e.field === 'barrier_cause').map((e) => e.quote)],
+    ['연락 의사', (['신청', '문자', '방문'] as const).map((k) => `${k} ${m.f1.consent[k]}`).join(' · '), m.f1.evidence.filter((e) => e.field.startsWith('consent.')).map((e) => e.quote)],
+    ['도움 관계망', m.f1.support_network, m.f1.evidence.filter((e) => e.field === 'support_network').map((e) => e.quote)],
+    ['고립 징후', m.f1.isolation_signals.length ? m.f1.isolation_signals.join(' · ') : '없음', m.f1.evidence.filter((e) => e.field.startsWith('isolation_signals')).map((e) => e.quote)],
+  ]
+  const uniq = (a: string[]) => [...new Set(a)]
+  const copyText = async () => {
+    try { await navigator.clipboard.writeText(m.text) } catch { /* 복사 불가 */ }
+    toast(`${sel + 1}회차 원문을 복사했습니다.`)
+  }
+
+  useEffect(() => { markRefs.current = {} }, [sel])
 
   return (
     <>
@@ -119,7 +162,15 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
         <StatusTag c={c} />
         {c.f2.flags.map((f) => <Tag key={f} tone="warn" icon="help">{f}</Tag>)}
         {h.contact_refused && <Tag icon="ban">연락 거부 이력</Tag>}
-        <span className="sc"><b className="serif num">{c.f2.total}</b><small>/100</small></span>
+        <span className="tot"><span className="sc"><b className="serif num">{c.f2.total}</b><small>/100</small></span><button className="lnk-btn" onClick={() => setTab('score')}>점수 구성</button></span>
+      </div>
+
+      <div className="find" role="note" aria-label="반복 결론">
+        <span className="k">반복</span>
+        <h2>{rb ? rb.summary : B?.unknown ? '회차 메모 1건 — 반복 여부 미확인' : '반복되는 장벽 없음'}</h2>
+        {rb && (
+          <span className="j">{h.memos.length}회 중 {repMemos.length}회{repMemos.map((i) => <Fragment key={i}> · <button className="lnk-btn" onClick={() => goMemo(i)}>{i + 1}회차</button></Fragment>)}</span>
+        )}
       </div>
 
       <div className="layout">
@@ -134,189 +185,108 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
             ))}
           </div>
           <div className="file" role="tabpanel" id="file-panel" aria-labelledby={`itab-${tab}`}>
-            <i className="hole h1" aria-hidden="true" /><i className="hole h2" aria-hidden="true" /><i className="hole h3" aria-hidden="true" />
             {tab === 'memos' && (
-              <>
-        {c.action.safety_check && (
-          <section className="pane a-safety" aria-labelledby="h-safe">
-            <div className="card-head">
-              <h2 id="h-safe"><ShieldCheck size={22} aria-hidden="true" /> 안전 확인</h2>
-              <Tag tone="warn" icon="shield">본인 연락 별개</Tag>
-            </div>
-            <p>{c.action.safety_check.reason}</p>
-            <div className="safe-cols">
-              <div>
-                <h3>확인 경로</h3>
-                <ul className="channels">{c.action.safety_check.channels.map((ch) => <li key={ch}>{ch}</li>)}</ul>
-              </div>
-              <div>
-                <h3>근거</h3>
-                <ul className="triggers">
-                  {c.action.safety_check.triggers.map((t) => {
-                    const quote = t.startsWith('메모: ') ? t.slice(4) : null
-                    const key = quote ? locate(quote) : null
-                    return <li key={t}>{key
-                      ? <button className="srcbtn" onClick={() => jump(key)}><Tag icon="pencil">메모 근거</Tag>“{quote}”</button>
-                      : t}</li>
-                  })}
-                </ul>
-              </div>
-            </div>
-          </section>
-        )}
-
-        <section className="pane a-compare" aria-labelledby="h-compare">
-          <div className="card-head">
-            <h2 id="h-compare">회차별 메모 <Hint label="표시 설명">점선 밑줄 = 메모에서 읽은 내용(확인 전). 번호를 누르면 원문 구간으로 이동합니다.</Hint></h2>
-            <span className="head-actions">
-              {c.interpretationConfirmed && <Tag tone="done" icon="ok">담당자 확인</Tag>}
-              <button className="btn primary" disabled={c.interpretationConfirmed} onClick={() => confirmInterpretation(h.id)}>
-                <CircleCheck size={18} aria-hidden="true" />해석 확정
-              </button>
-            </span>
-          </div>
-
-          {rb ? (
-            <div className="callout" role="note" aria-label="회차 교차 발견">
-              <p className="callout-kicker"><Repeat2 size={18} aria-hidden="true" />반복 장벽: {rb.cause} ({nMemo}/{h.memos.length}회차)</p>
-              <p className="callout-main">{rb.summary}</p>
-              <ol className="bq">
-                {rb.quotes.map((q, n) => (
-                  <li key={n}>
-                    <button onClick={() => jump(spanKey(q.memo_index, q.start, q.end))}
-                      aria-label={`반복 장벽 근거 ${n + 1}, ${q.memo_index + 1}회차 메모 원문으로 이동`}>
-                      <span className="qn">{bmark(n)}</span><small>{q.memo_index + 1}회차 · {h.memos[q.memo_index].written_at}</small>
-                      <span className="q">“{q.quote}”</span>
-                    </button>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ) : (
-            <p className="callout none"><Repeat2 size={18} aria-hidden="true" />{B?.unknown ? '회차 메모가 1건뿐이라 반복 장벽 여부는 미확인입니다.' : '회차 메모 사이에 반복되는 장벽은 찾지 못했습니다.'}</p>
-          )}
-
-          <div className="memo-cols">
-            {h.memos.map((m, mi) => {
-              const sp = spans[mi]
-              return (
-                <article key={mi} className="memo-card" aria-label={`${mi + 1}회차 메모`}>
-                  <h3>{mi + 1}회차 <small>{m.written_at} · {m.consult_type}</small></h3>
-                  <p className="memo">
-                    {segments(m.text, sp).map((s, i) => (
-                      <Fragment key={i}>
-                        {s.ids.length ? (
-                          <mark
-                            className={`${s.ids.some((n) => `${mi}:${n}` === active) ? 'on' : ''}${s.ids.some((n) => sp[n].barrier !== undefined) ? ' barrier' : ''}`}
-                            ref={(el) => { if (el) s.ids.forEach((n) => { markRefs.current[`${mi}:${n}`] ??= el }) }}
-                            onMouseEnter={() => setActive(`${mi}:${s.ids[0]}`)} onMouseLeave={() => setActive(null)}
-                          >{s.text}</mark>
-                        ) : s.text}
-                        {s.ends.map((n) => (
-                          <sup key={n} className="mk" tabIndex={0} data-tip={`${sp[n].labels.join(' · ')}`} aria-label={`근거 ${n + 1}: ${sp[n].labels.join(', ')}`}>{mark(n)}{sp[n].barrier !== undefined && <b className="bm">{bmark(sp[n].barrier!)}</b>}</sup>
-                        ))}
-                      </Fragment>
-                    ))}
-                  </p>
-                  {(() => {
-                    const bc = m.f1.evidence.filter((e) => e.field === 'barrier_cause')
-                    const gs: { g: string; rows: [string, ReactNode][] }[] = [
-                      { g: '업무·종결', rows: [['업무 상태', m.f1.work_status], ['종결 유형', m.f1.closure_type ? labels[m.f1.closure_type] : '판단 못함']] },
-                      { g: '장벽 원인', rows: [['장벽 원인', <>{m.f1.barrier_cause}{bc.length > 0 && <span className="mk-in" title={bc.map((e) => `“${e.quote}”`).join(' ')}> ⓘ</span>}</>]] },
-                      { g: '연락 의사', rows: [['연락 의사', (['신청', '문자', '방문'] as const).map((k) => `${k} ${m.f1.consent[k]}`).join(' · ')]] },
-                      { g: '관계망·고립', rows: [['도움 관계망', m.f1.support_network], ['고립 징후', m.f1.isolation_signals.length ? m.f1.isolation_signals.join(' · ') : '없음']] },
-                    ]
-                    const st = gs.map((x) => review[reviewKey(h.id, mi, x.g)])
-                    const allOk = st.every((x) => x === 'approved')
-                    const anyBad = st.some((x) => x === 'rejected')
-                    const open = !!fix[mi] || anyBad
+              <div className="mainrow">
+                <ol className="tline" role="tablist" aria-orientation="vertical" aria-label="회차 선택" onKeyDown={(e) => {
+                  const f = trRefs.current.findIndex((b) => b === document.activeElement)
+                  const cur = f >= 0 ? f : sel
+                  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); selectMemo(Math.min(h.memos.length - 1, cur + 1), true) }
+                  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); selectMemo(Math.max(0, cur - 1), true) }
+                  if (e.key === 'Home') { e.preventDefault(); selectMemo(0, true) }
+                  if (e.key === 'End') { e.preventDefault(); selectMemo(h.memos.length - 1, true) }
+                }}>
+                  {h.memos.map((mm, i) => {
+                    const b = !IGN.has(mm.f1.barrier_cause)
                     return (
-                      <>
-                        <dl className="kv2">
-                          {gs.flatMap((x) => x.rows).map(([k, v]) => <div key={k}><dt>{k}</dt><dd className={allOk ? '' : 'derived'}>{v}</dd></div>)}
-                        </dl>
-                        <div className={`rv${allOk ? ' ok' : ''}${open ? ' bad' : ''}`} role="group" aria-label={`${mi + 1}회차 해석 검토`}>
-                          <button className="btn small" aria-pressed={allOk} onClick={() => {
-                            if (allOk) setReviewMany(h.id, mi, gs.map((x) => x.g), null, '')
-                            else { setReviewMany(h.id, mi, gs.map((x) => x.g), 'approved', '해석 확인'); setFix({ ...fix, [mi]: false }); toast(`${mi + 1}회차 해석을 확인했습니다.`) }
-                          }}><CircleCheck size={16} aria-hidden="true" />해석 확인</button>
-                          <button className="btn small" aria-pressed={open} aria-expanded={open} onClick={() => { if (open) { setFix({ ...fix, [mi]: false }); gs.forEach((x) => setReview(h.id, mi, x.g, null)) } else { setFix({ ...fix, [mi]: true }); if (allOk) setReviewMany(h.id, mi, gs.map((x) => x.g), null, '') } }}><CircleX size={16} aria-hidden="true" />수정 필요</button>
-                        </div>
-                        {open && (
-                          <div className="fixrow" role="group" aria-label={`${mi + 1}회차 수정할 항목`}>
-                            {gs.map((x, n) => {
-                              const on = st[n] === 'rejected'
-                              return <button key={x.g} className={`chip-f${on ? ' on' : ''}`} aria-pressed={on} onClick={() => { setReview(h.id, mi, x.g, on ? null : 'rejected'); if (!on) toast(`${mi + 1}회차 ${x.g} 수정 필요로 표시했습니다.`) }}>{x.g}</button>
-                            })}
-                          </div>
-                        )}
-                      </>
-                    )
-                  })()}
-                  {m.f1.consent_guard && (['신청', '문자', '방문', '전화'] as const).filter((k) => m.f1.consent[k] === '거부').map((k) => (
-                    <p key={k} className="check-line">
-                      <Tag tone="warn" icon="ban">거부 표현 감지(코드 규칙)</Tag>
-                      <span>{k} 거부{m.f1.evidence.filter((e) => e.field === `consent.${k}`).map((e) => <q key={e.start} className="bq-inline"> “{e.quote}”</q>)}</span>
-                    </p>
-                  ))}
-                  {m.f1.needs_check && !c.interpretationConfirmed && (
-                    <p className="check-line"><Tag tone="warn" icon="help">확인 필요</Tag><span>{m.f1.needs_check_reason}</span></p>
-                  )}
-                </article>
-              )
-            })}
-          </div>
-        </section>
-                <section className="tl-wrap" aria-labelledby="h-time">
-                  <h2 id="h-time" className="sr-only">진행 경과</h2>
-                  <ol className="tl">
-                    {tl.map((e) => (
-                      <li key={e.k} className={`ev ${e.cls}`}>
-                        <i aria-hidden="true" />
-                        {e.memo !== undefined
-                          ? <button className="evb" onClick={() => document.querySelector(`[aria-label="${e.memo! + 1}회차 메모"]`)?.scrollIntoView({ block: 'center' })}><b className="num">{e.date}</b><span>{e.label}</span></button>
-                          : <span className="evb"><b className="num">{e.date}</b><span>{e.label}</span></span>}
+                      <li key={i} role="presentation">
+                        <button ref={(el) => { trRefs.current[i] = el }} role="tab" aria-selected={sel === i} tabIndex={sel === i ? 0 : -1} className={`tr${sel === i ? ' on' : ''}`} onClick={() => selectMemo(i)} aria-label={`${i + 1}회차 ${mm.written_at.slice(5).replace('-', '.')}${b ? ` 장벽 ${mm.f1.barrier_cause}` : ''}`}>
+                          <span className={`dot${b ? ' b' : ''}`} aria-hidden="true" />
+                          <span><b className="serif">{i + 1}회차</b><span className="num">{mm.written_at.slice(5).replace('-', '.')} · {mm.consult_type.replace(' 상담', '')}</span>{b && <em>{mm.f1.barrier_cause}</em>}</span>
+                        </button>
                       </li>
-                    ))}
-                  </ol>
+                    )
+                  })}
+                </ol>
+                <section className="read" aria-label={`${sel + 1}회차 메모`}>
+                  {!barrier && <p className="quiet">장벽 해당 없음</p>}
+                  <div className="passage">
+                    {sents.map((s, i) => {
+                      const faint = i === 0 && /발굴\.?$/.test(m.text.slice(s.start, s.end)) && s.end - s.start < 14
+                      return (
+                        <div className="ps" key={i}>
+                          <p className={faint ? 'faint' : ''}>
+                            {cuts(s).map((seg, k) => seg.on
+                              ? <mark key={k} className={seg.flash ? 'on' : ''}>{m.text.slice(seg.from, seg.to)}</mark>
+                              : <Fragment key={k}>{m.text.slice(seg.from, seg.to)}</Fragment>)}
+                          </p>
+                          <div className="mg">
+                            {notes[i].map((n) => <div key={n.k + n.v} className={`mn${n.strong ? ' st' : ''}`}><span>{n.k}</span><b>{n.v}</b></div>)}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="rbar">
+                    <button className="btn sec sm" aria-pressed={allOk} onClick={confirmMemo}><CircleCheck size={16} aria-hidden="true" />{allOk ? '해석 확정됨' : '이 회차 해석 확정'}</button>
+                    <button className="lnk-btn" aria-expanded={evOpen} onClick={() => setEvOpen(!evOpen)}>근거 전체 {evOpen ? '▴' : '▾'}</button>
+                    <button className="lnk-btn right" onClick={copyText}>원문 복사</button>
+                  </div>
+                  {evOpen && (
+                    <div className="evall">
+                      <dl className="evrows">
+                        {evRows.map(([k, v, q]) => (
+                          <div key={k}><dt>{k}</dt><dd className={allOk ? '' : 'derived'}>{v}</dd><dd className="evq">{uniq(q).map((x) => <q key={x}>{x}</q>)}</dd></div>
+                        ))}
+                      </dl>
+                      <div className={`rv${allOk ? ' ok' : ''}${fixOpen ? ' bad' : ''}`} role="group" aria-label={`${sel + 1}회차 해석 검토`}>
+                        <button className="btn sec sm" aria-pressed={allOk} onClick={confirmMemo}><CircleCheck size={16} aria-hidden="true" />해석 확인</button>
+                        <button className="btn sec sm" aria-pressed={fixOpen} aria-expanded={fixOpen} onClick={() => { if (fixOpen) { setFix({ ...fix, [sel]: false }); GROUPS.forEach((g) => setReview(h.id, sel, g, null)) } else { setFix({ ...fix, [sel]: true }); if (allOk) setReviewMany(h.id, sel, [...GROUPS], null, '') } }}><CircleX size={16} aria-hidden="true" />수정 필요</button>
+                      </div>
+                      {fixOpen && (
+                        <div className="fixrow" role="group" aria-label={`${sel + 1}회차 수정할 항목`}>
+                          {GROUPS.map((g, n) => {
+                            const on = st[n] === 'rejected'
+                            return <button key={g} className={`chip-f${on ? ' on' : ''}`} aria-pressed={on} onClick={() => { setReview(h.id, sel, g, on ? null : 'rejected'); if (!on) toast(`${sel + 1}회차 ${g} 수정 필요로 표시했습니다.`) }}>{g}</button>
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </section>
-              </>
+              </div>
             )}
             {tab === 'score' && (
-        <section className="pane a-score" aria-labelledby="h-score">
-          <h2 id="h-score">점수 구성</h2>
-          <dl className="items">
-            {c.f2.items.map((i) => (
-              <div key={i.key}>
-                <dt>{i.label}<small>{sourceLabel(i.source)}</small></dt>
-                <dd className="pts">
-                  {i.unknown ? <Tag tone="warn" icon="help">미확인 · 0점</Tag>
-                    : i.points === 0 ? <span className="muted">0점 (해당 없음)</span> : <>{i.points} / {i.max}</>}
-                </dd>
-                <dd className="why">
-                  {shortReason(i)}
-                  {i.evidence.length > 0 && (
-                    <span className="src">
-                      {i.evidence.map((q) => {
-                        const key = locate(q)
-                        return key
-                          ? <button key={q} className="srcbtn" onClick={() => jump(key)}><Tag icon="pencil">메모 근거</Tag>“{q}”</button>
-                          : <span key={q} className="srcbtn"><Tag icon="pencil">메모 근거</Tag>“{q}”</span>
-                      })}
-                    </span>
-                  )}
-                </dd>
-              </div>
-            ))}
-            <div className="total"><dt>합계</dt><dd className="pts"><ScoreBar total={c.f2.total} /></dd></div>
-          </dl>
-          <FairnessNote items={c.f2.excluded_attributes} />
-        </section>
+              <section className="pane a-score" aria-labelledby="h-score">
+                <h2 id="h-score">점수 구성</h2>
+                <dl className="items">
+                  {c.f2.items.map((i) => (
+                    <div key={i.key}>
+                      <dt>{i.label}<small>{sourceLabel(i.source)}</small></dt>
+                      <dd className="pts">
+                        {i.unknown ? <Tag tone="warn" icon="help">미확인 · 0점</Tag>
+                          : i.points === 0 ? <span className="muted">0점 (해당 없음)</span> : <>{i.points} / {i.max}</>}
+                      </dd>
+                      <dd className="why">
+                        {shortReason(i)}
+                        {i.evidence.length > 0 && (
+                          <span className="src">
+                            {i.evidence.map((q) => locate(q)
+                              ? <button key={q} className="srcbtn" onClick={() => focusQuote(q)}><Tag icon="pencil">메모 근거</Tag>“{q}”</button>
+                              : <span key={q} className="srcbtn"><Tag icon="pencil">메모 근거</Tag>“{q}”</span>)}
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                  <div className="total"><dt>합계</dt><dd className="pts"><ScoreBar total={c.f2.total} /></dd></div>
+                </dl>
+                <FairnessNote items={c.f2.excluded_attributes} />
+              </section>
             )}
             {tab === 'cond' && (
               <section className="pane" aria-labelledby="h-cond">
                 <div className="card-head"><h2 id="h-cond">조건 대조 <small>후보 {c.f3.candidates.length}건</small></h2>
-                  <Link className="btn" to={`/case/${h.id}/reguide`}>조건 대조·재안내 열기<ArrowRight size={16} aria-hidden="true" /></Link></div>
+                  <Link className="btn sec" to={`/case/${h.id}/reguide`}>조건 대조·재안내 열기<ArrowRight size={16} aria-hidden="true" /></Link></div>
                 {c.f3.candidates.length === 0 ? <p className="muted">후보 없음 · 다음 확인일 {c.f2.next_check_due}</p> : (
                   <ul className="cond-list">
                     {c.f3.candidates.slice(0, 3).map((cd) => (
@@ -336,30 +306,23 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
             )}
           </div>
         </div>
-
-        <aside className="side">
-          <section className="score-sum" aria-labelledby="h-ss">
-            <h2 id="h-ss">점수 구성</h2>
-            <ul>{topItems(c).concat(c.f2.items.filter((i) => i.points > 0).sort((a, b) => b.points - a.points).slice(2, 3)).map((i) => <li key={i.key} className="fr"><span>{i.chip}</span><b className="serif num">+{i.points}</b></li>)}</ul>
-            <button className="linkbtn" onClick={() => setTab('score')}>점수 전체 보기</button>
-          </section>
-          <DecisionPanel c={c} />
-        </aside>
+        <aside className="side"><DecisionPanel c={c} onScore={() => setTab('score')} onQuote={focusQuote} /></aside>
       </div>
     </>
   )
 }
 
-function DecisionPanel({ c }: { c: View }) {
+function DecisionPanel({ c, onScore, onQuote }: { c: View; onScore: () => void; onQuote: (q: string) => void }) {
   const toast = useToast()
   const h = c.household
   const k = h.consent
   const d = c.decision
   const sug = d.ai_suggestion
-  const rb = h.repeated_barrier
   const [editing, setEditing] = useState(false)
   const [pick, setPick] = useState<Outreach | '미검토'>(sug)
   const [reason, setReason] = useState('')
+  const [reasonOpen, setReasonOpen] = useState(false)
+  const reasonRef = useRef<HTMLTextAreaElement>(null)
 
   const block = (a: Outreach): string | null => {
     if (VISIT.includes(a) && k.방문 === '거부') return '방문을 거부한 가구입니다.'
@@ -373,23 +336,24 @@ function DecisionPanel({ c }: { c: View }) {
     const out: string[] = []
     if (VISIT.includes(a)) out.push(k.방문 === '동의' ? '방문 연락 동의' : '방문 연락 미확인 · 확인 후 진행')
     if (a === '안부 문자' || a === '문자재안내') out.push(k.문자 === '동의' ? '문자 연락 동의' : '문자 연락 미확인 · 확인 후 진행')
-    if (a.startsWith('동행') && k.신청 === '보류(장벽)') out.push('신청 보류(장벽): 거부가 아니라 서류·절차 부담으로 미룬 상태')
-    if (a === '재확인 예약') out.push('본인 연락 없이 재확인일까지 둠')
+    if (a.startsWith('동행') && k.신청 === '보류(장벽)') out.push('신청 보류(장벽) · 서류·절차 부담으로 미룬 상태')
+    if (a === '재확인 예약') out.push(`대기열에 남고 ${c.f2.next_check_due}에 다시 올라옴`)
     return out
   }
   const needReason = pick !== '미검토' && pick !== sug
   const missing = needReason && !reason.trim()
   const nothing = pick === '미검토' && !c.decided
   const readOnly = c.decided && !editing
+  // 제안과 다른 판단이면 사유 입력란을 열고 곧바로 포커스한다.
+  useEffect(() => {
+    if (!needReason) return
+    setReasonOpen((open) => { if (!open) setTimeout(() => reasonRef.current?.focus(), 0); return true })
+  }, [needReason, pick, editing])
+  const safety = c.action.safety_check
 
   return (
     <section className="dec" aria-labelledby="h-dec">
       <h2 id="h-dec">처리 결정</h2>
-      <div className="rationale">
-        <p><b>제안: {ACTION_LABEL(sug)}</b>{c.action.due && <small> · 기한 {md(c.action.due)}</small>}</p>
-        {rb && c.action.outreach.startsWith('동행') && <p className="why-line">반복 장벽 {rb.cause} → 동행 신청 지원</p>}
-        <p className="muted">{c.action.outreach_reason}</p>
-      </div>
       {readOnly ? (
         <>
           <p className="saved" role="status"><Stamp>{ACTION_LABEL(d.status)} 처리</Stamp>
@@ -401,7 +365,7 @@ function DecisionPanel({ c }: { c: View }) {
           {c.history.length > 0 && (
             <p className="caption muted">이전 기록: {c.history.map((x) => `${ACTION_LABEL(x.status)}(${fmtTime(x.at ?? '')})`).join(', ')}</p>
           )}
-          <button className="btn" onClick={() => { setEditing(true); setPick(d.status); setReason('') }}>판단 변경</button>
+          <button className="btn sec" onClick={() => { setEditing(true); setPick(d.status); setReason(''); setReasonOpen(false) }}>판단 변경</button>
         </>
       ) : (
         <>
@@ -410,31 +374,48 @@ function DecisionPanel({ c }: { c: View }) {
               const off = o !== '미검토' && !!block(o)
               const lines = o === '미검토' ? [] : hint(o)
               return (
-                <label key={o} className={`radio${pick === o ? ' sel' : ''}${off ? ' off' : ''}`}>
-                  <input type="radio" name="decision" value={o} checked={pick === o} disabled={off} onChange={() => setPick(o)} />
-                  <span><b>{o === '재확인 예약' ? `재확인 예약 — 대기열에 남고 ${c.f2.next_check_due}에 다시 올라옵니다` : ACTION_LABEL(o)}</b>{o === sug && <span className="stamp sm">제안</span>}
-                    {lines.map((l) => <small key={l}>{off && <Ban size={14} aria-hidden="true" />}{l}</small>)}</span>
-                </label>
+                <Fragment key={o}>
+                  <label className={`radio op${pick === o ? ' sel' : ''}${off ? ' off' : ''}`} title={off ? block(o as Outreach) ?? undefined : undefined}>
+                    <input type="radio" name="decision" value={o} checked={pick === o} disabled={off} onChange={() => setPick(o)} />
+                    <b>{ACTION_LABEL(o)}</b>{o === sug && <span className="stamp sm">제안</span>}{off && <span className="no">불가</span>}
+                  </label>
+                  {pick === o && lines.length > 0 && <div className="subtxt">{lines.map((l) => <span key={l}>{off && <Ban size={13} aria-hidden="true" />}{l}</span>)}</div>}
+                  {o === sug && safety && (
+                    <div className="a-safety" role="note" aria-label="안전 확인">
+                      <b><ShieldCheck size={15} aria-hidden="true" /> 안전 확인 <span className="ch">{safety.channels.join(' · ')}</span></b>
+                      <p>{safety.reason}</p>
+                      <ul>
+                        {safety.triggers.map((t) => {
+                          const q = t.startsWith('메모: ') ? t.slice(4) : null
+                          return <li key={t}>{q ? <button className="srcbtn" onClick={() => onQuote(q)}>“{q}”</button> : t}</li>
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </Fragment>
               )
             })}
           </div>
-          <label className="field">사유 <small>(제안과 다르면 필수)</small>
-            <textarea
-              rows={3} value={reason} placeholder="사유"
-              onChange={(e) => setReason(e.target.value)} 
-              aria-invalid={missing} aria-describedby={missing ? 'reason-err' : undefined}
-            />
-          </label>
+          <div className="why">
+            <button className="lnk-btn" aria-expanded={reasonOpen} onClick={() => setReasonOpen(!reasonOpen)}>다른 판단이면 사유 {reasonOpen ? '▴' : '▾'}</button>
+            <button className="lnk-btn" onClick={onScore}>점수 구성</button>
+          </div>
+          {reasonOpen && (
+            <label className="field">사유 <small>(제안과 다르면 필수)</small>
+              <textarea ref={reasonRef} rows={3} value={reason} placeholder="사유" onChange={(e) => setReason(e.target.value)} aria-invalid={missing} aria-describedby={missing ? 'reason-err' : undefined} />
+            </label>
+          )}
           {missing && <p id="reason-err" className="err"><CircleAlert size={16} aria-hidden="true" />사유를 입력하십시오</p>}
           <button
             className="btn primary block" disabled={missing || nothing}
             onClick={() => {
-              saveDecision(c, pick, reason); setEditing(false); setReason('');
+              saveDecision(c, pick, reason); setEditing(false); setReason(''); setReasonOpen(false)
               toast(pick === '미검토' ? `${h.id} 판단을 취소했습니다.` : `${h.id} 판단을 저장했습니다: ${ACTION_LABEL(pick)} (처리 기록에 남음)`)
             }}
           >판단 저장</button>
         </>
       )}
+      {c.action.due && !readOnly && <p className="caption muted">기한 {md(c.action.due)}</p>}
       <Link className="more" to={`/case/${h.id}/reguide`}>조건 대조·재안내 보기<ArrowRight size={16} aria-hidden="true" /></Link>
     </section>
   )
