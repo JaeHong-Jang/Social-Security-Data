@@ -4,7 +4,7 @@ import { ArrowUpDown, Ban, CircleAlert, CircleCheck, CircleHelp, ListFilter, Pen
 import {
   ACTION_LABEL, ASSIGNEES, OUTREACH, RANK, assignCases, consentKinds, md, needsCheck, place, topItems, useData, type View,
 } from './data'
-import { EmptyState, LevelBadge, ScoreBar, Skeleton, StatusTag, useToast } from './ui'
+import { EmptyState, Hint, LevelBadge, ScoreBar, Skeleton, StatusTag, useToast } from './ui'
 
 const PAGE = 20
 const TABS = ['전체', '긴급', '주의', '관찰', '처리완료'] as const
@@ -100,7 +100,7 @@ export default function Queue() {
   return (
     <>
       <div className="tt">
-        <h1>대기열</h1>
+        <h1>대기열</h1><Hint label="숫자 기준">탭: 전체 기준 · 메뉴 숫자: 미검토 기준</Hint>
         <span className="num">미검토 {all.filter((c) => !c.decided).length} · 처리됨 {all.filter((c) => c.decided).length}</span>
         <div className="qseg" role="tablist" aria-label="단계별 보기">
           {TABS.map((t) => (
@@ -110,7 +110,7 @@ export default function Queue() {
           ))}
         </div>
       </div>
-      <p className="caption muted tabnote">탭 숫자는 전체 기준 · 사이드 배지는 미검토 기준</p>
+
 
       <div className="toolbar">
         <label className="search">

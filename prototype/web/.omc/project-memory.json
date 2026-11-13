@@ -142,6 +142,19 @@
       ]
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "screenshots/v7/home-1440.png",
+      "accessCount": 1,
+      "lastAccessed": 1794577608418,
+      "type": "file"
+    },
+    {
+      "path": "screenshots/v7/detail-1440.png",
+      "accessCount": 1,
+      "lastAccessed": 1794577608952,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

@@ -84,7 +84,7 @@ export default function Home() {
         <ul className="strip">
           {ranked.map((c) => (
             <li key={c.household.id}>
-              <Link to={`/case/${c.household.id}`} className="hm" title={`${c.household.id} ${c.f2.level} ${c.f2.total}점`} aria-label={`${c.household.id} ${c.f2.level} ${c.f2.total}점`}>
+              <Link to={`/case/${c.household.id}`} className="hm" data-tip={`${c.household.id} · ${c.f2.total}점`} aria-label={`${c.household.id} ${c.f2.level} ${c.f2.total}점`}>
                 <House level={c.f2.level} urgent={c.f2.level === '긴급'} /><span className="num">{c.f2.total}</span>
               </Link>
             </li>

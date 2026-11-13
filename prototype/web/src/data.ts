@@ -148,6 +148,13 @@ export function setReview(id: string, mi: number, group: string, v: Review | nul
   if (v) pushLog({ kind: 'review', caseId: id, by: OPERATOR, text: `${id} ${mi + 1}회차 ${group} 해석 ${v === 'approved' ? '승인' : '반려'}` })
   commit()
 }
+export function setReviewMany(id: string, mi: number, groups: string[], v: Review | null, label: string) {
+  const next = { ...local.review }
+  groups.forEach((g) => { const k = reviewKey(id, mi, g); if (v) next[k] = v; else delete next[k] })
+  local.review = next
+  if (v) pushLog({ kind: 'review', caseId: id, by: OPERATOR, text: `${id} ${mi + 1}회차 ${label}` })
+  commit()
+}
 export function saveNotice(id: string, patch: Partial<NoticeState>) {
   local.notices[id] = { ...(local.notices[id] ?? { text: '', approved: null }), ...patch }
   if (patch.approved) pushLog({ kind: 'notice', caseId: id, by: OPERATOR, text: `${id} 재안내문 담당자 승인` })
@@ -260,3 +267,33 @@ export const modelLabel = (m: Meta) =>
 /** 이번 주 처리: 기준일 7일 안에 저장된 '현재 유효한' 판단 */
 export const weekRecords = (rows: RecordRow[], ref: string) =>
   rows.filter((r) => r.state === 'current' && new Date(r.at).getTime() >= new Date(ref).getTime() - 7 * 864e5)
+
+/** 점수 항목 사유를 짧은 명사구로. 긴 문장은 상세 데이터에 남기고 화면에는 쓰지 않는다. */
+export function shortReason(i: F2Item): string {
+  const r = i.reason
+  let m: RegExpMatchArray | null
+  switch (i.key) {
+    case 'R': if ((m = r.match(/내 (\d+)회 발굴/))) return `관찰기간 내 ${m[1]}회 발굴`; if (/첫 발굴/.test(r)) return '첫 발굴'; break
+    case 'C': if ((m = r.match(/위기영역은 (\d+)개\(([^)]*)\)/))) return `위기영역 ${m[1]}개 (${m[2].replace(/,\s*/g, '·')})`; break
+    case 'W': if ((m = r.match(/(\d+)개에서 (\d+)개로 (늘었|늘지)/))) return `위기영역 ${m[1]}→${m[2]}개${m[3] === '늘지' ? ' (증가 없음)' : ''}`; if (/직전 발굴이 없/.test(r)) return '직전 발굴 없음'; break
+    case 'M': if (/일치/.test(r)) return '종결 상태 일치'; if (/조사불가/.test(r)) return '조사불가 종결'; if ((m = r.match(/'([^']+)' 상태/))) return `메모상 ${m[1]}`; break
+    case 'B': if ((m = r.match(/장벽 원인\(([^)]+)\)/))) return `${m[1]} 반복`; if (/1건뿐/.test(r)) return '비교 메모 없음'; if (/반복되지는/.test(r)) return '반복 없음'; break
+    case 'I': {
+      const p: string[] = []
+      if (/1인가구입니다/.test(r)) p.push('1인가구'); else if (/1인가구가 아닙니다/.test(r)) p.push('다인가구')
+      if (/관계망 부재/.test(r)) p.push('관계망 부재'); else if (/관계망이 있/.test(r)) p.push('관계망 있음'); else if (/관계망은 메모 인용이 없어/.test(r)) p.push('관계망 미확인')
+      if (/고립 징후가 있/.test(r)) p.push('고립 징후')
+      if (p.length) return p.join(' · ')
+      break
+    }
+    case 'N': {
+      if (/없습니다/.test(r)) return '새 신호 없음'
+      const items = [...r.matchAll(/([^,():]+?)\((\d\d\.\d\d)/g)].map((x) => `${x[1].trim()} ${x[2]}`)
+      if (items.length) return items.join(', ')
+      break
+    }
+    case 'T': if ((m = r.match(/종결 후 (\d+)일/))) return `종결 후 ${m[1]}일`; break
+  }
+  return i.chip
+}
+export const sourceLabel = (s: string) => (s === '행정+F1' ? '행정자료·메모' : s === 'F1' ? '메모' : s === '행정' ? '행정자료' : s)

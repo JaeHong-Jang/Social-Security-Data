@@ -26,7 +26,7 @@ const old = await p.locator('table.rec tbody tr .strike').count()
 console.log('records live', live, 'rows', rows, 'cancel', cancel, 'prev', old)
 ok(live === 3 && cancel === 1 && old === 2 - 0 || (cancel === 1 && old >= 1 && live === rows - cancel - old), 'A6 KPI는 현재 판단만, 취소·이전 판단은 구분 표시')
 const week = +(await p.locator('a.kpi, .kpi').first().innerText().then(() => 0))
-await p.screenshot({ path: 'screenshots/v6/records-1440.png', fullPage: true })
+await p.screenshot({ path: 'screenshots/v7/records-1440.png', fullPage: true })
 // A7
 await go(p, '#/rules'); const row = await p.locator('.exp-t tr', { hasText: 'H-0816' }).innerText(); ok(row.includes('주의'), 'A7 H-0816 슬라이더 표에서 주의 (' + row.replace(/\s+/g, ' ') + ')')
 // A9 서버 켜짐 + 녹화 재생 + 직접 입력

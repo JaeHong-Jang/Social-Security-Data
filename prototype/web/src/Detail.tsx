@@ -2,7 +2,7 @@ import { Fragment, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowRight, Ban, ChevronLeft, ChevronRight, CircleAlert, CircleCheck, CircleX, Repeat2, ShieldCheck } from 'lucide-react'
 import {
-  ACTION_LABEL, OUTREACH, byPriority, confirmInterpretation, fmtTime, md, place, reviewKey, saveDecision, setReview, topItems, useData,
+  ACTION_LABEL, OUTREACH, byPriority, confirmInterpretation, fmtTime, md, place, reviewKey, saveDecision, setReview, setReviewMany, shortReason, sourceLabel, topItems, useData,
   type Case, type LogEntry, type Meta, type Outreach, type Review, type View,
 } from './data'
 import { EmptyState, FairnessNote, Hint, LampIcon, LevelBadge, ScoreBar, Skeleton, Stamp, StatusTag, Tag, useToast } from './ui'
@@ -70,6 +70,7 @@ type TabKey = (typeof TABS)[number]['k']
 function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View; labels: Record<string, string>; meta: Meta; review: Record<string, Review>; log: LogEntry[]; prev: string | null; next: string | null; pos: string }) {
   const toast = useToast()
   const [tab, setTab] = useState<TabKey>('memos')
+  const [fix, setFix] = useState<Record<number, boolean>>({})
   const h = c.household
   const urgent = c.f2.level === '긴급' && !c.decided
   const [active, setActive] = useState<string | null>(null)
@@ -201,7 +202,6 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
               return (
                 <article key={mi} className="memo-card" aria-label={`${mi + 1}회차 메모`}>
                   <h3>{mi + 1}회차 <small>{m.written_at} · {m.consult_type}</small></h3>
-                  <p className="caption muted">발굴 {m.discovery_date}</p>
                   <p className="memo">
                     {segments(m.text, sp).map((s, i) => (
                       <Fragment key={i}>
@@ -213,48 +213,45 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
                           >{s.text}</mark>
                         ) : s.text}
                         {s.ends.map((n) => (
-                          <sup key={n}>{mark(n)}{sp[n].barrier !== undefined && <b className="bm">{bmark(sp[n].barrier!)}</b>}</sup>
+                          <sup key={n} className="mk" tabIndex={0} data-tip={`${sp[n].labels.join(' · ')}`} aria-label={`근거 ${n + 1}: ${sp[n].labels.join(', ')}`}>{mark(n)}{sp[n].barrier !== undefined && <b className="bm">{bmark(sp[n].barrier!)}</b>}</sup>
                         ))}
                       </Fragment>
                     ))}
                   </p>
-                  <ol className="quotes">
-                    {sp.map((s, n) => (
-                      <li key={n} className={active === `${mi}:${n}` ? 'on' : ''}
-                        onMouseEnter={() => setActive(`${mi}:${n}`)} onMouseLeave={() => setActive(null)}>
-                        <button onFocus={() => setActive(`${mi}:${n}`)} onBlur={() => setActive(null)}
-                          onClick={() => markRefs.current[`${mi}:${n}`]?.scrollIntoView({ block: 'nearest' })}
-                          aria-label={`${mi + 1}회차 근거 ${n + 1}, 원문 구간으로 이동`}>
-                          <span className="qn">{mark(n)}</span>“{s.quote}”<span className="qf">{s.labels.join(' · ')}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
                   {(() => {
                     const bc = m.f1.evidence.filter((e) => e.field === 'barrier_cause')
-                    const groups: { g: string; rows: [string, ReactNode][] }[] = [
-                      { g: '업무·종결', rows: [['업무 상태', m.f1.work_status], ['종결 유형', m.f1.closure_type ? labels[m.f1.closure_type] : '판단하지 못함']] },
-                      { g: '장벽 원인', rows: [['장벽 원인', <>{m.f1.barrier_cause}{bc.map((e) => <q key={e.start} className="bq-inline"> “{e.quote}”</q>)}</>]] },
-                      { g: '연락 의사', rows: [['연락 의사', (['신청', '문자', '방문', '전화'] as const).filter((k) => k !== '전화' || m.f1.consent.전화 !== '미확인').map((k) => `${k} ${m.f1.consent[k]}`).join(' · ')]] },
+                    const gs: { g: string; rows: [string, ReactNode][] }[] = [
+                      { g: '업무·종결', rows: [['업무 상태', m.f1.work_status], ['종결 유형', m.f1.closure_type ? labels[m.f1.closure_type] : '판단 못함']] },
+                      { g: '장벽 원인', rows: [['장벽 원인', <>{m.f1.barrier_cause}{bc.length > 0 && <span className="mk-in" title={bc.map((e) => `“${e.quote}”`).join(' ')}> ⓘ</span>}</>]] },
+                      { g: '연락 의사', rows: [['연락 의사', (['신청', '문자', '방문'] as const).map((k) => `${k} ${m.f1.consent[k]}`).join(' · ')]] },
                       { g: '관계망·고립', rows: [['도움 관계망', m.f1.support_network], ['고립 징후', m.f1.isolation_signals.length ? m.f1.isolation_signals.join(' · ') : '없음']] },
                     ]
-                    return groups.map(({ g, rows }) => {
-                      const rv = review[reviewKey(h.id, mi, g)]
-                      const act = (v: Review) => {
-                        setReview(h.id, mi, g, rv === v ? null : v)
-                        if (rv !== v) toast(`${mi + 1}회차 ${g} 해석을 ${v === 'approved' ? '승인' : '반려'}했습니다.`)
-                      }
-                      return (
-                        <div key={g} className={`rg${rv ? ` ${rv}` : ''}`}>
-                          <dl className="kv">{rows.map(([k, v]) => <Fragment key={k}><dt>{k}</dt><dd className={rv === 'approved' ? '' : 'derived'}>{v}</dd></Fragment>)}</dl>
-                          <div className="rg-act" role="group" aria-label={`${mi + 1}회차 ${g} 해석 검토`}>
-                            {rv === 'approved' ? <Tag tone="done" icon="ok">승인</Tag> : rv === 'rejected' ? <Tag tone="observe" icon="x">반려</Tag> : null}
-                            <button className="btn small" aria-pressed={rv === 'approved'} onClick={() => act('approved')}><CircleCheck size={16} aria-hidden="true" />승인</button>
-                            <button className="btn small" aria-pressed={rv === 'rejected'} onClick={() => act('rejected')}><CircleX size={16} aria-hidden="true" />반려</button>
-                          </div>
+                    const st = gs.map((x) => review[reviewKey(h.id, mi, x.g)])
+                    const allOk = st.every((x) => x === 'approved')
+                    const anyBad = st.some((x) => x === 'rejected')
+                    const open = !!fix[mi] || anyBad
+                    return (
+                      <>
+                        <dl className="kv2">
+                          {gs.flatMap((x) => x.rows).map(([k, v]) => <div key={k}><dt>{k}</dt><dd className={allOk ? '' : 'derived'}>{v}</dd></div>)}
+                        </dl>
+                        <div className={`rv${allOk ? ' ok' : ''}${open ? ' bad' : ''}`} role="group" aria-label={`${mi + 1}회차 해석 검토`}>
+                          <button className="btn small" aria-pressed={allOk} onClick={() => {
+                            if (allOk) setReviewMany(h.id, mi, gs.map((x) => x.g), null, '')
+                            else { setReviewMany(h.id, mi, gs.map((x) => x.g), 'approved', '해석 확인'); setFix({ ...fix, [mi]: false }); toast(`${mi + 1}회차 해석을 확인했습니다.`) }
+                          }}><CircleCheck size={16} aria-hidden="true" />해석 확인</button>
+                          <button className="btn small" aria-pressed={open} aria-expanded={open} onClick={() => { if (open) { setFix({ ...fix, [mi]: false }); gs.forEach((x) => setReview(h.id, mi, x.g, null)) } else { setFix({ ...fix, [mi]: true }); if (allOk) setReviewMany(h.id, mi, gs.map((x) => x.g), null, '') } }}><CircleX size={16} aria-hidden="true" />수정 필요</button>
                         </div>
-                      )
-                    })
+                        {open && (
+                          <div className="fixrow" role="group" aria-label={`${mi + 1}회차 수정할 항목`}>
+                            {gs.map((x, n) => {
+                              const on = st[n] === 'rejected'
+                              return <button key={x.g} className={`chip-f${on ? ' on' : ''}`} aria-pressed={on} onClick={() => { setReview(h.id, mi, x.g, on ? null : 'rejected'); if (!on) toast(`${mi + 1}회차 ${x.g} 수정 필요로 표시했습니다.`) }}>{x.g}</button>
+                            })}
+                          </div>
+                        )}
+                      </>
+                    )
                   })()}
                   {m.f1.consent_guard && (['신청', '문자', '방문', '전화'] as const).filter((k) => m.f1.consent[k] === '거부').map((k) => (
                     <p key={k} className="check-line">
@@ -291,13 +288,13 @@ function DetailBody({ c, labels, meta, review, log, prev, next, pos }: { c: View
           <dl className="items">
             {c.f2.items.map((i) => (
               <div key={i.key}>
-                <dt>{i.key} {i.label}<small>{i.source}</small></dt>
+                <dt>{i.label}<small>{sourceLabel(i.source)}</small></dt>
                 <dd className="pts">
                   {i.unknown ? <Tag tone="warn" icon="help">미확인 · 0점</Tag>
                     : i.points === 0 ? <span className="muted">0점 (해당 없음)</span> : <>{i.points} / {i.max}</>}
                 </dd>
                 <dd className="why">
-                  {i.reason}
+                  {shortReason(i)}
                   {i.evidence.length > 0 && (
                     <span className="src">
                       {i.evidence.map((q) => {

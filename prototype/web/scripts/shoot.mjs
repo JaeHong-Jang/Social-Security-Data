@@ -1,9 +1,9 @@
 // 사용법: npm run build && npm run preview -- --port 4173 --strictPort &  →  node scripts/shoot.mjs
-// 모든 화면을 실제로 눌러 보며 스크린샷(screenshots/v6), 콘솔 에러, 가로 스크롤을 검사한다.
+// 모든 화면을 실제로 눌러 보며 스크린샷(screenshots/v7), 콘솔 에러, 가로 스크롤을 검사한다.
 import { chromium } from 'playwright'
 
 const base = process.env.BASE ?? 'http://localhost:4173/'
-const out = 'screenshots/v6'
+const out = 'screenshots/v7'
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM })
 let bad = 0
 const fail = (m) => { bad++; console.log('실패:', m) }
@@ -33,6 +33,29 @@ await session(1440, async (page) => {
   await go(page, '#/')
   await shot(page, 'home-1440')
   ok(await page.locator('.scraps a.scr').count() === 4 && await page.locator('a.huge').count() === 1, '현황 KPI(큰 숫자 + 쪽지 4개)')
+  // 세로 인덱스 탭(A안 프레임): nav·aria-current·44px·스크롤 따라옴
+  {
+    const tabs = page.locator('nav[aria-label="주 메뉴"] a.vtab')
+    ok(await tabs.count() === 6 && await page.locator('nav[aria-label="주 메뉴"] a[aria-current=page]').count() === 1, '세로 탭 6개 + aria-current 1개')
+    const hs = await tabs.evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().height)))
+    ok(Math.min(...hs) >= 44, `세로 탭 높이 ≥44 (${Math.min(...hs)})`)
+    await go(page, '#/queue'); await page.evaluate(() => window.scrollTo(0, 600)); await page.waitForTimeout(200)
+    const top = await tabs.first().evaluate((e) => Math.round(e.getBoundingClientRect().top))
+    ok(top >= 0 && top < 400, `스크롤해도 탭이 보임 (top=${top})`)
+    ok(await page.locator('.spine, .vtabs').first().getAttribute('aria-hidden') !== 'false', '장식 바인더 aria-hidden')
+    await page.evaluate(() => window.scrollTo(0, 0)); await go(page, '#/')
+  }
+  // 홈 hover: 큰 숫자·카운트·타일·집·쪽지는 파랑으로 바뀌지 않는다
+  await go(page, '#/')
+  const BLUE = ['rgb(0, 90, 170)', 'rgb(0, 73, 138)']
+  const targets = [['큰 숫자', 'a.huge'], ['레벨 카운트', '.tally a .v'], ['KPI 타일', '.scraps a.scr .v'], ['집 스트립', '.hm span'], ['쪽지 카드', '.note .nid']]
+  for (const [label, sel] of targets) {
+    const el = page.locator(sel).first(); const host = sel.startsWith('.hm') ? page.locator('.hm').first() : (sel.startsWith('a.huge') ? el : el)
+    await host.hover(); await page.waitForTimeout(120)
+    const col = await el.evaluate((e) => getComputedStyle(e).color)
+    ok(!BLUE.includes(col), `hover '${label}' 색 유지 (${col})`)
+    if (label === '집 스트립') await page.screenshot({ path: `${out}/home-hover-1440.png` })
+  }
   // A1 KPI 숫자 = 도착한 목록 행 수
   const kp = [['재검토 대상', () => page.locator('a.huge'), (l) => l.innerText().then((t) => +t.replace(/\D/g, ''))],
     ['긴급', () => page.locator('.scraps a.scr', { hasText: '긴급' }), (l) => l.locator('.v').innerText().then(Number)],
@@ -112,9 +135,10 @@ await session(1440, async (page) => {
 
   // 상세
   await go(page, '#/case/H-0412')
-  await page.getByRole('button', { name: '승인' }).first().click()
-  await page.getByRole('button', { name: '반려' }).nth(1).click()
-  ok(await page.locator('.rg.approved').count() >= 1 && await page.locator('.rg.rejected').count() >= 1, '해석 승인/반려')
+  await page.getByRole('button', { name: '해석 확인' }).first().click()
+  await page.getByRole('button', { name: '수정 필요' }).nth(1).click()
+  await page.locator('.fixrow').first().getByRole('button', { name: '장벽 원인' }).click()
+  ok(await page.locator('.rv.ok').count() >= 1 && await page.locator('.chip-f.on').count() >= 1, '해석 확인 / 수정 필요(항목 표시)')
   await shot(page, 'detail-1440')
   await page.getByRole('button', { name: '판단 저장' }).click()
   ok(await page.locator('.toast').filter({ hasText: '판단을 저장' }).count() > 0, '판단 저장 → 토스트')

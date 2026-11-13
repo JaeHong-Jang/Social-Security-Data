@@ -5,7 +5,7 @@ import {
   DEFAULT_STEPS, fetchHealth, fetchSamples, findRecording, recordings, replay, streamAnalyze,
   type AnalyzeEvent, type AnalyzeRequest, type AnalyzeResult, type Sample, type SampleMemo, type StepDef, type StepEvent,
 } from './analyzeApi'
-import { ACTION_LABEL, addSessionCase, md, useData, type Case, type F1 } from './data'
+import { ACTION_LABEL, addSessionCase, md, shortReason, sourceLabel, useData, type Case, type F1 } from './data'
 import { Highlighted, LevelBadge, ScoreBar, Stamp, Tag, useToast } from './ui'
 
 const HOUSEHOLD = ['1인가구', '부부가구', '한부모가구', '조손가구', '다인가구']
@@ -19,7 +19,7 @@ const shortDetail = (id: string, d: string) => {
   if (id === 'f3') return d.replace(/ ?\(.*\)/, '')
   return d
 }
-const fmtMs = (ms: number) => (ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(1)}s`)
+const fmtMs = (ms: number) => (ms < 1 ? '<1ms' : ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(1)}s`)
 const blank = (): SampleMemo => ({ date: '2026-11-01', consult_type: '전화 상담', text: '' })
 const MAX_LEN = 1000
 
@@ -216,7 +216,7 @@ export default function Analyze() {
           <div className="an-bar">
             {running
               ? <button className="btn" onClick={stop}><Square size={18} aria-hidden="true" />중지</button>
-              : <button className="btn primary" disabled={invalid || !editing} onClick={() => start(memos, type, mode)}><Play size={18} aria-hidden="true" />분석 실행</button>}
+              : <button className="btn primary" disabled={invalid} onClick={() => start(memos, type, mode)}><Play size={18} aria-hidden="true" />분석 실행</button>}
             {invalid && editing && <span className="caption muted">날짜(YYYY-MM-DD)와 메모(1,000자 이하) 필요</span>}
           </div>
         </section>
@@ -292,9 +292,9 @@ function Result({ r }: { r: AnalyzeResult }) {
       <dl className="items">
         {r.f2.items.map((i) => (
           <div key={i.key}>
-            <dt>{i.key} {i.label}<small>{i.source}</small></dt>
+            <dt>{i.label}<small>{sourceLabel(i.source)}</small></dt>
             <dd className="pts">{i.unknown ? <Tag tone="warn" icon="help">미확인 · 0점</Tag> : i.points === 0 ? <span className="muted">0점 (해당 없음)</span> : <>{i.points} / {i.max}</>}</dd>
-            <dd className="why">{i.reason}{i.evidence?.length > 0 && <span className="src">{i.evidence.map((q) => <span key={q} className="srcbtn"><Tag icon="pencil">메모 근거</Tag>“{q}”</span>)}</span>}</dd>
+            <dd className="why">{shortReason(i)}{i.evidence?.length > 0 && <span className="src">{i.evidence.map((q) => <span key={q} className="srcbtn"><Tag icon="pencil">메모 근거</Tag>“{q}”</span>)}</span>}</dd>
           </div>
         ))}
         <div className="total"><dt>합계</dt><dd className="pts"><ScoreBar total={r.f2.total} /></dd></div>
@@ -331,7 +331,7 @@ function buildCase(id: string, req: AnalyzeRequest, r: AnalyzeResult, ref: strin
   const f3 = { ...{ notice_source: null, tag_filter_source: '', candidates: [], notice_draft: null, model: '', tag_filter: {}, checks_narrowed: { total: 0, 충족: 0, 미충족: 0, 확인필요: 0, summary: '' } }, ...(r.f3 as Partial<Case['f3']>) } as Case['f3']
   return {
     household: {
-      id, gu: '(가상)', dong: 'AI 분석', household_type: req.household_type, discoveries: [],
+      id, gu: '(가상)', dong: '분석 추가', household_type: req.household_type, discoveries: [],
       memos: req.memos.map((m, i) => ({ discovery_date: m.date, written_at: m.date, consult_type: m.consult_type, text: m.text, closure_label: null, f1: f1[i] })),
       repeated_barrier: r.repeated_barrier ?? null, post_closure_signals: [], closed_at: last.date, days_since_closure: days,
       consent: lastF1.consent, contact_refused: lastF1.consent.문자 === '거부' && lastF1.consent.방문 === '거부',
