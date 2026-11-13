@@ -1,0 +1,2146 @@
+{
+  "meta": {
+    "notice": "가상 데이터 — UI 개발용 mock. 평가 시험셋·합성 데이터셋이 아니다.",
+    "reference_date": "2026-11-13",
+    "rule_version": "v1",
+    "level_thresholds": {
+      "긴급": 70,
+      "주의": 40,
+      "관찰": 0
+    },
+    "closure_labels": {
+      "A": "기준초과",
+      "B": "지원제외",
+      "C": "조사불가",
+      "D": "상담안내 종결",
+      "D1": "정보만 받고 신청 대기",
+      "D2": "욕구 불명확",
+      "D3": "일시 위기 해소 진술",
+      "지원연계": "지원연계"
+    },
+    "f1_model": "mock",
+    "f3_model": "mock",
+    "service_cache": "data/cache/local_서울특별시.json",
+    "service_cache_fetched_at": "2026-11-13 00:14:18"
+  },
+  "cases": [
+    {
+      "household": {
+        "id": "H-0412",
+        "gu": "강북구",
+        "dong": "수유동",
+        "household_type": "1인가구",
+        "support_network": "부재",
+        "discoveries": [
+          {
+            "date": "2025-12-03",
+            "crisis_domains": [
+              "생계"
+            ],
+            "result": "D"
+          },
+          {
+            "date": "2026-04-15",
+            "crisis_domains": [
+              "생계",
+              "공공요금"
+            ],
+            "result": "D"
+          },
+          {
+            "date": "2026-09-22",
+            "crisis_domains": [
+              "생계",
+              "공공요금",
+              "주거"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-10-06",
+        "days_since_closure": 38,
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "3회차 발굴. 단전 예고 통지를 받았다고 함. 월세 2개월 밀림. 일용직 일감이 끊긴 지 석 달째. 연락하고 지내는 가족이나 지인은 없다고 함. 서울형 긴급복지 안내했으나 서류 떼러 갈 기운이 없다며 신청은 미룸. 문자로 안내 받는 건 괜찮다고 함. 상담안내로 종결.",
+        "written_at": "2026-10-06"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D1",
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "상담안내로 종결",
+            "start": 140,
+            "end": 148
+          },
+          {
+            "field": "closure_type",
+            "quote": "서류 떼러 갈 기운이 없다며 신청은 미룸",
+            "start": 96,
+            "end": 118
+          },
+          {
+            "field": "consent.문자",
+            "quote": "문자로 안내 받는 건 괜찮다고 함",
+            "start": 120,
+            "end": 138
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 95,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 25,
+            "max": 25,
+            "chip": "3회째 발굴",
+            "reason": "관찰기간 내 3회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 15,
+            "max": 20,
+            "chip": "위기영역 3개",
+            "reason": "현재 활성 위기영역은 3개(생계, 공공요금, 주거)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 15,
+            "max": 15,
+            "chip": "위기영역 2→3개",
+            "reason": "직전 발굴보다 위기영역이 2개에서 3개로 늘었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 15,
+            "max": 15,
+            "chip": "1인가구·관계망 없음",
+            "reason": "1인가구이고 도움 관계망 부재가 확인되었습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "긴급",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002235",
+            "name": "서울형 긴급복지지원",
+            "org": "서울특별시 복지실 돌봄고독정책관 돌봄복지과",
+            "source": "지자체",
+            "criteria_quote": "갑작스러운 위기사유 발생으로 생계유지가 곤란한 가구",
+            "checks": [
+              {
+                "condition": "위기사유(실업 등)",
+                "status": "충족",
+                "evidence": "메모: 일용직 일감이 끊긴 지 석 달째"
+              },
+              {
+                "condition": "기준 중위소득 100% 이하",
+                "status": "확인필요",
+                "evidence": "메모에 소득 정보 없음"
+              },
+              {
+                "condition": "금융재산 1,000만원 이하",
+                "status": "확인필요",
+                "evidence": "메모에 재산 정보 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "돌봄복지과 02-2133-7393",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00002255",
+            "name": "서울형 주택바우처(저소득층 주택임대료 보조)",
+            "org": "서울특별시 주택정책실 주택공급기획관 주택정책과",
+            "source": "지자체",
+            "criteria_quote": "① 민간 월세인 ‘주택’ 및 ‘고시원’ , '주거용 오피스텔'거주 가구",
+            "checks": [
+              {
+                "condition": "민간 월세 거주",
+                "status": "충족",
+                "evidence": "메모: 월세 2개월 밀림"
+              },
+              {
+                "condition": "소득평가액 기준중위소득 60% 이하",
+                "status": "확인필요",
+                "evidence": "메모에 소득 정보 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울시 주거복지과 0221337992",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00005663",
+            "name": "고독사 예방 밑반찬 지원사업 기운찬",
+            "org": "서울특별시 강북구 복지생활국 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "만 40~64세 이하의 1인가구로 중위소득 100% 이내의 자 중",
+            "checks": [
+              {
+                "condition": "1인가구",
+                "status": "충족",
+                "evidence": "가구형태: 1인가구"
+              },
+              {
+                "condition": "만 40~64세",
+                "status": "확인필요",
+                "evidence": "메모에 연령 정보 없음"
+              },
+              {
+                "condition": "유사 공적 돌봄서비스 미이용",
+                "status": "확인필요",
+                "evidence": "메모에 이용 여부 없음"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "강북구청 복지정책과 02-901-2494",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "서울시와 강북구에는 갑자기 일이 끊겨 생활이 어려운 분을 돕는 제도가 있습니다. 서류 준비가 어려우시면 동주민센터 담당자가 함께 도와드립니다. 편하실 때 연락 주세요.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "재방문",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0587",
+        "gu": "강서구",
+        "dong": "화곡동",
+        "household_type": "1인가구",
+        "support_network": "부재",
+        "discoveries": [
+          {
+            "date": "2026-03-10",
+            "crisis_domains": [
+              "생계",
+              "주거",
+              "건강"
+            ],
+            "result": "D"
+          },
+          {
+            "date": "2026-08-28",
+            "crisis_domains": [
+              "생계",
+              "주거",
+              "건강"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-09-15",
+        "days_since_closure": 59,
+        "consent": {
+          "신청": "거부",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "2차 발굴. 당뇨 치료 중단 상태로 병원비 부담 호소. 관리비 4개월 체납, 식사는 하루 한 끼. 형제와는 10년 넘게 연락이 끊겼다고 함. 지원 필요 없다, 그냥 두라고 하심. 원하는 도움이 무엇인지 끝내 파악하지 못함. 다시 방문하는 건 괜찮다고 함. 상담안내 종결.",
+        "written_at": "2026-09-15"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D2",
+        "consent": {
+          "신청": "거부",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "상담안내 종결",
+            "start": 143,
+            "end": 150
+          },
+          {
+            "field": "closure_type",
+            "quote": "원하는 도움이 무엇인지 끝내 파악하지 못함",
+            "start": 100,
+            "end": 123
+          },
+          {
+            "field": "consent.신청",
+            "quote": "지원 필요 없다, 그냥 두라고 하심",
+            "start": 79,
+            "end": 98
+          },
+          {
+            "field": "consent.방문",
+            "quote": "다시 방문하는 건 괜찮다고 함",
+            "start": 125,
+            "end": 141
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 70,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 15,
+            "max": 20,
+            "chip": "위기영역 3개",
+            "reason": "현재 활성 위기영역은 3개(생계, 주거, 건강)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "위기영역 3→3개",
+            "reason": "직전 발굴보다 위기영역이 3개에서 3개로 늘지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 15,
+            "max": 15,
+            "chip": "1인가구·관계망 없음",
+            "reason": "1인가구이고 도움 관계망 부재가 확인되었습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "긴급",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002328",
+            "name": "저소득 긴급구호사업",
+            "org": "서울특별시 강서구 생활복지국 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "중한 질병 및 부상을 당한 경우 : 긴급복지지원법 등으로 지원받지 못하는 비급여 항목의 의료비 지원",
+            "checks": [
+              {
+                "condition": "중한 질병",
+                "status": "확인필요",
+                "evidence": "메모: 당뇨 치료 중단 상태로 병원비 부담 호소"
+              },
+              {
+                "condition": "강서구 거주",
+                "status": "충족",
+                "evidence": "주소지: 강서구"
+              },
+              {
+                "condition": "국가형·서울형 긴급지원 중복수혜 아님",
+                "status": "확인필요",
+                "evidence": "메모에 수혜 이력 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "강서구청 복지정책과 강서형긴급구호담당 02-2600-5436",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00005003",
+            "name": "서울시 1인가구 동행서비스(건강동행서비스)",
+            "org": "서울특별시 복지실 돌봄고독정책관 1인가구지원과",
+            "source": "지자체",
+            "criteria_quote": "병원이용에 도움이 필요한 서울시민 누구나(기준 중위소득 100%이하인 자 연 48회 무료이용)",
+            "checks": [
+              {
+                "condition": "병원이용 도움 필요",
+                "status": "충족",
+                "evidence": "메모: 당뇨 치료 중단 상태"
+              },
+              {
+                "condition": "기준 중위소득 100% 이하(무료 이용)",
+                "status": "확인필요",
+                "evidence": "메모에 소득 정보 없음"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "서울특별시 1인가구지원과 02-2133-9266",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "병원비가 부담되실 때 강서구가 치료비 일부를 도와드리는 제도가 있습니다. 병원에 함께 가 드리는 서비스도 있습니다. 다음 방문 때 자세히 설명드리겠습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "재방문",
+        "by": "담당자(가상)",
+        "at": "2026-11-12T15:20:00",
+        "reason": null,
+        "ai_suggestion": "재방문",
+        "agrees_with_ai": true
+      }
+    },
+    {
+      "household": {
+        "id": "H-0233",
+        "gu": "중랑구",
+        "dong": "면목동",
+        "household_type": "1인가구",
+        "support_network": "미확인",
+        "discoveries": [
+          {
+            "date": "2026-02-20",
+            "crisis_domains": [
+              "생계"
+            ],
+            "result": "C"
+          },
+          {
+            "date": "2026-09-30",
+            "crisis_domains": [
+              "생계",
+              "주거",
+              "공공요금",
+              "금융"
+            ],
+            "result": "C"
+          }
+        ],
+        "closed_at": "2026-10-14",
+        "days_since_closure": 30,
+        "consent": {
+          "신청": "미확인",
+          "문자": "거부",
+          "방문": "거부"
+        },
+        "contact_refused": true
+      },
+      "memo": {
+        "text": "2차 발굴(전기요금·통신비 체납, 카드 연체, 월세 미납 통보). 세 차례 방문했으나 문을 열어주지 않음. 인터폰으로 찾아오지 말라, 문자도 보내지 말라고 함. 집 앞에 우편물이 쌓여 있음. 가족 관계 확인 못함. 조사불가로 종결.",
+        "written_at": "2026-10-14"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "C",
+        "consent": {
+          "신청": "미확인",
+          "문자": "거부",
+          "방문": "거부"
+        },
+        "evidence": [
+          {
+            "field": "closure_type",
+            "quote": "조사불가로 종결",
+            "start": 120,
+            "end": 128
+          },
+          {
+            "field": "consent.방문",
+            "quote": "찾아오지 말라",
+            "start": 66,
+            "end": 73
+          },
+          {
+            "field": "consent.문자",
+            "quote": "문자도 보내지 말라",
+            "start": 75,
+            "end": 85
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 70,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 20,
+            "max": 20,
+            "chip": "위기영역 4개",
+            "reason": "현재 활성 위기영역은 4개(생계, 주거, 공공요금, 금융)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 15,
+            "max": 15,
+            "chip": "위기영역 1→4개",
+            "reason": "직전 발굴보다 위기영역이 1개에서 4개로 늘었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 15,
+            "max": 25,
+            "chip": "조사불가로 종결",
+            "reason": "조사불가로 종결되어 지원 여부가 확인되지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 5,
+            "max": 15,
+            "chip": "1인가구·관계망 미확인",
+            "reason": "1인가구이고 도움 관계망은 미확인입니다(0점, 확인 필요).",
+            "unknown": true
+          }
+        ],
+        "level": "긴급",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002235",
+            "name": "서울형 긴급복지지원",
+            "org": "서울특별시 복지실 돌봄고독정책관 돌봄복지과",
+            "source": "지자체",
+            "criteria_quote": "주요위기사유 : 실업, 폐업, 중한 질병, 화재 등 (국가 긴급복지 지원 위기사유 준용)",
+            "checks": [
+              {
+                "condition": "위기사유 존재",
+                "status": "확인필요",
+                "evidence": "메모: 전기요금·통신비 체납, 카드 연체, 월세 미납 통보"
+              },
+              {
+                "condition": "기준 중위소득 100% 이하",
+                "status": "확인필요",
+                "evidence": "조사불가로 소득 확인 못함"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "돌봄복지과 02-2133-7393",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "생활이 어려워지셨을 때 서울시가 생계비를 도와드리는 긴급복지 제도가 있습니다. 필요하실 때 동주민센터로 연락 주세요.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "보류",
+        "by": "담당자(가상)",
+        "at": "2026-11-11T10:05:00",
+        "reason": null,
+        "ai_suggestion": "보류",
+        "agrees_with_ai": true
+      }
+    },
+    {
+      "household": {
+        "id": "H-0158",
+        "gu": "마포구",
+        "dong": "망원동",
+        "household_type": "1인가구",
+        "support_network": "부재",
+        "discoveries": [
+          {
+            "date": "2026-07-08",
+            "crisis_domains": [
+              "생계",
+              "건강"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-07-21",
+        "days_since_closure": 115,
+        "consent": {
+          "신청": "거부",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "실직 후 소득 없음. 허리 디스크로 일을 구하기 어렵다고 함. 의지할 사람은 없다고 함. 서울형 기초보장과 마포구 특별생계보호 안내. 신청은 안 하겠다, 남의 도움 받기 싫다고 함. 다만 문자로 정보 보내주는 건 괜찮다고 함. 상담안내 종결.",
+        "written_at": "2026-07-21"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D1",
+        "consent": {
+          "신청": "거부",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "상담안내 종결",
+            "start": 127,
+            "end": 134
+          },
+          {
+            "field": "consent.신청",
+            "quote": "신청은 안 하겠다",
+            "start": 75,
+            "end": 84
+          },
+          {
+            "field": "consent.문자",
+            "quote": "문자로 정보 보내주는 건 괜찮다고 함",
+            "start": 105,
+            "end": 125
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 50,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 0,
+            "max": 25,
+            "chip": "첫 발굴",
+            "reason": "이번이 첫 발굴입니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 10,
+            "max": 20,
+            "chip": "위기영역 2개",
+            "reason": "현재 활성 위기영역은 2개(생계, 건강)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "직전 발굴 없음",
+            "reason": "비교할 직전 발굴이 없습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 15,
+            "max": 15,
+            "chip": "1인가구·관계망 없음",
+            "reason": "1인가구이고 도움 관계망 부재가 확인되었습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "주의",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002715",
+            "name": "저소득주민 특별생계보호사업",
+            "org": "서울특별시 마포구 복지동행국 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "저소득 주민으로서 법정지원(국민기초수급자, 긴급복지 등)에서 제외되나 실제 생활이 어려운 저소득 주민",
+            "checks": [
+              {
+                "condition": "법정지원 제외",
+                "status": "확인필요",
+                "evidence": "메모에 수급 여부 없음"
+              },
+              {
+                "condition": "기준 중위소득 70% 이내",
+                "status": "확인필요",
+                "evidence": "메모: 실직 후 소득 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "마포구청 복지정책과 02-3153-8837",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00002234",
+            "name": "서울형 기초보장제도 운영",
+            "org": "서울특별시 복지정책실 복지기획관 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "생활수준은 어려우나 국민기초생활보장제도 선정 기준을 초과하여 법정보호를 받지 못하고 있는 비수급 빈곤층",
+            "checks": [
+              {
+                "condition": "비수급 빈곤층",
+                "status": "확인필요",
+                "evidence": "메모에 수급 여부 없음"
+              },
+              {
+                "condition": "소득평가액 기준 중위소득 48% 이하",
+                "status": "확인필요",
+                "evidence": "메모: 실직 후 소득 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울특별시 복지정책실 복지정책과 02-2133-7338",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00005003",
+            "name": "서울시 1인가구 동행서비스(건강동행서비스)",
+            "org": "서울특별시 복지실 돌봄고독정책관 1인가구지원과",
+            "source": "지자체",
+            "criteria_quote": "병원이용에 도움이 필요한 서울시민 누구나(기준 중위소득 100%이하인 자 연 48회 무료이용)",
+            "checks": [
+              {
+                "condition": "병원이용 도움 필요",
+                "status": "확인필요",
+                "evidence": "메모: 허리 디스크"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "서울특별시 1인가구지원과 02-2133-9266",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "일을 쉬고 계신 동안 생활비를 도와드리는 서울시·마포구 제도가 있습니다. 신청은 원하실 때 하시면 됩니다. 궁금하신 점은 동주민센터로 문자나 전화 주세요.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "문자재안내",
+        "by": "담당자(가상)",
+        "at": "2026-11-10T11:30:00",
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": true
+      }
+    },
+    {
+      "household": {
+        "id": "H-0901",
+        "gu": "노원구",
+        "dong": "상계동",
+        "household_type": "다인가구",
+        "support_network": "미확인",
+        "discoveries": [
+          {
+            "date": "2026-01-14",
+            "crisis_domains": [
+              "생계",
+              "금융"
+            ],
+            "result": "A"
+          },
+          {
+            "date": "2026-08-05",
+            "crisis_domains": [
+              "생계",
+              "금융"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-08-19",
+        "days_since_closure": 86,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "2차 발굴(건보료 체납, 대출 연체). 가구원 3명, 성인 자녀 포함. 자녀가 지난달 취업해서 이제 좀 나아질 거라고 함. 카드값 연체는 계속 남아 있음. 필요하면 전화하겠다고 함. 상담안내 종결.",
+        "written_at": "2026-08-19"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D3",
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "상담안내 종결",
+            "start": 102,
+            "end": 109
+          },
+          {
+            "field": "closure_type",
+            "quote": "자녀가 지난달 취업해서 이제 좀 나아질 거라고 함",
+            "start": 40,
+            "end": 67
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 50,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 10,
+            "max": 20,
+            "chip": "위기영역 2개",
+            "reason": "현재 활성 위기영역은 2개(생계, 금융)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "위기영역 2→2개",
+            "reason": "직전 발굴보다 위기영역이 2개에서 2개로 늘지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 0,
+            "max": 15,
+            "chip": "관계망 미확인",
+            "reason": "1인가구가 아니며 도움 관계망은 미확인입니다(0점, 확인 필요).",
+            "unknown": true
+          }
+        ],
+        "level": "주의",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002234",
+            "name": "서울형 기초보장제도 운영",
+            "org": "서울특별시 복지정책실 복지기획관 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "생활수준은 어려우나 국민기초생활보장제도 선정 기준을 초과하여 법정보호를 받지 못하고 있는 비수급 빈곤층",
+            "checks": [
+              {
+                "condition": "비수급 빈곤층",
+                "status": "확인필요",
+                "evidence": "직전 발굴 결과: 기준초과"
+              },
+              {
+                "condition": "소득평가액 기준 중위소득 48% 이하",
+                "status": "확인필요",
+                "evidence": "메모: 자녀가 지난달 취업"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울특별시 복지정책실 복지정책과 02-2133-7338",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "생활이 다시 어려워지시면 서울시 기초보장 제도를 상담받으실 수 있습니다. 동주민센터로 연락 주세요.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0670",
+        "gu": "관악구",
+        "dong": "신림동",
+        "household_type": "1인가구",
+        "support_network": "미확인",
+        "discoveries": [
+          {
+            "date": "2026-06-19",
+            "crisis_domains": [
+              "생계",
+              "주거",
+              "건강"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-07-02",
+        "days_since_closure": 134,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "고시원 거주. 월세 체납 여부를 물으니 본인 말이 계속 바뀜. 병원은 다니고 있다고 했다가 안 간다고 함. 다음에 다시 얘기하자며 상담 중단. 상담안내로 종결 처리.",
+        "written_at": "2026-07-02"
+      },
+      "f1": {
+        "work_status": "판단보류",
+        "closure_type": null,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "다음에 다시 얘기하자며 상담 중단",
+            "start": 60,
+            "end": 78
+          },
+          {
+            "field": "work_status",
+            "quote": "본인 말이 계속 바뀜",
+            "start": 22,
+            "end": 33
+          }
+        ],
+        "needs_check": true,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 45,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 0,
+            "max": 25,
+            "chip": "첫 발굴",
+            "reason": "이번이 첫 발굴입니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 15,
+            "max": 20,
+            "chip": "위기영역 3개",
+            "reason": "현재 활성 위기영역은 3개(생계, 주거, 건강)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "직전 발굴 없음",
+            "reason": "비교할 직전 발굴이 없습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 5,
+            "max": 15,
+            "chip": "1인가구·관계망 미확인",
+            "reason": "1인가구이고 도움 관계망은 미확인입니다(0점, 확인 필요).",
+            "unknown": true
+          }
+        ],
+        "level": "주의",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002255",
+            "name": "서울형 주택바우처(저소득층 주택임대료 보조)",
+            "org": "서울특별시 주택정책실 주택공급기획관 주택정책과",
+            "source": "지자체",
+            "criteria_quote": "① 민간 월세인 ‘주택’ 및 ‘고시원’ , '주거용 오피스텔'거주 가구",
+            "checks": [
+              {
+                "condition": "민간 월세 거주",
+                "status": "충족",
+                "evidence": "메모: 고시원 거주"
+              },
+              {
+                "condition": "임대보증금 1억6천5백만원 이하",
+                "status": "확인필요",
+                "evidence": "메모에 보증금 정보 없음"
+              },
+              {
+                "condition": "소득평가액 기준중위소득 60% 이하",
+                "status": "확인필요",
+                "evidence": "메모에 소득 정보 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울시 주거복지과 0221337992",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "고시원이나 월세에 사시는 분의 월세 일부를 서울시가 매달 도와드리는 제도가 있습니다. 동주민센터에서 상담받으실 수 있습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0345",
+        "gu": "강북구",
+        "dong": "미아동",
+        "household_type": "1인가구",
+        "support_network": "부재",
+        "discoveries": [
+          {
+            "date": "2026-02-02",
+            "crisis_domains": [
+              "생계",
+              "주거"
+            ],
+            "result": "D"
+          },
+          {
+            "date": "2026-08-20",
+            "crisis_domains": [
+              "건강"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-09-03",
+        "days_since_closure": 71,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "2차 발굴. 지난번 월세 문제는 집주인과 조정했다고 함. 최근 무릎 수술 후 거동이 불편해 혼자 장보기 어려움. 연락하는 가족 없음. 돌봄 서비스 안내했으나 생각해보겠다고 함. 다음 달에 한 번 더 들러달라고 함. 상담안내 종결.",
+        "written_at": "2026-09-03"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D1",
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "상담안내 종결",
+            "start": 120,
+            "end": 127
+          },
+          {
+            "field": "closure_type",
+            "quote": "생각해보겠다고 함",
+            "start": 88,
+            "end": 97
+          },
+          {
+            "field": "consent.방문",
+            "quote": "다음 달에 한 번 더 들러달라고 함",
+            "start": 99,
+            "end": 118
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 60,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 5,
+            "max": 20,
+            "chip": "위기영역 1개",
+            "reason": "현재 활성 위기영역은 1개(건강)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "위기영역 2→1개",
+            "reason": "직전 발굴보다 위기영역이 2개에서 1개로 늘지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 15,
+            "max": 15,
+            "chip": "1인가구·관계망 없음",
+            "reason": "1인가구이고 도움 관계망 부재가 확인되었습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "주의",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00001212",
+            "name": "복지사각지대 건강음료배달 사업",
+            "org": "서울특별시 강북구 복지생활국 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "그 외 복지사각지대 발굴 가구 중 안부확인이 필요한 돌봄 취약 대상",
+            "checks": [
+              {
+                "condition": "복지사각지대 발굴 가구",
+                "status": "충족",
+                "evidence": "발굴 이력 2회"
+              },
+              {
+                "condition": "안부확인 필요",
+                "status": "충족",
+                "evidence": "메모: 연락하는 가족 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "강북구청 복지정책과 02-901-6722",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00005663",
+            "name": "고독사 예방 밑반찬 지원사업 기운찬",
+            "org": "서울특별시 강북구 복지생활국 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "만 40~64세 이하의 1인가구로 중위소득 100% 이내의 자 중",
+            "checks": [
+              {
+                "condition": "1인가구",
+                "status": "충족",
+                "evidence": "가구형태: 1인가구"
+              },
+              {
+                "condition": "만 40~64세",
+                "status": "확인필요",
+                "evidence": "메모에 연령 정보 없음"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "강북구청 복지정책과 02-901-2494",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00005003",
+            "name": "서울시 1인가구 동행서비스(건강동행서비스)",
+            "org": "서울특별시 복지실 돌봄고독정책관 1인가구지원과",
+            "source": "지자체",
+            "criteria_quote": "병원이용에 도움이 필요한 서울시민 누구나(기준 중위소득 100%이하인 자 연 48회 무료이용)",
+            "checks": [
+              {
+                "condition": "병원이용 도움 필요",
+                "status": "충족",
+                "evidence": "메모: 무릎 수술 후 거동이 불편"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "서울특별시 1인가구지원과 02-2133-9266",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "거동이 불편하신 동안 안부를 살피고 병원에 함께 가 드리는 서비스가 있습니다. 다음 방문 때 같이 살펴보겠습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "재방문",
+        "by": "담당자(가상)",
+        "at": "2026-11-12T09:40:00",
+        "reason": "본인이 다음 달 방문을 요청함",
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": false
+      }
+    },
+    {
+      "household": {
+        "id": "H-0729",
+        "gu": "은평구",
+        "dong": "불광동",
+        "household_type": "부부가구",
+        "support_network": "있음",
+        "discoveries": [
+          {
+            "date": "2026-03-03",
+            "crisis_domains": [
+              "생계"
+            ],
+            "result": "A"
+          },
+          {
+            "date": "2026-09-09",
+            "crisis_domains": [
+              "생계",
+              "주거"
+            ],
+            "result": "B"
+          }
+        ],
+        "closed_at": "2026-09-24",
+        "days_since_closure": 50,
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "2차 발굴. 부부 2인 가구. 주거급여 수급 중이라 서울형 주택바우처는 지원제외. 배우자 병원비로 생활비 부족 호소. 관리비 2개월 체납. 자녀가 가끔 들여다봄. 안내 문자는 받겠다고 함. 지원제외로 종결.",
+        "written_at": "2026-09-24"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "B",
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "closure_type",
+            "quote": "지원제외로 종결",
+            "start": 106,
+            "end": 114
+          },
+          {
+            "field": "consent.문자",
+            "quote": "안내 문자는 받겠다고 함",
+            "start": 91,
+            "end": 104
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 40,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 10,
+            "max": 20,
+            "chip": "위기영역 2개",
+            "reason": "현재 활성 위기영역은 2개(생계, 주거)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 15,
+            "max": 15,
+            "chip": "위기영역 1→2개",
+            "reason": "직전 발굴보다 위기영역이 1개에서 2개로 늘었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 0,
+            "max": 25,
+            "chip": "공백 가점 없음",
+            "reason": "직전 종결 사유(B)는 지원 공백 가점 대상이 아닙니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 0,
+            "max": 15,
+            "chip": "관계망 있음",
+            "reason": "1인가구가 아니며 도움 관계망이 있습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "주의",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002235",
+            "name": "서울형 긴급복지지원",
+            "org": "서울특별시 복지실 돌봄고독정책관 돌봄복지과",
+            "source": "지자체",
+            "criteria_quote": "주요위기사유 : 실업, 폐업, 중한 질병, 화재 등 (국가 긴급복지 지원 위기사유 준용)",
+            "checks": [
+              {
+                "condition": "위기사유(중한 질병)",
+                "status": "확인필요",
+                "evidence": "메모: 배우자 병원비로 생활비 부족 호소"
+              },
+              {
+                "condition": "기준 중위소득 100% 이하",
+                "status": "확인필요",
+                "evidence": "메모에 소득 정보 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "돌봄복지과 02-2133-7393",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "가족이 아파 생활비가 부족해졌을 때 서울시 긴급복지로 도움을 받으실 수 있는지 확인해 드립니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-1024",
+        "gu": "송파구",
+        "dong": "가락동",
+        "household_type": "다인가구",
+        "support_network": "있음",
+        "discoveries": [
+          {
+            "date": "2026-05-12",
+            "crisis_domains": [
+              "생계",
+              "금융"
+            ],
+            "result": "A"
+          }
+        ],
+        "closed_at": "2026-05-26",
+        "days_since_closure": 171,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "건보료 체납으로 발굴. 맞벌이 4인 가구로 소득 기준 초과 확인. 체납은 분납 신청을 마쳤다고 함. 기준초과로 종결.",
+        "written_at": "2026-05-26"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "A",
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "closure_type",
+            "quote": "기준초과로 종결",
+            "start": 56,
+            "end": 64
+          },
+          {
+            "field": "closure_type",
+            "quote": "소득 기준 초과 확인",
+            "start": 24,
+            "end": 35
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 10,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 0,
+            "max": 25,
+            "chip": "첫 발굴",
+            "reason": "이번이 첫 발굴입니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 10,
+            "max": 20,
+            "chip": "위기영역 2개",
+            "reason": "현재 활성 위기영역은 2개(생계, 금융)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "직전 발굴 없음",
+            "reason": "비교할 직전 발굴이 없습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 0,
+            "max": 25,
+            "chip": "공백 가점 없음",
+            "reason": "직전 종결 사유(A)는 지원 공백 가점 대상이 아닙니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 0,
+            "max": 15,
+            "chip": "관계망 있음",
+            "reason": "1인가구가 아니며 도움 관계망이 있습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "관찰",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [],
+        "notice_draft": null,
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0816",
+        "gu": "영등포구",
+        "dong": "대림동",
+        "household_type": "한부모가구",
+        "support_network": "있음",
+        "discoveries": [
+          {
+            "date": "2026-09-25",
+            "crisis_domains": [
+              "생계",
+              "주거"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-10-08",
+        "days_since_closure": 36,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "한부모 가구, 월세 거주. 소득 자료 보완을 요청했고 다음 주 서류 받으러 재방문 예정. 인근에 사는 친척이 아이를 돌봐 줌. 상담안내로 종결 처리함.",
+        "written_at": "2026-10-08"
+      },
+      "f1": {
+        "work_status": "조사중",
+        "closure_type": null,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "동의"
+        },
+        "evidence": [
+          {
+            "field": "work_status",
+            "quote": "다음 주 서류 받으러 재방문 예정",
+            "start": 30,
+            "end": 48
+          },
+          {
+            "field": "consent.방문",
+            "quote": "재방문 예정",
+            "start": 42,
+            "end": 48
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 35,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 0,
+            "max": 25,
+            "chip": "첫 발굴",
+            "reason": "이번이 첫 발굴입니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 10,
+            "max": 20,
+            "chip": "위기영역 2개",
+            "reason": "현재 활성 위기영역은 2개(생계, 주거)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "직전 발굴 없음",
+            "reason": "비교할 직전 발굴이 없습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 0,
+            "max": 15,
+            "chip": "관계망 있음",
+            "reason": "1인가구가 아니며 도움 관계망이 있습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "관찰",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002255",
+            "name": "서울형 주택바우처(저소득층 주택임대료 보조)",
+            "org": "서울특별시 주택정책실 주택공급기획관 주택정책과",
+            "source": "지자체",
+            "criteria_quote": "① 민간 월세인 ‘주택’ 및 ‘고시원’ , '주거용 오피스텔'거주 가구",
+            "checks": [
+              {
+                "condition": "민간 월세 거주",
+                "status": "충족",
+                "evidence": "메모: 월세 거주"
+              },
+              {
+                "condition": "소득평가액 기준중위소득 60% 이하",
+                "status": "확인필요",
+                "evidence": "소득 자료 보완 중"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울시 주거복지과 0221337992",
+            "fetched_at": "2026-11-13T00:14:18"
+          },
+          {
+            "serv_id": "WLF00002538",
+            "name": "저소득주민 국민건강보험료 등 지원",
+            "org": "서울특별시 영등포구 복지국 생활보장과",
+            "source": "지자체",
+            "criteria_quote": "소득인정액 기준중위소득 50%이하인 자 중 보험료 부과금액이 보건복지부 장관이 정한 월 최저보험료 이하인 65세이상 노인,등록장애인, 한부모가족",
+            "checks": [
+              {
+                "condition": "한부모가족",
+                "status": "충족",
+                "evidence": "가구형태: 한부모가구"
+              },
+              {
+                "condition": "소득인정액 기준중위소득 50% 이하",
+                "status": "확인필요",
+                "evidence": "소득 자료 보완 중"
+              },
+              {
+                "condition": "월 최저보험료 이하",
+                "status": "확인필요",
+                "evidence": "메모에 보험료 정보 없음"
+              }
+            ],
+            "apply_method": "확인필요",
+            "contact": "영등포구청 생활보장과 02-2670-4070",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "월세 일부와 건강보험료를 도와드리는 제도가 있습니다. 서류를 받으러 갈 때 함께 안내해 드리겠습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0550",
+        "gu": "성북구",
+        "dong": "정릉동",
+        "household_type": "부부가구",
+        "support_network": "있음",
+        "discoveries": [
+          {
+            "date": "2026-07-30",
+            "crisis_domains": [
+              "생계"
+            ],
+            "result": "D"
+          }
+        ],
+        "closed_at": "2026-08-12",
+        "days_since_closure": 93,
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "생계 곤란으로 발굴. 배우자가 다시 일을 시작해서 당분간 괜찮다고 함. 필요하면 문자 달라고 함. 상담안내 종결.",
+        "written_at": "2026-08-12"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "D3",
+        "consent": {
+          "신청": "미확인",
+          "문자": "동의",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "closure_type",
+            "quote": "배우자가 다시 일을 시작해서 당분간 괜찮다고 함",
+            "start": 12,
+            "end": 38
+          },
+          {
+            "field": "consent.문자",
+            "quote": "필요하면 문자 달라고 함",
+            "start": 40,
+            "end": 53
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 30,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 0,
+            "max": 25,
+            "chip": "첫 발굴",
+            "reason": "이번이 첫 발굴입니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 5,
+            "max": 20,
+            "chip": "위기영역 1개",
+            "reason": "현재 활성 위기영역은 1개(생계)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "직전 발굴 없음",
+            "reason": "비교할 직전 발굴이 없습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 25,
+            "max": 25,
+            "chip": "상담안내만 받고 종결",
+            "reason": "상담안내만 받고 종결되어 지원이 이어지지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 0,
+            "max": 15,
+            "chip": "관계망 있음",
+            "reason": "1인가구가 아니며 도움 관계망이 있습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "관찰",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00002234",
+            "name": "서울형 기초보장제도 운영",
+            "org": "서울특별시 복지정책실 복지기획관 복지정책과",
+            "source": "지자체",
+            "criteria_quote": "생활수준은 어려우나 국민기초생활보장제도 선정 기준을 초과하여 법정보호를 받지 못하고 있는 비수급 빈곤층",
+            "checks": [
+              {
+                "condition": "비수급 빈곤층",
+                "status": "확인필요",
+                "evidence": "메모에 수급 여부 없음"
+              }
+            ],
+            "apply_method": "방문",
+            "contact": "서울특별시 복지정책실 복지정책과 02-2133-7338",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "다시 생활이 어려워지시면 서울시 기초보장 제도를 상담받으실 수 있습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    },
+    {
+      "household": {
+        "id": "H-0127",
+        "gu": "종로구",
+        "dong": "창신동",
+        "household_type": "1인가구",
+        "support_network": "있음",
+        "discoveries": [
+          {
+            "date": "2026-01-20",
+            "crisis_domains": [
+              "건강"
+            ],
+            "result": "A"
+          },
+          {
+            "date": "2026-07-14",
+            "crisis_domains": [
+              "건강"
+            ],
+            "result": "A"
+          }
+        ],
+        "closed_at": "2026-07-28",
+        "days_since_closure": 108,
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "contact_refused": false
+      },
+      "memo": {
+        "text": "2차 발굴(의료비 과다). 혼자 살지만 자녀가 매주 방문한다고 함. 연금 소득으로 기준 초과. 정기 통원 중이며 병원 동행이 있으면 좋겠다고 함. 기준초과로 종결.",
+        "written_at": "2026-07-28"
+      },
+      "f1": {
+        "work_status": "종결",
+        "closure_type": "A",
+        "consent": {
+          "신청": "미확인",
+          "문자": "미확인",
+          "방문": "미확인"
+        },
+        "evidence": [
+          {
+            "field": "closure_type",
+            "quote": "기준초과로 종결",
+            "start": 82,
+            "end": 90
+          }
+        ],
+        "needs_check": false,
+        "model": "mock"
+      },
+      "f2": {
+        "total": 25,
+        "items": [
+          {
+            "key": "R",
+            "label": "반복 발굴",
+            "points": 15,
+            "max": 25,
+            "chip": "2회째 발굴",
+            "reason": "관찰기간 내 2회 발굴되었습니다.",
+            "unknown": false
+          },
+          {
+            "key": "C",
+            "label": "현재 위기영역",
+            "points": 5,
+            "max": 20,
+            "chip": "위기영역 1개",
+            "reason": "현재 활성 위기영역은 1개(건강)입니다.",
+            "unknown": false
+          },
+          {
+            "key": "W",
+            "label": "악화",
+            "points": 0,
+            "max": 15,
+            "chip": "위기영역 1→1개",
+            "reason": "직전 발굴보다 위기영역이 1개에서 1개로 늘지 않았습니다.",
+            "unknown": false
+          },
+          {
+            "key": "F",
+            "label": "지원 공백",
+            "points": 0,
+            "max": 25,
+            "chip": "공백 가점 없음",
+            "reason": "직전 종결 사유(A)는 지원 공백 가점 대상이 아닙니다.",
+            "unknown": false
+          },
+          {
+            "key": "I",
+            "label": "확인된 고립",
+            "points": 5,
+            "max": 15,
+            "chip": "1인가구·관계망 있음",
+            "reason": "1인가구이고 도움 관계망이 있습니다.",
+            "unknown": false
+          }
+        ],
+        "level": "관찰",
+        "excluded_attributes": [
+          "성별",
+          "연령",
+          "국적",
+          "장애"
+        ],
+        "rule_version": "v1"
+      },
+      "f3": {
+        "candidates": [
+          {
+            "serv_id": "WLF00005003",
+            "name": "서울시 1인가구 동행서비스(건강동행서비스)",
+            "org": "서울특별시 복지실 돌봄고독정책관 1인가구지원과",
+            "source": "지자체",
+            "criteria_quote": "병원이용에 도움이 필요한 서울시민 누구나(기준 중위소득 100%이하인 자 연 48회 무료이용)",
+            "checks": [
+              {
+                "condition": "병원이용 도움 필요",
+                "status": "충족",
+                "evidence": "메모: 병원 동행이 있으면 좋겠다고 함"
+              },
+              {
+                "condition": "기준 중위소득 100% 이하(무료 이용)",
+                "status": "확인필요",
+                "evidence": "메모: 연금 소득으로 기준 초과"
+              }
+            ],
+            "apply_method": "직접 지원(별도 신청사항 없음)",
+            "contact": "서울특별시 1인가구지원과 02-2133-9266",
+            "fetched_at": "2026-11-13T00:14:18"
+          }
+        ],
+        "notice_draft": "병원에 갈 때 함께 가 드리는 서울시 서비스가 있습니다. 소득에 따라 무료 또는 유료로 이용하실 수 있습니다.",
+        "model": "mock"
+      },
+      "decision": {
+        "status": "미검토",
+        "by": null,
+        "at": null,
+        "reason": null,
+        "ai_suggestion": "문자재안내",
+        "agrees_with_ai": null
+      }
+    }
+  ],
+  "audit": [
+    {
+      "household_id": "H-0412",
+      "gender": "남",
+      "age_band": "50대"
+    },
+    {
+      "household_id": "H-0587",
+      "gender": "남",
+      "age_band": "60대"
+    },
+    {
+      "household_id": "H-0233",
+      "gender": "미상",
+      "age_band": "미상"
+    },
+    {
+      "household_id": "H-0158",
+      "gender": "남",
+      "age_band": "40대"
+    },
+    {
+      "household_id": "H-0901",
+      "gender": "여",
+      "age_band": "50대"
+    },
+    {
+      "household_id": "H-0670",
+      "gender": "남",
+      "age_band": "30대"
+    },
+    {
+      "household_id": "H-0345",
+      "gender": "여",
+      "age_band": "60대"
+    },
+    {
+      "household_id": "H-0729",
+      "gender": "여",
+      "age_band": "70대"
+    },
+    {
+      "household_id": "H-1024",
+      "gender": "여",
+      "age_band": "40대"
+    },
+    {
+      "household_id": "H-0816",
+      "gender": "여",
+      "age_band": "30대"
+    },
+    {
+      "household_id": "H-0550",
+      "gender": "남",
+      "age_band": "60대"
+    },
+    {
+      "household_id": "H-0127",
+      "gender": "여",
+      "age_band": "80대 이상"
+    }
+  ]
+}

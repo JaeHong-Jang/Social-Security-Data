@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1794561980374,
+  "projectRoot": "/mnt/c/Users/User/Desktop/대학교/3학년/사회보장 경진대회/prototype/web",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.2",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2",
+        "category": "frontend"
+      },
+      {
+        "name": "playwright",
+        "version": "1.65.0",
+        "category": "testing"
+      },
+      {
+        "name": "vite",
+        "version": "8.3.8",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc --noEmit && vite build",
+      "preview": "vite preview",
+      "shoot": "node scripts/shoot.mjs"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "scripts",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 1,
+      "lastAccessed": 1794561980325,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "mock": {
+      "path": "mock",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1794561980334,
+      "keyFiles": [
+        "households.json",
+        "households.v2.json",
+        "households.v3.json"
+      ]
+    },
+    "screenshots": {
+      "path": "screenshots",
+      "purpose": null,
+      "fileCount": 18,
+      "lastAccessed": 1794561980340,
+      "keyFiles": [
+        "detail-H-0233-1440.png",
+        "detail-H-0233-390.png",
+        "detail-H-0412-1440.png",
+        "detail-H-0412-390.png",
+        "detail-H-0670-1440.png"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1794561980347,
+      "keyFiles": [
+        "shoot.mjs"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 8,
+      "lastAccessed": 1794561980353,
+      "keyFiles": [
+        "App.tsx",
+        "Detail.tsx",
+        "Queue.tsx",
+        "Reguide.tsx",
+        "data.ts"
+      ]
+    },
+    "dist/assets": {
+      "path": "dist/assets",
+      "purpose": "Static assets",
+      "fileCount": 3,
+      "lastAccessed": 1794561980363,
+      "keyFiles": [
+        "family-papercut-DrhkpaAw.svg",
+        "index-B0dkTkn4.css",
+        "index-CXAB5jyo.js"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

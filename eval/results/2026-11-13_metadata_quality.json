@@ -1,0 +1,695 @@
+{
+ "generated": "2026-11-13",
+ "source": "LcgvWelfarelist 목록 (servDgst=요약 기준)",
+ "fetched_at": "2026-11-13 16:39:22",
+ "total": 4828,
+ "totals_api": {
+  "서울특별시": 397,
+  "부산광역시": 284,
+  "대구광역시": 137,
+  "인천광역시": 191,
+  "대전광역시": 80,
+  "울산광역시": 102,
+  "세종특별자치시": 52,
+  "경기도": 692,
+  "충청북도": 302,
+  "충청남도": 337,
+  "전남광주통합특별시": 555,
+  "경상북도": 289,
+  "경상남도": 488,
+  "제주특별자치도": 125,
+  "강원특별자치도": 401,
+  "전북특별자치도": 396
+ },
+ "finance_words": [
+  "대출",
+  "융자",
+  "금융",
+  "신용",
+  "채무",
+  "부채",
+  "이자",
+  "이차보전",
+  "보증",
+  "햇살론",
+  "저축",
+  "적금",
+  "통장",
+  "자산형성",
+  "연체",
+  "파산",
+  "회생",
+  "학자금",
+  "창업자금",
+  "자금",
+  "상환",
+  "대부",
+  "근로자 생활안정",
+  "생활안정자금"
+ ],
+ "age_regex": "(만\\s*)?\\d{1,3}\\s*세\\s*(이상|이하|미만|초과|까지)|\\d{1,3}\\s*[~\\-～]\\s*\\d{1,3}\\s*세|\\d{1,3}\\s*세\\s*[~\\-～]|(19|20)\\d{2}\\s*[.년]\\s*\\d{1,2}\\s*[.월]\\s*\\d{1,2}\\s*[.일]?\\s*(이후|이전|생)",
+ "income_regex": "중위\\s*소득|소득\\s*(인정액|기준|하위|상위|\\s*\\d)|\\d{2,3}\\s*%\\s*(이하|미만)|기초생활|기초수급|차상위|저소득|수급자|수급권자|건강보험료",
+ "by_sido": {
+  "경기도": {
+   "n": 692,
+   "fin_tag": 466,
+   "fin_tag_pct": 67.3,
+   "fin_tag_pct_of_tagged": 91.4,
+   "theme_empty": 182,
+   "theme_empty_pct": 26.3,
+   "life_empty": 227,
+   "life_empty_pct": 32.8,
+   "target_empty": 396,
+   "target_empty_pct": 57.2,
+   "fin_nomatch": 432,
+   "fin_nomatch_pct_of_fintag": 92.7,
+   "fin_nomatch_pct_of_all": 62.4,
+   "age_txt": 29,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 0.1,
+   "inc_txt": 115,
+   "inc_txt_notag": 51,
+   "inc_txt_notag_pct": 7.4
+  },
+  "전남광주통합특별시": {
+   "n": 555,
+   "fin_tag": 347,
+   "fin_tag_pct": 62.5,
+   "fin_tag_pct_of_tagged": 85.3,
+   "theme_empty": 148,
+   "theme_empty_pct": 26.7,
+   "life_empty": 157,
+   "life_empty_pct": 28.3,
+   "target_empty": 369,
+   "target_empty_pct": 66.5,
+   "fin_nomatch": 330,
+   "fin_nomatch_pct_of_fintag": 95.1,
+   "fin_nomatch_pct_of_all": 59.5,
+   "age_txt": 26,
+   "age_txt_notag": 2,
+   "age_txt_notag_pct": 0.4,
+   "inc_txt": 86,
+   "inc_txt_notag": 51,
+   "inc_txt_notag_pct": 9.2
+  },
+  "경상남도": {
+   "n": 488,
+   "fin_tag": 330,
+   "fin_tag_pct": 67.6,
+   "fin_tag_pct_of_tagged": 88.5,
+   "theme_empty": 115,
+   "theme_empty_pct": 23.6,
+   "life_empty": 143,
+   "life_empty_pct": 29.3,
+   "target_empty": 300,
+   "target_empty_pct": 61.5,
+   "fin_nomatch": 308,
+   "fin_nomatch_pct_of_fintag": 93.3,
+   "fin_nomatch_pct_of_all": 63.1,
+   "age_txt": 22,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 0.2,
+   "inc_txt": 86,
+   "inc_txt_notag": 42,
+   "inc_txt_notag_pct": 8.6
+  },
+  "강원특별자치도": {
+   "n": 401,
+   "fin_tag": 242,
+   "fin_tag_pct": 60.3,
+   "fin_tag_pct_of_tagged": 83.4,
+   "theme_empty": 111,
+   "theme_empty_pct": 27.7,
+   "life_empty": 109,
+   "life_empty_pct": 27.2,
+   "target_empty": 236,
+   "target_empty_pct": 58.9,
+   "fin_nomatch": 236,
+   "fin_nomatch_pct_of_fintag": 97.5,
+   "fin_nomatch_pct_of_all": 58.9,
+   "age_txt": 17,
+   "age_txt_notag": 0,
+   "age_txt_notag_pct": 0.0,
+   "inc_txt": 89,
+   "inc_txt_notag": 34,
+   "inc_txt_notag_pct": 8.5
+  },
+  "서울특별시": {
+   "n": 397,
+   "fin_tag": 252,
+   "fin_tag_pct": 63.5,
+   "fin_tag_pct_of_tagged": 87.5,
+   "theme_empty": 109,
+   "theme_empty_pct": 27.5,
+   "life_empty": 142,
+   "life_empty_pct": 35.8,
+   "target_empty": 166,
+   "target_empty_pct": 41.8,
+   "fin_nomatch": 248,
+   "fin_nomatch_pct_of_fintag": 98.4,
+   "fin_nomatch_pct_of_all": 62.5,
+   "age_txt": 22,
+   "age_txt_notag": 2,
+   "age_txt_notag_pct": 0.5,
+   "inc_txt": 106,
+   "inc_txt_notag": 41,
+   "inc_txt_notag_pct": 10.3
+  },
+  "전북특별자치도": {
+   "n": 396,
+   "fin_tag": 265,
+   "fin_tag_pct": 66.9,
+   "fin_tag_pct_of_tagged": 90.1,
+   "theme_empty": 102,
+   "theme_empty_pct": 25.8,
+   "life_empty": 139,
+   "life_empty_pct": 35.1,
+   "target_empty": 231,
+   "target_empty_pct": 58.3,
+   "fin_nomatch": 252,
+   "fin_nomatch_pct_of_fintag": 95.1,
+   "fin_nomatch_pct_of_all": 63.6,
+   "age_txt": 26,
+   "age_txt_notag": 4,
+   "age_txt_notag_pct": 1.0,
+   "inc_txt": 58,
+   "inc_txt_notag": 26,
+   "inc_txt_notag_pct": 6.6
+  },
+  "충청남도": {
+   "n": 337,
+   "fin_tag": 242,
+   "fin_tag_pct": 71.8,
+   "fin_tag_pct_of_tagged": 88.0,
+   "theme_empty": 62,
+   "theme_empty_pct": 18.4,
+   "life_empty": 90,
+   "life_empty_pct": 26.7,
+   "target_empty": 200,
+   "target_empty_pct": 59.3,
+   "fin_nomatch": 226,
+   "fin_nomatch_pct_of_fintag": 93.4,
+   "fin_nomatch_pct_of_all": 67.1,
+   "age_txt": 14,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 0.3,
+   "inc_txt": 52,
+   "inc_txt_notag": 27,
+   "inc_txt_notag_pct": 8.0
+  },
+  "충청북도": {
+   "n": 302,
+   "fin_tag": 189,
+   "fin_tag_pct": 62.6,
+   "fin_tag_pct_of_tagged": 88.7,
+   "theme_empty": 89,
+   "theme_empty_pct": 29.5,
+   "life_empty": 106,
+   "life_empty_pct": 35.1,
+   "target_empty": 171,
+   "target_empty_pct": 56.6,
+   "fin_nomatch": 184,
+   "fin_nomatch_pct_of_fintag": 97.4,
+   "fin_nomatch_pct_of_all": 60.9,
+   "age_txt": 26,
+   "age_txt_notag": 6,
+   "age_txt_notag_pct": 2.0,
+   "inc_txt": 29,
+   "inc_txt_notag": 9,
+   "inc_txt_notag_pct": 3.0
+  },
+  "경상북도": {
+   "n": 289,
+   "fin_tag": 191,
+   "fin_tag_pct": 66.1,
+   "fin_tag_pct_of_tagged": 88.0,
+   "theme_empty": 72,
+   "theme_empty_pct": 24.9,
+   "life_empty": 93,
+   "life_empty_pct": 32.2,
+   "target_empty": 176,
+   "target_empty_pct": 60.9,
+   "fin_nomatch": 187,
+   "fin_nomatch_pct_of_fintag": 97.9,
+   "fin_nomatch_pct_of_all": 64.7,
+   "age_txt": 4,
+   "age_txt_notag": 0,
+   "age_txt_notag_pct": 0.0,
+   "inc_txt": 42,
+   "inc_txt_notag": 12,
+   "inc_txt_notag_pct": 4.2
+  },
+  "부산광역시": {
+   "n": 284,
+   "fin_tag": 188,
+   "fin_tag_pct": 66.2,
+   "fin_tag_pct_of_tagged": 85.8,
+   "theme_empty": 65,
+   "theme_empty_pct": 22.9,
+   "life_empty": 48,
+   "life_empty_pct": 16.9,
+   "target_empty": 185,
+   "target_empty_pct": 65.1,
+   "fin_nomatch": 180,
+   "fin_nomatch_pct_of_fintag": 95.7,
+   "fin_nomatch_pct_of_all": 63.4,
+   "age_txt": 13,
+   "age_txt_notag": 0,
+   "age_txt_notag_pct": 0.0,
+   "inc_txt": 48,
+   "inc_txt_notag": 25,
+   "inc_txt_notag_pct": 8.8
+  },
+  "인천광역시": {
+   "n": 191,
+   "fin_tag": 124,
+   "fin_tag_pct": 64.9,
+   "fin_tag_pct_of_tagged": 84.9,
+   "theme_empty": 45,
+   "theme_empty_pct": 23.6,
+   "life_empty": 48,
+   "life_empty_pct": 25.1,
+   "target_empty": 99,
+   "target_empty_pct": 51.8,
+   "fin_nomatch": 118,
+   "fin_nomatch_pct_of_fintag": 95.2,
+   "fin_nomatch_pct_of_all": 61.8,
+   "age_txt": 11,
+   "age_txt_notag": 3,
+   "age_txt_notag_pct": 1.6,
+   "inc_txt": 35,
+   "inc_txt_notag": 14,
+   "inc_txt_notag_pct": 7.3
+  },
+  "대구광역시": {
+   "n": 137,
+   "fin_tag": 91,
+   "fin_tag_pct": 66.4,
+   "fin_tag_pct_of_tagged": 85.0,
+   "theme_empty": 30,
+   "theme_empty_pct": 21.9,
+   "life_empty": 42,
+   "life_empty_pct": 30.7,
+   "target_empty": 66,
+   "target_empty_pct": 48.2,
+   "fin_nomatch": 89,
+   "fin_nomatch_pct_of_fintag": 97.8,
+   "fin_nomatch_pct_of_all": 65.0,
+   "age_txt": 10,
+   "age_txt_notag": 0,
+   "age_txt_notag_pct": 0.0,
+   "inc_txt": 30,
+   "inc_txt_notag": 12,
+   "inc_txt_notag_pct": 8.8
+  },
+  "제주특별자치도": {
+   "n": 125,
+   "fin_tag": 102,
+   "fin_tag_pct": 81.6,
+   "fin_tag_pct_of_tagged": 94.4,
+   "theme_empty": 17,
+   "theme_empty_pct": 13.6,
+   "life_empty": 46,
+   "life_empty_pct": 36.8,
+   "target_empty": 52,
+   "target_empty_pct": 41.6,
+   "fin_nomatch": 98,
+   "fin_nomatch_pct_of_fintag": 96.1,
+   "fin_nomatch_pct_of_all": 78.4,
+   "age_txt": 9,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 0.8,
+   "inc_txt": 38,
+   "inc_txt_notag": 12,
+   "inc_txt_notag_pct": 9.6
+  },
+  "울산광역시": {
+   "n": 102,
+   "fin_tag": 61,
+   "fin_tag_pct": 59.8,
+   "fin_tag_pct_of_tagged": 83.6,
+   "theme_empty": 29,
+   "theme_empty_pct": 28.4,
+   "life_empty": 29,
+   "life_empty_pct": 28.4,
+   "target_empty": 64,
+   "target_empty_pct": 62.7,
+   "fin_nomatch": 57,
+   "fin_nomatch_pct_of_fintag": 93.4,
+   "fin_nomatch_pct_of_all": 55.9,
+   "age_txt": 7,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 1.0,
+   "inc_txt": 14,
+   "inc_txt_notag": 4,
+   "inc_txt_notag_pct": 3.9
+  },
+  "대전광역시": {
+   "n": 80,
+   "fin_tag": 41,
+   "fin_tag_pct": 51.2,
+   "fin_tag_pct_of_tagged": 89.1,
+   "theme_empty": 34,
+   "theme_empty_pct": 42.5,
+   "life_empty": 32,
+   "life_empty_pct": 40.0,
+   "target_empty": 38,
+   "target_empty_pct": 47.5,
+   "fin_nomatch": 40,
+   "fin_nomatch_pct_of_fintag": 97.6,
+   "fin_nomatch_pct_of_all": 50.0,
+   "age_txt": 2,
+   "age_txt_notag": 0,
+   "age_txt_notag_pct": 0.0,
+   "inc_txt": 10,
+   "inc_txt_notag": 5,
+   "inc_txt_notag_pct": 6.2
+  },
+  "세종특별자치시": {
+   "n": 52,
+   "fin_tag": 34,
+   "fin_tag_pct": 65.4,
+   "fin_tag_pct_of_tagged": 82.9,
+   "theme_empty": 11,
+   "theme_empty_pct": 21.2,
+   "life_empty": 19,
+   "life_empty_pct": 36.5,
+   "target_empty": 30,
+   "target_empty_pct": 57.7,
+   "fin_nomatch": 31,
+   "fin_nomatch_pct_of_fintag": 91.2,
+   "fin_nomatch_pct_of_all": 59.6,
+   "age_txt": 5,
+   "age_txt_notag": 1,
+   "age_txt_notag_pct": 1.9,
+   "inc_txt": 12,
+   "inc_txt_notag": 6,
+   "inc_txt_notag_pct": 11.5
+  }
+ },
+ "national": {
+  "n": 4828,
+  "fin_tag": 3165,
+  "fin_tag_pct": 65.6,
+  "fin_tag_pct_of_tagged": 87.7,
+  "theme_empty": 1221,
+  "theme_empty_pct": 25.3,
+  "life_empty": 1470,
+  "life_empty_pct": 30.4,
+  "target_empty": 2779,
+  "target_empty_pct": 57.6,
+  "fin_nomatch": 3016,
+  "fin_nomatch_pct_of_fintag": 95.3,
+  "fin_nomatch_pct_of_all": 62.5,
+  "age_txt": 243,
+  "age_txt_notag": 23,
+  "age_txt_notag_pct": 0.5,
+  "inc_txt": 850,
+  "inc_txt_notag": 371,
+  "inc_txt_notag_pct": 7.7
+ },
+ "seoul_list_based": {
+  "n": 397,
+  "fin_tag": 252,
+  "fin_tag_pct": 63.5,
+  "fin_tag_pct_of_tagged": 87.5,
+  "theme_empty": 109,
+  "theme_empty_pct": 27.5,
+  "life_empty": 142,
+  "life_empty_pct": 35.8,
+  "target_empty": 166,
+  "target_empty_pct": 41.8,
+  "fin_nomatch": 248,
+  "fin_nomatch_pct_of_fintag": 98.4,
+  "fin_nomatch_pct_of_all": 62.5,
+  "age_txt": 22,
+  "age_txt_notag": 2,
+  "age_txt_notag_pct": 0.5,
+  "inc_txt": 106,
+  "inc_txt_notag": 41,
+  "inc_txt_notag_pct": 10.3
+ },
+ "seoul_detail_based": {
+  "n": 397,
+  "fin_tag": 252,
+  "fin_tag_pct": 63.5,
+  "fin_tag_pct_of_tagged": 87.5,
+  "theme_empty": 109,
+  "theme_empty_pct": 27.5,
+  "life_empty": 142,
+  "life_empty_pct": 35.8,
+  "target_empty": 166,
+  "target_empty_pct": 41.8,
+  "fin_nomatch": 248,
+  "fin_nomatch_pct_of_fintag": 98.4,
+  "fin_nomatch_pct_of_all": 62.5,
+  "age_txt": 152,
+  "age_txt_notag": 24,
+  "age_txt_notag_pct": 6.0,
+  "inc_txt": 177,
+  "inc_txt_notag": 82,
+  "inc_txt_notag_pct": 20.7,
+  "note": "텍스트=요약+지원대상+선정기준. 본 정규식 결과는 기획서 §5.2의 149/116과 정의가 달라 값이 다를 수 있다."
+ },
+ "fin_mismatch_examples": [
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "성동구",
+   "servNm": "성동구 청년 등 탈모 치료 지원",
+   "servDgst": "청년 등의 탈모로 인한 정신적·육제적 고통을 해소하고 자신감 넘치는 일상생활을 영위할 수 있도록 탈모 치료 지원",
+   "tags": "서민금융, 신체건강"
+  },
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "",
+   "servNm": "서울형 장애인 개인예산제 시범사업",
+   "servDgst": "장애인 당사자의 자기결정권 및 서비스 선택권 보장 강화",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "",
+   "servNm": "서울형 스마트 헬스케어",
+   "servDgst": "서울형 스마트 헬스케어 플랫폼을 활용하여 건강관리 서비스를 제공함으로써 시민의 자기주도 건강관리 능력 향상 및 건강증진 도모",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "",
+   "servNm": "자녀출산 무주택가구 주거비 지원",
+   "servDgst": "무주택 가구의 주거비 부담을 줄여 안정된 주거환경 속에서 자녀를 출산 할 수 있도록 지원하고자 함",
+   "tags": "서민금융, 입양·위탁, 임신·출산"
+  },
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "서대문구",
+   "servNm": "서대문구 다자녀가족 입학축하상품권 지원사업",
+   "servDgst": "둘째아 이상 다자녀가정이 초등학교 입학 시 입학축하상품권을 지급하여 경제적 부담을 덜고 양육친화적인 환경을 조성하고자 하는 사업입니다.",
+   "tags": "서민금융, 교육"
+  },
+  {
+   "ctpvNm": "서울특별시",
+   "sggNm": "은평구",
+   "servNm": "저소득주민 국민건강보험료 지원",
+   "servDgst": "생활에 어려움을 겪고 있으나, 수급권자에 해당되지 않는 저소득 주민에게 건강보험료를 지원함으로써 건강증진과 사회복지 향상을 목적으로 함.",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "부산광역시",
+   "sggNm": "북구",
+   "servNm": "참전유공자 사망위로금 지급",
+   "servDgst": "국가에 헌신 공헌한 참전유공자에 대한 예우와 지원을 통해 자긍심 고취 및 명예 선양함으로써 구민의 나라사랑 정신을 함양에 기여하기 위함.",
+   "tags": "서민금융, 안전·위기"
+  },
+  {
+   "ctpvNm": "인천광역시",
+   "sggNm": "",
+   "servNm": "전몰군경유가족수당 지원",
+   "servDgst": "국가에 헌신 공헌한 전몰군경 유가족에게 전몰군경유가족 수당을 지원하여 예우 및 삶의 질 향상",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "경기도",
+   "sggNm": "성남시",
+   "servNm": "저소득중증청각장애인재활치료비지원",
+   "servDgst": "청각장애인 재활 치료비 지원으로 의료비부담 경감",
+   "tags": "서민금융, 신체건강"
+  },
+  {
+   "ctpvNm": "경기도",
+   "sggNm": "이천시",
+   "servNm": "산모신생아 건강관리 서비스 본인부담금 지원",
+   "servDgst": "산모·신생아 건강관리 서비스 비용 중 본인부담금을 일부 지원하여 출산가정의 경제적 부담을 경감\n산모·신생아 본인부담금 지원에 관한 거주 요건 완",
+   "tags": "서민금융, 임신·출산"
+  },
+  {
+   "ctpvNm": "충청북도",
+   "sggNm": "괴산군",
+   "servNm": "괴산군 어린이집 부모부담금 지원",
+   "servDgst": "❖ 정부에서 무상으로 지원하는 보육료 이외에 학부모가 부담하는 실비 성격의 어린이집 필요경비를 지원함으로 학부모 부담 경감 및 지역내 어린이집 ",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "충청남도",
+   "sggNm": "서산시",
+   "servNm": "서산시희망공원 매장묘지 개·화장 지원금",
+   "servDgst": "화장 문화 확산에 따른 화장 장려 및 희망공원 정비",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "전남광주통합특별시",
+   "sggNm": "해남군",
+   "servNm": "저소득층 특별구호",
+   "servDgst": "질병, 실직, 화재 등으로 생활에 어려움을 겪고 있는 위기가구에 기본적인 생계유지에 필요한 비용 지원",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "전남광주통합특별시",
+   "sggNm": "함평군",
+   "servNm": "참전유공자명예수당 지급",
+   "servDgst": "참전유공자의 명예를 기리고 군민의 애국정신 함양",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "경상북도",
+   "sggNm": "봉화군",
+   "servNm": "봉화군 효행장려 및 지원",
+   "servDgst": "경로효친의 건전한 가족제도 정착 및 지역사회의 효행 문화 확산에 기여",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "경상남도",
+   "sggNm": "",
+   "servNm": "난임부부 한의치료 지원사업",
+   "servDgst": "정부 난임부부 시술비 지원 외에 난임부부가 선택하여 난임 극복을 할 수 있도록 도 자체 한의치료 지원사업 추진",
+   "tags": "신체건강, 임신·출산, 서민금융"
+  },
+  {
+   "ctpvNm": "경상남도",
+   "sggNm": "함안군",
+   "servNm": "운동으로 산후우울에 브레이크를! (출산 후 심신 건강회복 운동비 지원)",
+   "servDgst": "-출산 후 산모의 신체적·정서적 회복을 통해 산후우울을 예방하고 모자의 건강 증진 \n-저출산에 따른 인구감소에 대응하기 위한 출산장려책을 통해 ",
+   "tags": "서민금융, 임신·출산"
+  },
+  {
+   "ctpvNm": "강원특별자치도",
+   "sggNm": "인제군",
+   "servNm": "저소득주민자녀장학금(생활비)지원사업",
+   "servDgst": "저소득주민자녀의 장학금(생황비)지원",
+   "tags": "서민금융"
+  },
+  {
+   "ctpvNm": "전북특별자치도",
+   "sggNm": "고창군",
+   "servNm": "다자녀 상수도 요금감면",
+   "servDgst": "다자녀 가정의 생활에 밀접한 복지 서비스(감면)제공",
+   "tags": "서민금융"
+  }
+ ],
+ "theme_vocab": [
+  [
+   "서민금융",
+   3165
+  ],
+  [
+   "임신·출산",
+   479
+  ],
+  [
+   "교육",
+   331
+  ],
+  [
+   "입양·위탁",
+   319
+  ],
+  [
+   "안전·위기",
+   207
+  ],
+  [
+   "일자리",
+   199
+  ],
+  [
+   "신체건강",
+   171
+  ],
+  [
+   "보호·돌봄",
+   89
+  ],
+  [
+   "주거",
+   55
+  ],
+  [
+   "생활지원",
+   8
+  ],
+  [
+   "보육",
+   1
+  ],
+  [
+   "에너지",
+   1
+  ]
+ ],
+ "life_vocab": [
+  [
+   "노년",
+   1338
+  ],
+  [
+   "청년",
+   1256
+  ],
+  [
+   "청소년",
+   942
+  ],
+  [
+   "중장년",
+   938
+  ],
+  [
+   "영유아",
+   900
+  ],
+  [
+   "아동",
+   858
+  ],
+  [
+   "임신 · 출산",
+   469
+  ]
+ ],
+ "target_vocab": [
+  [
+   "저소득",
+   818
+  ],
+  [
+   "장애인",
+   688
+  ],
+  [
+   "보훈대상자",
+   460
+  ],
+  [
+   "한부모·조손",
+   419
+  ],
+  [
+   "다자녀",
+   185
+  ],
+  [
+   "다문화·탈북민",
+   160
+  ]
+ ]
+}

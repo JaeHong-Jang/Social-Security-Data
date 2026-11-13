@@ -1,0 +1,69 @@
+{
+  "updatedAt": "2026-11-13T09:26:19.769Z",
+  "missions": [
+    {
+      "id": "session:9861638b-498a-457b-81f9-7298b5b4f9d2:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-11-13T08:30:37.157Z",
+      "updatedAt": "2026-11-13T09:26:19.769Z",
+      "status": "done",
+      "workerCount": 1,
+      "taskCounts": {
+        "total": 1,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 0,
+        "completed": 1,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "frontend:a679831",
+          "role": "frontend",
+          "ownership": "a679831e763c97e92",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-11-13T09:26:19.769Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-start:a679831e763c97e92:2026-11-13T08:30:37.157Z",
+          "at": "2026-11-13T08:30:37.157Z",
+          "kind": "update",
+          "agent": "frontend:a679831",
+          "detail": "started frontend:a679831",
+          "sourceKey": "session-start:a679831e763c97e92"
+        },
+        {
+          "id": "session-stop:a679831e763c97e92:2026-11-13T08:30:39.332Z",
+          "at": "2026-11-13T08:30:39.332Z",
+          "kind": "completion",
+          "agent": "frontend:a679831",
+          "detail": "completed",
+          "sourceKey": "session-stop:a679831e763c97e92"
+        },
+        {
+          "id": "session-stop:a64cb56c4af80cc1d:2026-11-13T08:33:49.161Z",
+          "at": "2026-11-13T08:33:49.161Z",
+          "kind": "completion",
+          "agent": "frontend:a679831",
+          "detail": "completed",
+          "sourceKey": "session-stop:a64cb56c4af80cc1d"
+        },
+        {
+          "id": "session-stop:ad2b34399609e8db8:2026-11-13T09:26:19.769Z",
+          "at": "2026-11-13T09:26:19.769Z",
+          "kind": "completion",
+          "agent": "frontend:a679831",
+          "detail": "completed",
+          "sourceKey": "session-stop:ad2b34399609e8db8"
+        }
+      ]
+    }
+  ]
+}
