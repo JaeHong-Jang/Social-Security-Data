@@ -121,7 +121,7 @@ sup { line-height: 0; }
 .num-btn { all: unset; cursor: pointer; font-size: var(--fs-caption); color: var(--text); padding: 0 2px; }
 .num-btn:focus-visible { box-shadow: var(--focus-ring); }
 .quotes { list-style: none; display: grid; gap: var(--sp-2); }
-.quotes li { background: var(--surface-sunken); border-left: var(--bw-bar) solid var(--wood-700); }
+.quotes li { background: var(--surface-sunken); }
 .quotes li.on { background: var(--mark-active-bg); }
 .quotes button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: var(--sp-2) var(--sp-3); cursor: pointer; }
 .quotes button:focus-visible { box-shadow: inset 0 0 0 2px var(--primary); }
@@ -157,7 +157,7 @@ sup { line-height: 0; }
 .cand h3 { margin: 0; display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; font-size: var(--fs-section); }
 .cand h3 small { font-weight: var(--fw-regular); color: var(--text-subtle); font-size: var(--fs-caption); }
 .cand h4 { margin: var(--sp-4) 0 var(--sp-2); font-size: var(--fs-cell); }
-blockquote { background: var(--surface-sunken); border-left: var(--bw-bar) solid var(--wood-700); padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-3); }
+blockquote { background: var(--surface-sunken); padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-3); }
 .cond th { background: var(--surface-sunken); text-align: left; padding: var(--sp-2) var(--sp-3); font-size: var(--fs-cell); }
 .cond td { padding: var(--sp-2) var(--sp-3); border-bottom: var(--bw) solid var(--border-subtle); font-size: var(--fs-cell); vertical-align: top; }
 .notice { position: sticky; top: var(--sp-4); }
@@ -399,7 +399,7 @@ h2 svg { vertical-align: -3px; }
 .sh-items li.zero { color: var(--text-subtle); }
 .sh-l { display: flex; justify-content: space-between; gap: var(--sp-3); }
 .bar.wide { display: block; width: 100%; margin-left: 0; }
-.ev { display: block; background: var(--surface-sunken); border-left: var(--bw-bar) solid var(--wood-700); padding: var(--sp-1) var(--sp-3); }
+.ev { display: block; background: var(--surface-sunken); padding: var(--sp-1) var(--sp-3); }
 .ev::before, .ev::after { content: none; }
 .assign { display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center; }
 .sheet-foot { display: flex; gap: var(--sp-2); padding: var(--sp-3) var(--sp-5); border-top: var(--bw) solid var(--border-subtle); }
