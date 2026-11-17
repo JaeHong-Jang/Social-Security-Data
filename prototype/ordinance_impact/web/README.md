@@ -1,7 +1,8 @@
 # 조례 변경 영향 검토 — 화면 시제품
 
-실제 화면을 검토하기 위한 독립 React 앱이다. 모든 조례·사업·원문·정정안·수집 상태는 **가상 예시**다.
-기준일은 2026-11-17이며 실제 법적 적용, AI 분석 결과, 외부 안내문 정정을 뜻하지 않는다.
+실제 공공자료 탐색과 별도의 가상 검토 시연을 제공하는 React 앱이다.
+`/data`는 실제 수집 API를 사용한다. `/impacts`·`/links`·`/sources`·`/history`의 검토 시연만 **가상 예시**다.
+실제 법적 적용, AI 분석 결과, 외부 안내문 정정을 뜻하지 않는다.
 
 ## 실행
 
@@ -13,6 +14,8 @@ npm run dev
 ~~~
 
 주소: http://127.0.0.1:5175/ — 기존 이음등 화면의 5174와 분리한다.
+
+자료 수집과 8788 API 실행은 [상위 실행 안내](../README.md)를 따른다. API가 연결되지 않으면 오류·재시도를 표시하고 가상 자료로 대체하지 않는다.
 
 ## 볼 수 있는 화면
 
@@ -32,6 +35,8 @@ npm run dev
 npm test
 npm run build
 npm run test:ui
+npm run test:data
+UI_DATA_MODE=mock npm run test:data
 ~~~
 
 test:ui는 실행 중인 서버와 설치된 Chrome을 사용한다. 다른 Chromium 경로는 PW_CHROMIUM,
@@ -51,5 +56,5 @@ test:ui는 실행 중인 서버와 설치된 Chrome을 사용한다. 다른 Chro
 - [데스크톱 비교](../../../design/ordinance-impact/comparison-desktop.png)
 - [모바일 비교](../../../design/ordinance-impact/comparison-mobile.png)
 
-현재는 API·인증·원문 버전 저장·AI 모델·외부 게시를 연결하지 않은 화면 시제품이다.
-실제 시스템 구현의 데이터 관문 G0와 이 화면의 동작 검증을 구분한다.
+실제 자료 읽기 API·고정 원문 저장은 연결했다. AI 모델·기관 인증·실제 업무 승인·외부 게시는 연결하지 않았다.
+실제 자료 확보와 이 화면의 동작 검증을 기관 업무·법적 판단 검증과 구분한다.

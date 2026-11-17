@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "ordinance-web",
+      "name": "국가법령정보 공개 원문·연혁",
+      "provider": "법제처·행정안전부",
+      "kind": "ordinance",
+      "homepageUrl": "https://www.law.go.kr",
+      "message": "공식 공개 웹 원문·연혁 수집. 보장된 OpenAPI 연동과 구분하며 사업 관계는 후보입니다."
+    },
+    {
+      "id": "bokjiro-guidance",
+      "name": "복지로 공개 사업 안내",
+      "provider": "한국사회보장정보원",
+      "kind": "guidance",
+      "homepageUrl": "https://www.bokjiro.go.kr",
+      "message": "공개 페이지에서 사업 안내 필드만 추출합니다. 내부 작성자 메타데이터를 보존하지 않습니다."
+    },
+    {
+      "id": "municipal-guidance",
+      "name": "성동구 공개 사업 안내",
+      "provider": "서울특별시 성동구",
+      "kind": "guidance",
+      "homepageUrl": "https://www.sd.go.kr",
+      "message": "등록된 공개 안내문만 수집합니다. 접근 차단·재접속 안내는 정상 본문으로 세지 않습니다."
+    },
+    {
+      "id": "recipient-statistics",
+      "name": "복지사업 시군구별 수급권자 현황",
+      "provider": "한국사회보장정보원",
+      "kind": "statistics",
+      "homepageUrl": "https://www.data.go.kr/data/15062448/fileData.do",
+      "message": "기준 2025-12-31 공개 집계. 수급권자는 실제 수급자 또는 조례 개정 영향인구와 동일하지 않습니다."
+    },
+    {
+      "id": "law-api",
+      "name": "국가법령정보 공동활용 API",
+      "provider": "법제처",
+      "kind": "legal_api",
+      "homepageUrl": "https://open.law.go.kr",
+      "message": "OC 등록 계정이 필요한 조례·법령 API입니다."
+    }
+  ],
+  "histories": [
+    {
+      "sourceId": "ordinance-web",
+      "ordinId": "2220991",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinHstListR.do?ordinSeq=1706939&ordinId=2220991&gubun=ELIS&chrClsCd=010202"
+    },
+    {
+      "sourceId": "ordinance-web",
+      "ordinId": "2209946",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinHstListR.do?ordinSeq=1957377&ordinId=2209946&gubun=ELIS&chrClsCd=010202"
+    },
+    {
+      "sourceId": "ordinance-web",
+      "ordinId": "2145868",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinHstListR.do?ordinSeq=1852983&ordinId=2145868&gubun=ELIS&chrClsCd=010202"
+    },
+    {
+      "sourceId": "ordinance-web",
+      "ordinId": "2141061",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinHstListR.do?ordinSeq=2067399&ordinId=2141061&gubun=ELIS&chrClsCd=010202"
+    }
+  ],
+  "documents": [
+    {
+      "id": "ordin-1706939",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 청년 등 탈모 치료 지원 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1706939&ordinId=2220991&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1706939",
+      "ordinId": "2220991",
+      "relatedServiceIds": [
+        "local:WLF00005234"
+      ]
+    },
+    {
+      "id": "ordin-1957377",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 여성청소년 생리용품 지원 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1957377&ordinId=2209946&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1957377",
+      "ordinId": "2209946",
+      "relatedServiceIds": [
+        "local:WLF00004779"
+      ]
+    },
+    {
+      "id": "ordin-1614983",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 여성청소년 생리용품 지원 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1614983&ordinId=2209946&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1614983",
+      "ordinId": "2209946",
+      "relatedServiceIds": [
+        "local:WLF00004779"
+      ]
+    },
+    {
+      "id": "ordin-1852983",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 출생축하금 지원에 관한 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1852983&ordinId=2145868&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1852983",
+      "ordinId": "2145868",
+      "relatedServiceIds": [
+        "local:WLF00002160"
+      ]
+    },
+    {
+      "id": "ordin-1662661",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 출생축하금 지원에 관한 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1662661&ordinId=2145868&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1662661",
+      "ordinId": "2145868",
+      "relatedServiceIds": [
+        "local:WLF00002160"
+      ]
+    },
+    {
+      "id": "ordin-2067399",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 국가보훈대상자 예우 및 지원에 관한 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=2067399&ordinId=2141061&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "2067399",
+      "ordinId": "2141061",
+      "relatedServiceIds": [
+        "local:WLF00002445"
+      ]
+    },
+    {
+      "id": "ordin-1982297",
+      "sourceId": "ordinance-web",
+      "kind": "ordinance",
+      "title": "서울특별시 성동구 국가보훈대상자 예우 및 지원에 관한 조례",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.law.go.kr/LSW/ordinInfoR.do?ordinSeq=1982297&ordinId=2141061&gubun=ELIS&chrClsCd=010202",
+      "ordinSeq": "1982297",
+      "ordinId": "2141061",
+      "relatedServiceIds": [
+        "local:WLF00002445"
+      ]
+    },
+    {
+      "id": "guidance-local-WLF00005234",
+      "sourceId": "bokjiro-guidance",
+      "kind": "guidance",
+      "parser": "bokjiro",
+      "serviceId": "WLF00005234",
+      "title": "성동구 청년 등 탈모 치료 지원",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005234&wlfareInfoReldBztpCd=02",
+      "relatedServiceIds": [
+        "local:WLF00005234"
+      ]
+    },
+    {
+      "id": "guidance-local-WLF00004779",
+      "sourceId": "bokjiro-guidance",
+      "kind": "guidance",
+      "parser": "bokjiro",
+      "serviceId": "WLF00004779",
+      "title": "여성청소년 생리용품 지원",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004779&wlfareInfoReldBztpCd=02",
+      "relatedServiceIds": [
+        "local:WLF00004779"
+      ]
+    },
+    {
+      "id": "guidance-local-WLF00002160",
+      "sourceId": "bokjiro-guidance",
+      "kind": "guidance",
+      "parser": "bokjiro",
+      "serviceId": "WLF00002160",
+      "title": "출생축하금 지원",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002160&wlfareInfoReldBztpCd=02",
+      "relatedServiceIds": [
+        "local:WLF00002160"
+      ]
+    },
+    {
+      "id": "guidance-local-WLF00002445",
+      "sourceId": "bokjiro-guidance",
+      "kind": "guidance",
+      "parser": "bokjiro",
+      "serviceId": "WLF00002445",
+      "title": "국가유공자 위문",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002445&wlfareInfoReldBztpCd=02",
+      "relatedServiceIds": [
+        "local:WLF00002445"
+      ]
+    },
+    {
+      "id": "guidance-central-WLF00000781",
+      "sourceId": "bokjiro-guidance",
+      "kind": "guidance",
+      "parser": "bokjiro",
+      "serviceId": "WLF00000781",
+      "title": "여성청소년 생리용품 지원",
+      "jurisdiction": "전국",
+      "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000781&wlfareInfoReldBztpCd=01",
+      "relatedServiceIds": [
+        "central:WLF00000781"
+      ]
+    },
+    {
+      "id": "law-285871",
+      "lsiSeq": "285871",
+      "lsId": "009681",
+      "sourceId": "ordinance-web",
+      "kind": "law",
+      "title": "청소년복지 지원법",
+      "jurisdiction": "대한민국",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=285871&efYd=20261113&chrClsCd=010202&ancYnChk=0&efGubun=Y",
+      "expectedText": "청소년복지 지원법",
+      "relatedServiceIds": [
+        "local:WLF00004779",
+        "central:WLF00000781"
+      ]
+    },
+    {
+      "id": "sd-guide-5353",
+      "sourceId": "municipal-guidance",
+      "kind": "guidance",
+      "title": "성동구 청년 등 탈모 치료 지원",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.sd.go.kr/main/contents.do?key=5353",
+      "relatedServiceIds": [
+        "local:WLF00005234"
+      ]
+    },
+    {
+      "id": "sd-guide-5280",
+      "sourceId": "municipal-guidance",
+      "kind": "guidance",
+      "title": "여성청소년 생리용품 지원",
+      "jurisdiction": "서울특별시 성동구",
+      "sourceUrl": "https://www.sd.go.kr/main/contents.do?key=5280",
+      "relatedServiceIds": [
+        "local:WLF00004779"
+      ]
+    }
+  ],
+  "statistics": [
+    {
+      "id": "recipient-20251231",
+      "sourceId": "recipient-statistics",
+      "title": "복지사업 시군구별 수급권자 현황 (2025-12-31 기준)",
+      "provider": "한국사회보장정보원",
+      "sourceUrl": "https://www.data.go.kr/data/15062448/fileData.do",
+      "publicDataPk": "15062448",
+      "publicDataDetailPk": "uddi:b4960581-6aa1-4317-a2a6-d3f947573f24",
+      "downloadName": "한국사회보장정보원_복지사업 시군구별 수급권자 현황_20251231",
+      "purpose": "지역·사업별 공개 집계 분포 참고. 조례 영향인구 또는 실제 수급자로 해석하지 않습니다.",
+      "scope": "공개 집계, 기준일 2025-12-31, 개인자료 없음"
+    }
+  ]
+}

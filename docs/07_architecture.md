@@ -1,8 +1,8 @@
 # 아키텍처 v0.1
 
-[기초설계](superpowers/specs/2026-11-17-ordinance-impact-design.md)와 [도메인 계약](05_domain-model.md)을 구현하기 위한 설계 초안이다. 아래 모듈·API는 아직 구현하지 않았다.
+[기초설계](superpowers/specs/2026-11-17-ordinance-impact-design.md)와 [도메인 계약](05_domain-model.md)을 구현하기 위한 설계다. 아래 AI·업무 상태 전이·기관 인증 API는 구현 전이다. 실제 수집·파일 스냅샷·자료 읽기 API는 [연결 계약](superpowers/specs/2026-11-17-ordinance-data-integration.md)에 따라 별도 구현했다.
 
-별도로 [가상 자료 기반 화면 시제품](../prototype/ordinance_impact/web/README.md)을 추가했다. 아래 수집·AI·버전 저장·API와 연결하지 않은 화면 검토용 앱이다.
+실제 `/data` 화면은 공개자료 API(8788)에 연결했다. 기존 `/impacts` 등 가상 검토 시연은 실제 업무 승인·AI와 연결하지 않는다. [실행·범위](../prototype/ordinance_impact/README.md)
 
 ## 1. 기술 선택과 배치
 

@@ -1,5 +1,6 @@
 .env
 data/raw/
+data/ordinance_impact/
 __pycache__/
 .venv/
 .omc/state/
