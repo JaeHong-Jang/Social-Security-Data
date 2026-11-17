@@ -2,6 +2,8 @@
 
 [기초설계](superpowers/specs/2026-11-17-ordinance-impact-design.md)와 [도메인 계약](05_domain-model.md)을 구현하기 위한 설계 초안이다. 아래 모듈·API는 아직 구현하지 않았다.
 
+별도로 [가상 자료 기반 화면 시제품](../prototype/ordinance_impact/web/README.md)을 추가했다. 아래 수집·AI·버전 저장·API와 연결하지 않은 화면 검토용 앱이다.
+
 ## 1. 기술 선택과 배치
 
 기존 저장소의 FastAPI·Pydantic·React·TypeScript·Vite·Ollama 경험을 활용한다. 새 구현은 향후 prototype/ordinance_impact/에 분리하고 기존 이음등 API·가구 모델·화면은 수정하지 않는다.

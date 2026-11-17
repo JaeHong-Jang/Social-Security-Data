@@ -2,7 +2,16 @@
 
 조례가 개정되면 영향을 받을 복지사업과 안내자료를 찾고, 변경 근거와 정정 초안을 담당자에게 제시하는 업무 도구의 기초설계다.
 
-**브랜치:** `design/ordinance-change-impact` · **상태:** 기초설계 v0.1 · **작성일:** 2026-11-17
+**브랜치:** `design/ordinance-change-impact` · **상태:** 기초설계 v0.1 + 가상 화면 시제품 · **작성일:** 2026-11-17
+
+## 화면 시제품
+
+실행 주소: **http://127.0.0.1:5175/**. [실행 방법](prototype/ordinance_impact/web/README.md)
+
+변경 검토 목록, 전후 조문·안내문 비교, 정정안 검토·승인, 별도의 수정 확인, 연결·출처·이력을 클릭해 볼 수 있다.
+모든 자료는 가상 예시이며 실제 API·AI 모델은 연동 전이다. 상태는 새로고침하면 초기화된다.
+
+[목록 화면](design/ordinance-impact/queue-desktop.png) · [근거 비교](design/ordinance-impact/comparison-desktop.png) · [모바일 비교](design/ordinance-impact/comparison-mobile.png)
 
 ## 핵심 흐름
 
@@ -32,9 +41,9 @@ flowchart LR
 
 ## 기존 프로젝트와의 관계
 
-이음등과 별도 주제다. 기존 `prototype/` 코드는 이음등 시제품이며 새 서비스 구현은 아직 없다. 기존 실행 명령과 서버를 사용해도 이음등 화면이 열린다.
+이음등과 별도 주제다. 기존 `prototype/web/`와 `prototype/api/`는 이음등 시제품이다. 새 화면은 `prototype/ordinance_impact/web/`에서 별도로 실행한다.
 
 - [기존 이음등 기획](docs/기획구상안.md)
 - [기존 작업 지침 보관본](docs/legacy/ieumdeung-project-harness.md)
 
-새 구현은 향후 `prototype/ordinance_impact/`에 분리한다. 이 브랜치에서는 설계 문서만 작성했다.
+새 주제의 코드는 `prototype/ordinance_impact/`에 분리한다. 실제 원문 수집·AI 분석·기관 연동은 설계 단계다.
