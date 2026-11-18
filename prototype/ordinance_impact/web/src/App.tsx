@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, CheckCheck, CheckCircle2, ChevronRight, CircleHelp, Clock3, Download, FileCheck2, FileDiff, FileText, FolderCheck, GitBranch, History, Info, Link2, ListFilter, Search, ShieldCheck, SlidersHorizontal, TriangleAlert, X } from 'lucide-react'
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
+import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, Database, CheckCheck, CheckCircle2, ChevronRight, CircleHelp, Clock3, Download, FileCheck2, FileDiff, FileText, FolderCheck, GitBranch, History, House, Info, Link2, ListFilter, Search, ShieldCheck, SlidersHorizontal, TriangleAlert, X } from 'lucide-react'
 import { DEMO_DATE, impacts, type Category, type ImpactItem, type WorkflowStatus } from './demo'
 import { approvalBlockReason, statusLabel, verifyBlockReason } from './workflow'
 import './styles.css'
@@ -14,10 +14,10 @@ const categoryLabel: Record<Category, string> = { current: '우선 검토', upco
 const makeInitialState = () => Object.fromEntries(impacts.map(item => [item.id, { status: 'PROPOSED' as WorkflowStatus, draft: item.draft, confirmed: false, reflected: false }]))
 const initialAudit: Audit[] = [{ id: 1, at: '09:40', itemId: 'OI-001', title: '가상 비교 자료 등록', detail: '조례 전후 버전과 안내문을 연결했습니다. 실제 API 수집 기록이 아닙니다.' }]
 const nav = [
-  { to: '/data', label: '실제 공공데이터', icon: BookOpen },
-  { to: '/impacts', label: '가상 검토 시연', icon: FileDiff },
+  { to: '/data', label: '실제 공공데이터', icon: BookOpen, group: '실제 자료' },
+  { to: '/impacts', label: '가상 검토 시연', icon: FileDiff, group: '가상 시연' },
   { to: '/links', label: '연결 관리', icon: GitBranch },
-  { to: '/sources', label: '출처·수집', icon: BookOpen },
+  { to: '/sources', label: '출처·수집', icon: Database },
   { to: '/history', label: '검토 이력', icon: History },
 ]
 
@@ -44,6 +44,7 @@ function PageHeading({ title, description, action }: { title: string; descriptio
 
 function AppShell() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [states, setStates] = useState<Record<string, CaseState>>(makeInitialState)
   const [audit, setAudit] = useState<Audit[]>(initialAudit)
   const [toast, setToast] = useState('')
@@ -82,17 +83,20 @@ function AppShell() {
 
   return <div className="app-shell">
     <a className="skip-link" href="#main-content">본문으로 이동</a>
-    <aside className="sidebar">
-      <Link to="/data" className="brand" aria-label="조례 변경 영향 검토 홈"><span className="brand-symbol"><FileDiff size={24} strokeWidth={1.7} /></span><span>조례 변경<span>영향 검토</span></span></Link>
-      <div className="workspace"><span className="workspace-dot" />{isPublicData ? '공공자료' : '가상 A구'}<span className="workspace-label">{isPublicData ? '읽기 전용' : '복지정책'}</span></div>
-      <nav aria-label="주 메뉴">{nav.map(item => <NavLink key={item.to} to={item.to}><item.icon size={19} strokeWidth={1.7} /><span>{item.label}</span>{item.to === '/impacts' && <span className="nav-count">{impacts.length}</span>}</NavLink>)}</nav>
-      <div className="sidebar-note"><ShieldCheck size={19} /><p>근거를 확인하고<br /><strong>담당자가 결정합니다.</strong></p></div>
-      <div className="user-block"><span className="avatar">{isPublicData ? '열' : '검'}</span><span><strong>{isPublicData ? '자료 열람' : '업무 검토자'}</strong><small>{isPublicData ? '실제 공개 자료' : '시연 역할'}</small></span><button className="icon-button" aria-label={isPublicData ? '자료 열람 안내' : '화면 시연 안내'} onClick={() => setToast(isPublicData ? '실제 수집한 공개 자료를 읽기 전용으로 열람합니다. 각 자료의 출처와 원수집일을 확인하세요.' : '이 검토 시연의 모든 자료는 가상입니다. 새로고침하면 시연 상태가 초기화됩니다.')}><CircleHelp size={17} /></button></div>
-    </aside>
-    <div className="workspace-main">
-      <header className="topbar"><div className="breadcrumb">{isPublicData ? '공공자료' : '가상 시연'}<ChevronRight size={13} /><span>{currentNav.label}</span></div><div className="topbar-right"><span className="demo-tag"><span />{isPublicData ? '실제 자료 · 읽기 전용' : '가상 화면 시연'}</span>{!isPublicData && <span className="date-label">판단 기준일 <strong>{DEMO_DATE.replaceAll('-', '.')}</strong></span>}</div></header>
-      {!isPublicData && <div className="demo-notice"><Info size={15} /><span><strong>가상 예시로 구성한 화면입니다.</strong> 실제 조례·사업·수집 결과가 아닙니다.</span></div>}
+    <div className="masthead"><div className="inner"><Info size={16} aria-hidden="true" />공모전 출품용 화면 시제품입니다. 정부 공식 누리집이 아닙니다.</div></div>
+    <header className="site-header">
+      <div className="inner header-top">
+        <Link to="/data" className="brand" aria-label="조례 변경 영향 검토 홈"><span className="brand-symbol"><FileDiff size={24} strokeWidth={1.7} /></span><span>조례 변경 영향 검토</span></Link>
+        <div className="header-right">
+          <div className="header-utility"><span className={'demo-tag' + (isPublicData ? '' : ' synthetic')}><span />{isPublicData ? '실제 자료 · 읽기 전용' : '가상 화면 시연'}</span>{!isPublicData && <span className="date-label">판단 기준일 <strong>{DEMO_DATE.replaceAll('-', '.')}</strong></span>}<span className="role-label">{isPublicData ? '자료 열람' : '시연 역할 · 업무 검토자'}</span><button aria-label={isPublicData ? '자료 열람 안내' : '화면 시연 안내'} onClick={() => setToast(isPublicData ? '실제 수집한 공개 자료를 읽기 전용으로 열람합니다. 각 자료의 출처와 원수집일을 확인하세요.' : '이 검토 시연의 모든 자료는 가상입니다. 새로고침하면 시연 상태가 초기화됩니다.')}><CircleHelp size={16} />이용 안내</button></div>
+          <form className="header-search" role="search" onSubmit={event => { event.preventDefault(); const query = String(new FormData(event.currentTarget).get('q') ?? '').trim(); navigate('/data' + (query ? '?query=' + encodeURIComponent(query) : '')); event.currentTarget.reset() }}><input name="q" aria-label="실제 복지사업 빠른 찾기" placeholder="사업명 또는 근거법령" /><button type="submit" aria-label="실제 복지사업에서 찾기"><Search size={22} /></button></form>
+        </div>
+      </div>
+      <nav className="gnb" aria-label="주 메뉴"><div className="inner">{nav.map(item => <Fragment key={item.to}>{'group' in item && <span className="nav-group">{item.group}</span>}<NavLink to={item.to}>{item.label}{item.to === '/impacts' && <span className="nav-count">{impacts.length}</span>}</NavLink></Fragment>)}</div></nav>
+    </header>
+    {!isPublicData && <div className="demo-notice"><div className="inner"><Info size={16} /><span><strong>가상 예시로 구성한 화면입니다.</strong> 실제 조례·사업·수집 결과가 아닙니다.</span></div></div>}
       <main id="main-content" tabIndex={-1}>
+        <div className="breadcrumb"><Link to="/data"><House size={15} aria-hidden="true" />홈</Link><ChevronRight size={14} aria-hidden="true" />{isPublicData ? '실제 자료' : '가상 시연'}<ChevronRight size={14} aria-hidden="true" /><span>{currentNav.label}</span></div>
         <Routes>
           <Route path="/" element={<Navigate to="/data" replace />} />
           <Route path="/data/*" element={<PublicData />} />
@@ -104,8 +108,7 @@ function AppShell() {
           <Route path="*" element={<Navigate to="/data" replace />} />
         </Routes>
       </main>
-      <footer className="app-footer"><span>조례 변경 영향 추적 및 안내 오류 예방 AI</span><span>{isPublicData ? '실제 공개 자료 · 원문과 수집 범위 열람' : '가상 자료 · 로컬 화면 시제품'}</span></footer>
-    </div>
+      <footer className="app-footer"><div className="inner"><div><strong>조례 변경 영향 추적 및 안내 오류 예방 AI</strong><p>근거를 확인하고 담당자가 결정합니다. AI는 후보와 초안만 제안합니다.</p></div><p>{isPublicData ? '실제 공개 자료 · 원문과 수집 범위 열람' : '가상 자료 · 로컬 화면 시제품'}<br />공모전 출품용 시제품 · 정부 공식 누리집 아님</p></div></footer>
     {toast && <div className="toast" role="status"><Info size={18} />{toast}<button aria-label="알림 닫기" onClick={() => setToast('')}><X size={16} /></button></div>}
     {modal?.kind === 'source' && <Modal title="가상 원문과 적용 근거" onClose={() => setModal(null)}>
       <Badge tone="amber">가상 예시 · 공식 원문 아님</Badge><h3>{modal.item.title}</h3>

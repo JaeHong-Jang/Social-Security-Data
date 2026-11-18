@@ -63,3 +63,20 @@ export async function readPublicData<T>(path: string, signal: AbortSignal): Prom
   if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('자료 서버의 JSON 응답을 확인하지 못했습니다.')
   return response.json() as Promise<T>
 }
+
+export type DiffLine = { text: string; changed: boolean }
+// 줄 단위 글자 비교(LCS). 의미·적용 판단이 아니라 두 원문의 문자열 차이만 표시한다.
+// ponytail: O(n*m) 표, 조례 본문(수백 줄)에는 충분. 수천 줄 문서가 생기면 Myers diff로 교체.
+export function diffLines(before: string, after: string): { before: DiffLine[]; after: DiffLine[] } {
+  const a = before.split('\n'), b = after.split('\n'), key = (line: string) => line.trim()
+  const table = Array.from({ length: a.length + 1 }, () => new Uint16Array(b.length + 1))
+  for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--) table[i][j] = key(a[i]) === key(b[j]) ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1])
+  const left: DiffLine[] = [], right: DiffLine[] = []
+  let i = 0, j = 0
+  while (i < a.length || j < b.length) {
+    if (i < a.length && j < b.length && key(a[i]) === key(b[j])) { left.push({ text: a[i++], changed: false }); right.push({ text: b[j++], changed: false }) }
+    else if (j >= b.length || (i < a.length && table[i + 1][j] >= table[i][j + 1])) left.push({ text: a[i++], changed: true })
+    else right.push({ text: b[j++], changed: true })
+  }
+  return { before: left, after: right }
+}

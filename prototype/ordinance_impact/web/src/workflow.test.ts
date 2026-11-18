@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { DEMO_DATE, impacts, type ImpactItem, type WorkflowStatus } from './demo.ts'
 import { approvalBlockReason, statusLabel, verifyBlockReason } from './workflow.ts'
+import { diffLines } from './publicData.ts'
 
 const current = (): ImpactItem => ({ ...impacts[0] })
 
@@ -104,4 +105,12 @@ test('시연 자료는 전부 가상으로 표시하고 세 분류를 갖춘다'
     assert.ok(item.newText.includes(item.after))
     assert.ok(item.oldText.includes(item.before))
   }
+})
+
+test('연혁 비교는 달라진 줄만 표시하고 원문 줄을 빠뜨리지 않는다', () => {
+  const result = diffLines('제1조 목적\n신청 기한 90일\n제3조 삭제될 조문\n부칙', '제1조 목적\n신청 기한 180일\n부칙\n제4조 신설')
+  assert.deepEqual(result.before.filter(line => line.changed).map(line => line.text), ['신청 기한 90일', '제3조 삭제될 조문'])
+  assert.deepEqual(result.after.filter(line => line.changed).map(line => line.text), ['신청 기한 180일', '제4조 신설'])
+  assert.equal(result.before.map(line => line.text).join('\n'), '제1조 목적\n신청 기한 90일\n제3조 삭제될 조문\n부칙')
+  assert.equal(diffLines('같은 본문', '같은 본문').after.some(line => line.changed), false)
 })
