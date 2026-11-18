@@ -1,0 +1,500 @@
+{
+  "sample_id": "S3",
+  "sample": {
+    "id": "S3",
+    "title": "조사가 안 끝났는데 종결 처리된 메모",
+    "household_type": "한부모가구",
+    "memos": [
+      {
+        "date": "2026-10-08",
+        "consult_type": "방문 상담",
+        "text": "한부모 가구, 월세 거주. 소득 자료 보완을 요청했고 다음 주 서류 받으러 재방문 예정. 인근에 사는 친척이 아이를 돌봐 줌. 상담안내로 종결 처리함."
+      }
+    ]
+  },
+  "notice": "가상 데이터 — 실제 로컬 LLM 실행 녹화",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "model_info": {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "ollama_version": "0.40.16",
+    "digest": "0edcdef34593",
+    "parameter_size": "4.0B",
+    "quantization": "Q4_K_M"
+  },
+  "prompt_version": "r3-b754cefee1",
+  "llm_options": {
+    "temperature": 0,
+    "seed": 42,
+    "num_ctx": 8192
+  },
+  "recorded_at": "2026-11-13T21:54:31",
+  "elapsed_ms": 1678.0,
+  "events": [
+    {
+      "t_ms": 0.5,
+      "event": "start",
+      "data": {
+        "run_id": "449ff213bf30",
+        "mode": "live",
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "steps": [
+          {
+            "id": "validate",
+            "label": "원문 확인"
+          },
+          {
+            "id": "f1",
+            "label": "메모 읽기"
+          },
+          {
+            "id": "quote_check",
+            "label": "인용 원문 대조"
+          },
+          {
+            "id": "refusal_guard",
+            "label": "거부 표현 가드"
+          },
+          {
+            "id": "cross",
+            "label": "회차 비교"
+          },
+          {
+            "id": "f2",
+            "label": "재검토 점수"
+          },
+          {
+            "id": "action",
+            "label": "행동 제안"
+          },
+          {
+            "id": "f3",
+            "label": "조건 대조"
+          }
+        ]
+      }
+    },
+    {
+      "t_ms": 0.5,
+      "event": "step",
+      "data": {
+        "id": "validate",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 28.2,
+      "event": "step",
+      "data": {
+        "id": "validate",
+        "status": "done",
+        "ms": 0.0,
+        "detail": "메모 1건 · 84자 · 예시 가구 행정 정보 사용"
+      }
+    },
+    {
+      "t_ms": 28.2,
+      "event": "step",
+      "data": {
+        "id": "f1",
+        "status": "running",
+        "memo_index": 0
+      }
+    },
+    {
+      "t_ms": 1677.7,
+      "event": "step",
+      "data": {
+        "id": "f1",
+        "status": "done",
+        "ms": 1649.4,
+        "detail": "조사중 · 장벽 미확인 · 근거 인용 2개 제안",
+        "memo_index": 0
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "f1",
+      "data": {
+        "memo_index": 0,
+        "f1": {
+          "work_status": "조사중",
+          "closure_type": null,
+          "barrier_cause": "미확인",
+          "consent": {
+            "신청": "미확인",
+            "문자": "미확인",
+            "방문": "미확인",
+            "전화": "미확인"
+          },
+          "consent_guard": false,
+          "support_network": "있음",
+          "isolation_signals": [],
+          "evidence": [
+            {
+              "field": "work_status",
+              "quote": "다음 주 서류 받으러 재방문 예정",
+              "start": 30,
+              "end": 48
+            },
+            {
+              "field": "support_network",
+              "quote": "인근에 사는 친척이 아이를 돌봐 줌",
+              "start": 50,
+              "end": 69
+            }
+          ],
+          "needs_check": false,
+          "needs_check_reason": null,
+          "model": "qwen3:4b-instruct-2507-q4_K_M"
+        }
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "quote_check",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "quote_check",
+        "status": "done",
+        "ms": 0.11,
+        "detail": "인용 2개 중 2개 원문과 일치"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "refusal_guard",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "refusal_guard",
+        "status": "done",
+        "ms": 0.03,
+        "detail": "명시적 거부 표현 없음"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "cross",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "cross",
+        "status": "done",
+        "ms": 0.0,
+        "detail": "비교할 메모가 1건뿐입니다"
+      }
+    },
+    {
+      "t_ms": 1677.8,
+      "event": "step",
+      "data": {
+        "id": "f2",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "step",
+      "data": {
+        "id": "f2",
+        "status": "done",
+        "ms": 0.2,
+        "detail": "24점 · 주의 · 처리 확인 필요"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "step",
+      "data": {
+        "id": "action",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "step",
+      "data": {
+        "id": "action",
+        "status": "done",
+        "ms": 0.0,
+        "detail": "재방문"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "step",
+      "data": {
+        "id": "f3",
+        "status": "running"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "step",
+      "data": {
+        "id": "f3",
+        "status": "done",
+        "ms": 0.0,
+        "detail": "후보 2개 (mock 매핑)"
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "result",
+      "data": {
+        "f1": [
+          {
+            "work_status": "조사중",
+            "closure_type": null,
+            "barrier_cause": "미확인",
+            "consent": {
+              "신청": "미확인",
+              "문자": "미확인",
+              "방문": "미확인",
+              "전화": "미확인"
+            },
+            "consent_guard": false,
+            "support_network": "있음",
+            "isolation_signals": [],
+            "evidence": [
+              {
+                "field": "work_status",
+                "quote": "다음 주 서류 받으러 재방문 예정",
+                "start": 30,
+                "end": 48
+              },
+              {
+                "field": "support_network",
+                "quote": "인근에 사는 친척이 아이를 돌봐 줌",
+                "start": 50,
+                "end": 69
+              }
+            ],
+            "needs_check": false,
+            "needs_check_reason": null,
+            "model": "qwen3:4b-instruct-2507-q4_K_M"
+          }
+        ],
+        "repeated_barrier": null,
+        "f2": {
+          "total": 24,
+          "items": [
+            {
+              "key": "R",
+              "label": "반복 발굴",
+              "source": "행정",
+              "points": 0,
+              "max": 10,
+              "chip": "첫 발굴",
+              "reason": "이번이 첫 발굴입니다.",
+              "unknown": false,
+              "evidence": []
+            },
+            {
+              "key": "C",
+              "label": "현재 위기영역",
+              "source": "행정",
+              "points": 6,
+              "max": 12,
+              "chip": "위기영역 2개",
+              "reason": "현재 위기영역은 2개(생계, 주거)입니다.",
+              "unknown": false,
+              "evidence": []
+            },
+            {
+              "key": "W",
+              "label": "악화",
+              "source": "행정",
+              "points": 0,
+              "max": 8,
+              "chip": "직전 발굴 없음",
+              "reason": "비교할 직전 발굴이 없습니다.",
+              "unknown": false,
+              "evidence": []
+            },
+            {
+              "key": "M",
+              "label": "처리 확인 필요",
+              "source": "F1",
+              "points": 15,
+              "max": 15,
+              "chip": "메모상 조사중",
+              "reason": "행정상 종결이지만 메모는 '조사중' 상태로 읽혀 처리 확인이 필요합니다.",
+              "unknown": false,
+              "evidence": [
+                "다음 주 서류 받으러 재방문 예정"
+              ]
+            },
+            {
+              "key": "B",
+              "label": "반복 장벽",
+              "source": "F1",
+              "points": 0,
+              "max": 15,
+              "chip": "비교 메모 없음",
+              "reason": "회차 메모가 1건뿐이라 반복 여부를 알 수 없습니다(미확인).",
+              "unknown": true,
+              "evidence": []
+            },
+            {
+              "key": "I",
+              "label": "고립",
+              "source": "행정+F1",
+              "points": 0,
+              "max": 14,
+              "chip": "관계망 있음",
+              "reason": "1인가구가 아닙니다. 메모상 도움 관계망이 있습니다.",
+              "unknown": false,
+              "evidence": []
+            },
+            {
+              "key": "N",
+              "label": "종결 후 새 위기신호",
+              "source": "행정",
+              "points": 0,
+              "max": 14,
+              "chip": "새 신호 없음",
+              "reason": "종결 이후 들어온 새 위기신호가 없습니다.",
+              "unknown": false,
+              "evidence": []
+            },
+            {
+              "key": "T",
+              "label": "경과일",
+              "source": "행정",
+              "points": 3,
+              "max": 12,
+              "chip": "종결 후 36일",
+              "reason": "종결 후 36일이 지났습니다(30일마다 가점).",
+              "unknown": false,
+              "evidence": []
+            }
+          ],
+          "level": "주의",
+          "flags": [
+            "처리 확인 필요"
+          ],
+          "next_check_due": "2026-12-13",
+          "excluded_attributes": [
+            "성별",
+            "연령",
+            "국적",
+            "장애"
+          ],
+          "rule_version": "v2"
+        },
+        "action": {
+          "outreach": "재방문",
+          "outreach_reason": "행정상 종결이지만 메모상 조사가 끝나지 않아 조사를 마무리합니다.",
+          "due": "2026-11-13",
+          "safety_check": null,
+          "consent_note": "신청 미확인 · 문자 미확인 · 방문 미확인"
+        },
+        "f3": {
+          "concept": "조건 대조",
+          "candidates": [
+            {
+              "serv_id": "WLF00002255",
+              "name": "서울형 주택바우처(저소득층 주택임대료 보조)",
+              "org": "서울특별시 주택정책실 주택공급기획관 주택정책과",
+              "source": "지자체",
+              "criteria_quote": "① 민간 월세인 ‘주택’ 및 ‘고시원’ , '주거용 오피스텔'거주 가구",
+              "checks": [
+                {
+                  "condition": "민간 월세 거주",
+                  "status": "충족",
+                  "evidence": "메모: 월세 거주"
+                },
+                {
+                  "condition": "소득평가액 기준중위소득 60% 이하",
+                  "status": "확인필요",
+                  "evidence": "소득 자료 보완 중"
+                }
+              ],
+              "apply_method": "방문",
+              "contact": "서울시 주거복지과 0221337992",
+              "fetched_at": "2026-11-13T00:14:18",
+              "found_by_tag_filter": false
+            },
+            {
+              "serv_id": "WLF00005985",
+              "name": "강북구 저소득 주민 국민건강보험료 등 지원",
+              "org": "서울특별시 강북구 복지생활국 생활보장과",
+              "source": "지자체",
+              "criteria_quote": "건강보험 지역가입 중 건강보험료(장기요양보험료 포함) 부과금액이 보건복지부 장관이 매년 고시하는 최저보험료 이하이며 중위소득의 50% 이하인 가구.",
+              "checks": [
+                {
+                  "condition": "강북구 거주",
+                  "status": "충족",
+                  "evidence": "주소지: 강북구"
+                },
+                {
+                  "condition": "중위소득 50% 이하",
+                  "status": "확인필요",
+                  "evidence": "소득 자료 보완 중"
+                },
+                {
+                  "condition": "지역가입자·최저보험료 이하",
+                  "status": "확인필요",
+                  "evidence": "메모에 보험료 정보 없음"
+                }
+              ],
+              "apply_method": "방문",
+              "contact": "강북구청 생활보장과 02-901-6624",
+              "fetched_at": "2026-11-13T00:14:18",
+              "found_by_tag_filter": false
+            }
+          ],
+          "checks_narrowed": {
+            "total": 5,
+            "충족": 2,
+            "미충족": 0,
+            "확인필요": 3,
+            "summary": "확인 필요 3개 (조건 5개 중 2개 충족)"
+          },
+          "tag_filter": {
+            "themes": [
+              "생활지원",
+              "안전·위기",
+              "주거"
+            ],
+            "targets": [
+              "한부모·조손"
+            ]
+          },
+          "tag_filter_source": "mock-mapping",
+          "notice_draft": "월세 일부와 건강보험료를 도와드리는 제도가 있습니다. 서류를 받으러 갈 때 함께 안내해 드리겠습니다.",
+          "notice_source": "mock",
+          "model": "mock"
+        }
+      }
+    },
+    {
+      "t_ms": 1678.0,
+      "event": "end",
+      "data": {
+        "run_id": "449ff213bf30",
+        "elapsed_ms": 1678.0
+      }
+    }
+  ]
+}

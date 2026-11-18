@@ -1,0 +1,15 @@
+.env
+data/raw/
+__pycache__/
+.venv/
+.omc/state/
+.omc/sessions/
+node_modules/
+prototype/web/dist/
+*.db
+prototype/api/server.log
+# 도구 상태 파일
+.fablize/
+.omc/artifacts/ask/.omc/
+# 외부 사이트 캡처(저작권) — 로컬에만 둔다
+design/references/

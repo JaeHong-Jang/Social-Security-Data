@@ -1,0 +1,9 @@
+/* E안 색 규칙 토큰. 파랑(--primary)은 처리 도장과 키보드 포커스 링에만 남는다. 빨강은 긴급에만. */
+:root {
+  --ink: #2B2620;                 /* = --text. 링크 글자 · 주 버튼 채움 · 선택 표시 */
+  --link-line: var(--wood-700);   /* 링크 밑줄 1.5px */
+  --btn-hover: var(--wood-700);   /* 주 버튼 호버(흰 글자 CR 5.73) */
+  --sel-bg: var(--wood-100);      /* 선택된 칩·행·단계 배경 */
+  --btn-primary-bg: var(--ink);
+  --btn-primary-fg: var(--surface);
+}

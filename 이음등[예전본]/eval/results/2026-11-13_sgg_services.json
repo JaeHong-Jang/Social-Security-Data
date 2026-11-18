@@ -1,0 +1,618 @@
+{
+ "generated": "2026-11-13",
+ "denominator": "기초생활보장(맞춤형급여) 수급가구수, 2025-12",
+ "metric": "자체 사업 수 / (수급가구수/1000)",
+ "units_national": 229,
+ "units_with_zero_services": 2,
+ "units_with_le3_services": 3,
+ "api_sgg_services_matched": 3960,
+ "api_sgg_services_unmatched": 30,
+ "api_services_without_valid_sgg": {
+  "서울특별시": 66,
+  "부산광역시": 56,
+  "대구광역시": 46,
+  "인천광역시": 70,
+  "대전광역시": 31,
+  "울산광역시": 40,
+  "세종특별자치시": 52,
+  "경기도": 86,
+  "충청북도": 42,
+  "충청남도": 49,
+  "전남광주통합특별시": 84,
+  "경상북도": 23,
+  "경상남도": 53,
+  "제주특별자치도": 47,
+  "강원특별자치도": 41,
+  "전북특별자치도": 52
+ },
+ "unmatched_api_units": [
+  {
+   "sido": "인천광역시",
+   "sgg": "제물포구",
+   "n": 14
+  },
+  {
+   "sido": "인천광역시",
+   "sgg": "영종구",
+   "n": 11
+  },
+  {
+   "sido": "인천광역시",
+   "sgg": "서해구",
+   "n": 5
+  }
+ ],
+ "csv_units_without_api_match": [
+  "세종특별자치시 세종특별자치시",
+  "인천광역시 서구"
+ ],
+ "seoul": {
+  "q1_services": 11.0,
+  "risk_rule": "구 자체 사업 수가 서울 25개 구 하위 사분위(<=Q1)인 구",
+  "total_gu_services": 331,
+  "seoul_services_without_gu": 66,
+  "rows": [
+   {
+    "sido": "서울특별시",
+    "gu": "중구",
+    "수급가구수": 5330,
+    "수급권자수": 6326,
+    "services": 17,
+    "low_income_tag": 4,
+    "per_1000": 3.19,
+    "income_text_services_seoul_detail": 8,
+    "risk_high": false,
+    "rank_per_1000_desc": 1,
+    "rank_services_desc": 4
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "종로구",
+    "수급가구수": 5477,
+    "수급권자수": 6387,
+    "services": 13,
+    "low_income_tag": 4,
+    "per_1000": 2.37,
+    "income_text_services_seoul_detail": 7,
+    "risk_high": false,
+    "rank_per_1000_desc": 2,
+    "rank_services_desc": 13
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "성동구",
+    "수급가구수": 8575,
+    "수급권자수": 10865,
+    "services": 20,
+    "low_income_tag": 2,
+    "per_1000": 2.33,
+    "income_text_services_seoul_detail": 8,
+    "risk_high": false,
+    "rank_per_1000_desc": 3,
+    "rank_services_desc": 1
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "용산구",
+    "수급가구수": 7369,
+    "수급권자수": 9248,
+    "services": 15,
+    "low_income_tag": 4,
+    "per_1000": 2.04,
+    "income_text_services_seoul_detail": 4,
+    "risk_high": false,
+    "rank_per_1000_desc": 4,
+    "rank_services_desc": 8
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "서초구",
+    "수급가구수": 6245,
+    "수급권자수": 8523,
+    "services": 10,
+    "low_income_tag": 2,
+    "per_1000": 1.6,
+    "income_text_services_seoul_detail": 4,
+    "risk_high": true,
+    "rank_per_1000_desc": 5,
+    "rank_services_desc": 21
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "서대문구",
+    "수급가구수": 9998,
+    "수급권자수": 12930,
+    "services": 14,
+    "low_income_tag": 6,
+    "per_1000": 1.4,
+    "income_text_services_seoul_detail": 9,
+    "risk_high": false,
+    "rank_per_1000_desc": 6,
+    "rank_services_desc": 9
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "동작구",
+    "수급가구수": 11322,
+    "수급권자수": 14289,
+    "services": 14,
+    "low_income_tag": 3,
+    "per_1000": 1.24,
+    "income_text_services_seoul_detail": 3,
+    "risk_high": false,
+    "rank_per_1000_desc": 7,
+    "rank_services_desc": 9
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "마포구",
+    "수급가구수": 9748,
+    "수급권자수": 12769,
+    "services": 12,
+    "low_income_tag": 4,
+    "per_1000": 1.23,
+    "income_text_services_seoul_detail": 7,
+    "risk_high": false,
+    "rank_per_1000_desc": 8,
+    "rank_services_desc": 15
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "동대문구",
+    "수급가구수": 13892,
+    "수급권자수": 17255,
+    "services": 17,
+    "low_income_tag": 5,
+    "per_1000": 1.22,
+    "income_text_services_seoul_detail": 7,
+    "risk_high": false,
+    "rank_per_1000_desc": 9,
+    "rank_services_desc": 4
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "강동구",
+    "수급가구수": 15984,
+    "수급권자수": 20669,
+    "services": 18,
+    "low_income_tag": 4,
+    "per_1000": 1.13,
+    "income_text_services_seoul_detail": 6,
+    "risk_high": false,
+    "rank_per_1000_desc": 10,
+    "rank_services_desc": 3
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "강남구",
+    "수급가구수": 13500,
+    "수급권자수": 17846,
+    "services": 14,
+    "low_income_tag": 3,
+    "per_1000": 1.04,
+    "income_text_services_seoul_detail": 6,
+    "risk_high": false,
+    "rank_per_1000_desc": 11,
+    "rank_services_desc": 9
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "광진구",
+    "수급가구수": 12098,
+    "수급권자수": 16001,
+    "services": 12,
+    "low_income_tag": 6,
+    "per_1000": 0.99,
+    "income_text_services_seoul_detail": 7,
+    "risk_high": false,
+    "rank_per_1000_desc": 12,
+    "rank_services_desc": 15
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "영등포구",
+    "수급가구수": 11291,
+    "수급권자수": 13261,
+    "services": 11,
+    "low_income_tag": 4,
+    "per_1000": 0.97,
+    "income_text_services_seoul_detail": 5,
+    "risk_high": true,
+    "rank_per_1000_desc": 13,
+    "rank_services_desc": 18
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "관악구",
+    "수급가구수": 21667,
+    "수급권자수": 26914,
+    "services": 20,
+    "low_income_tag": 4,
+    "per_1000": 0.92,
+    "income_text_services_seoul_detail": 6,
+    "risk_high": false,
+    "rank_per_1000_desc": 14,
+    "rank_services_desc": 1
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "도봉구",
+    "수급가구수": 14533,
+    "수급권자수": 19634,
+    "services": 13,
+    "low_income_tag": 6,
+    "per_1000": 0.89,
+    "income_text_services_seoul_detail": 6,
+    "risk_high": false,
+    "rank_per_1000_desc": 15,
+    "rank_services_desc": 13
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "강북구",
+    "수급가구수": 20351,
+    "수급권자수": 26568,
+    "services": 17,
+    "low_income_tag": 4,
+    "per_1000": 0.84,
+    "income_text_services_seoul_detail": 8,
+    "risk_high": false,
+    "rank_per_1000_desc": 16,
+    "rank_services_desc": 4
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "구로구",
+    "수급가구수": 13412,
+    "수급권자수": 17951,
+    "services": 10,
+    "low_income_tag": 5,
+    "per_1000": 0.75,
+    "income_text_services_seoul_detail": 5,
+    "risk_high": true,
+    "rank_per_1000_desc": 17,
+    "rank_services_desc": 21
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "성북구",
+    "수급가구수": 14820,
+    "수급권자수": 19522,
+    "services": 11,
+    "low_income_tag": 2,
+    "per_1000": 0.74,
+    "income_text_services_seoul_detail": 4,
+    "risk_high": true,
+    "rank_per_1000_desc": 18,
+    "rank_services_desc": 18
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "은평구",
+    "수급가구수": 21845,
+    "수급권자수": 29250,
+    "services": 16,
+    "low_income_tag": 5,
+    "per_1000": 0.73,
+    "income_text_services_seoul_detail": 9,
+    "risk_high": false,
+    "rank_per_1000_desc": 19,
+    "rank_services_desc": 7
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "양천구",
+    "수급가구수": 15490,
+    "수급권자수": 20616,
+    "services": 11,
+    "low_income_tag": 4,
+    "per_1000": 0.71,
+    "income_text_services_seoul_detail": 8,
+    "risk_high": true,
+    "rank_per_1000_desc": 20,
+    "rank_services_desc": 18
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "중랑구",
+    "수급가구수": 24029,
+    "수급권자수": 32151,
+    "services": 14,
+    "low_income_tag": 1,
+    "per_1000": 0.58,
+    "income_text_services_seoul_detail": 2,
+    "risk_high": false,
+    "rank_per_1000_desc": 21,
+    "rank_services_desc": 9
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "송파구",
+    "수급가구수": 15455,
+    "수급권자수": 20961,
+    "services": 8,
+    "low_income_tag": 1,
+    "per_1000": 0.52,
+    "income_text_services_seoul_detail": 4,
+    "risk_high": true,
+    "rank_per_1000_desc": 22,
+    "rank_services_desc": 23
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "금천구",
+    "수급가구수": 12368,
+    "수급권자수": 15678,
+    "services": 6,
+    "low_income_tag": 0,
+    "per_1000": 0.49,
+    "income_text_services_seoul_detail": 2,
+    "risk_high": true,
+    "rank_per_1000_desc": 23,
+    "rank_services_desc": 24
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "강서구",
+    "수급가구수": 27028,
+    "수급권자수": 35923,
+    "services": 12,
+    "low_income_tag": 2,
+    "per_1000": 0.44,
+    "income_text_services_seoul_detail": 7,
+    "risk_high": false,
+    "rank_per_1000_desc": 24,
+    "rank_services_desc": 15
+   },
+   {
+    "sido": "서울특별시",
+    "gu": "노원구",
+    "수급가구수": 25401,
+    "수급권자수": 34030,
+    "services": 6,
+    "low_income_tag": 1,
+    "per_1000": 0.24,
+    "income_text_services_seoul_detail": 2,
+    "risk_high": true,
+    "rank_per_1000_desc": 25,
+    "rank_services_desc": 24
+   }
+  ]
+ },
+ "national_q1_services": 11.0,
+ "national_lowest_per_1000": [
+  {
+   "sido": "세종특별자치시",
+   "unit": "세종특별자치시",
+   "수급가구수": 6857,
+   "수급권자수": 10202,
+   "services": 0,
+   "low_income_tag": 0,
+   "per_1000": 0.0
+  },
+  {
+   "sido": "인천광역시",
+   "unit": "서구",
+   "수급가구수": 23551,
+   "수급권자수": 34159,
+   "services": 0,
+   "low_income_tag": 0,
+   "per_1000": 0.0
+  },
+  {
+   "sido": "인천광역시",
+   "unit": "남동구",
+   "수급가구수": 29228,
+   "수급권자수": 40857,
+   "services": 5,
+   "low_income_tag": 2,
+   "per_1000": 0.17
+  },
+  {
+   "sido": "서울특별시",
+   "unit": "노원구",
+   "수급가구수": 25401,
+   "수급권자수": 34030,
+   "services": 6,
+   "low_income_tag": 1,
+   "per_1000": 0.24
+  },
+  {
+   "sido": "인천광역시",
+   "unit": "미추홀구",
+   "수급가구수": 24128,
+   "수급권자수": 33502,
+   "services": 6,
+   "low_income_tag": 1,
+   "per_1000": 0.25
+  },
+  {
+   "sido": "대구광역시",
+   "unit": "동구",
+   "수급가구수": 19627,
+   "수급권자수": 25675,
+   "services": 5,
+   "low_income_tag": 1,
+   "per_1000": 0.25
+  },
+  {
+   "sido": "부산광역시",
+   "unit": "금정구",
+   "수급가구수": 12360,
+   "수급권자수": 15947,
+   "services": 4,
+   "low_income_tag": 0,
+   "per_1000": 0.32
+  },
+  {
+   "sido": "경상북도",
+   "unit": "포항시",
+   "수급가구수": 26175,
+   "수급권자수": 34873,
+   "services": 9,
+   "low_income_tag": 2,
+   "per_1000": 0.34
+  },
+  {
+   "sido": "대구광역시",
+   "unit": "수성구",
+   "수급가구수": 16948,
+   "수급권자수": 23136,
+   "services": 6,
+   "low_income_tag": 2,
+   "per_1000": 0.35
+  },
+  {
+   "sido": "인천광역시",
+   "unit": "부평구",
+   "수급가구수": 25743,
+   "수급권자수": 35560,
+   "services": 9,
+   "low_income_tag": 2,
+   "per_1000": 0.35
+  },
+  {
+   "sido": "대구광역시",
+   "unit": "북구",
+   "수급가구수": 19068,
+   "수급권자수": 25995,
+   "services": 7,
+   "low_income_tag": 0,
+   "per_1000": 0.37
+  },
+  {
+   "sido": "경기도",
+   "unit": "남양주시",
+   "수급가구수": 23281,
+   "수급권자수": 32269,
+   "services": 9,
+   "low_income_tag": 1,
+   "per_1000": 0.39
+  },
+  {
+   "sido": "인천광역시",
+   "unit": "중구",
+   "수급가구수": 7265,
+   "수급권자수": 9900,
+   "services": 3,
+   "low_income_tag": 1,
+   "per_1000": 0.41
+  },
+  {
+   "sido": "경기도",
+   "unit": "의정부시",
+   "수급가구수": 20853,
+   "수급권자수": 28407,
+   "services": 9,
+   "low_income_tag": 1,
+   "per_1000": 0.43
+  },
+  {
+   "sido": "서울특별시",
+   "unit": "강서구",
+   "수급가구수": 27028,
+   "수급권자수": 35923,
+   "services": 12,
+   "low_income_tag": 2,
+   "per_1000": 0.44
+  }
+ ],
+ "national_by_sido": {
+  "강원특별자치도": {
+   "units": 18,
+   "median_services": 19.0,
+   "median_per_1000": 11.815000000000001,
+   "zero": 0
+  },
+  "경기도": {
+   "units": 31,
+   "median_services": 20.0,
+   "median_per_1000": 1.84,
+   "zero": 0
+  },
+  "경상남도": {
+   "units": 18,
+   "median_services": 22.5,
+   "median_per_1000": 6.785,
+   "zero": 0
+  },
+  "경상북도": {
+   "units": 22,
+   "median_services": 11.0,
+   "median_per_1000": 2.59,
+   "zero": 0
+  },
+  "대구광역시": {
+   "units": 9,
+   "median_services": 9.0,
+   "median_per_1000": 0.5,
+   "zero": 0
+  },
+  "대전광역시": {
+   "units": 5,
+   "median_services": 10.0,
+   "median_per_1000": 0.8,
+   "zero": 0
+  },
+  "부산광역시": {
+   "units": 16,
+   "median_services": 12.0,
+   "median_per_1000": 0.9199999999999999,
+   "zero": 0
+  },
+  "서울특별시": {
+   "units": 25,
+   "median_services": 13.0,
+   "median_per_1000": 0.97,
+   "zero": 0
+  },
+  "세종특별자치시": {
+   "units": 1,
+   "median_services": 0.0,
+   "median_per_1000": 0.0,
+   "zero": 1
+  },
+  "울산광역시": {
+   "units": 5,
+   "median_services": 9.0,
+   "median_per_1000": 1.54,
+   "zero": 0
+  },
+  "인천광역시": {
+   "units": 10,
+   "median_services": 7.5,
+   "median_per_1000": 0.6799999999999999,
+   "zero": 1
+  },
+  "전남광주통합특별시": {
+   "units": 27,
+   "median_services": 17.0,
+   "median_per_1000": 5.78,
+   "zero": 0
+  },
+  "전북특별자치도": {
+   "units": 14,
+   "median_services": 24.5,
+   "median_per_1000": 6.33,
+   "zero": 0
+  },
+  "제주특별자치도": {
+   "units": 2,
+   "median_services": 39.0,
+   "median_per_1000": 3.33,
+   "zero": 0
+  },
+  "충청남도": {
+   "units": 15,
+   "median_services": 17.0,
+   "median_per_1000": 4.43,
+   "zero": 0
+  },
+  "충청북도": {
+   "units": 11,
+   "median_services": 26.0,
+   "median_per_1000": 6.48,
+   "zero": 0
+  }
+ }
+}
