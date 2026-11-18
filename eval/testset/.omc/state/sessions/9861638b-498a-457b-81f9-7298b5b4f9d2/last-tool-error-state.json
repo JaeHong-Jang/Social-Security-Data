@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"SCR=/tmp/claude-1000/-mnt-c-Users-User-Desktop-----3------------/9861638b-498a-457b-81f9-7298b5b4f9d2/scratchpad; ls $SCR/f1eval/out; sed -n '/## 혼동행렬/,$p' $SCR/f1eval/out/*.md; cd \\\"/mnt/...",
-  "error": "Exit code 2\n2026-11-13_f1_testset_qwen3-4b-instruct-2507-q4_K_M.json\n2026-11-13_f1_testset_qwen3-4b-instruct-2507-q4_K_M.md\n## 혼동행렬 (`qwen3:4b-instruct-2507-q4_K_M`)\n\n**work_status** (행=정답, 열=예측)\n\n| 정답＼예측 | 종결 |\n|---|---:|\n| 조사중 | 1 |\n| 종결 | 5 |\n\n**closure_type** (행=정답, 열=예측)\n\n| 정답＼예측 | A | C | D1 |\n|---|---:|---:|---:|\n| A | 1 | 0 | 0 |\n| C | 0 | 1 | 0 |\n| D1 | 0 | 0 | 3 |\n| 없음 | 0 | 0 | 1 |\n\n**barrier_cause** (행=정답, 열=예측)\n\n| 정답＼예측 | 건강 | 서류·절차 | 해당없음 |\n|---|---:|---:|---:|\n| 건강 | 1 | 0 | 0 |\n|...",
-  "timestamp": "2026-11-13T08:16:13.990Z",
-  "retry_count": 1
-}

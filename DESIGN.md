@@ -5,10 +5,9 @@
 - Status: Draft
 - Implemented: `/data`의 실제 자료 탐색·사업/원문/통계·연혁 비교와 별도 `/impacts`의 가상 검토 시연. [연결 계약](docs/superpowers/specs/2026-11-17-ordinance-data-integration.md).
 - Last refreshed: 2026-11-18
-- Primary product surfaces: 공무원용 변경 영향 검토 웹. 이음등과 별도 서비스.
+- Primary product surfaces: 공무원용 변경 영향 검토 웹.
 - 제품 범위: [기초설계](docs/superpowers/specs/2026-11-17-ordinance-impact-design.md), 상태·승인: [도메인 모델](docs/05_domain-model.md).
-- Evidence reviewed: 기존 [이음등 화면 구상](design/), [기존 웹 소스](prototype/web/src/), [이전 기획](docs/기획구상안.md).
-  기존 UI에는 목록·상세·기록·근거 화면과 문서 중심의 밀도가 있다. 이 사실을 새 도메인의 검증 증거로 해석하지 않는다.
+- Evidence reviewed: [화면 시제품](prototype/ordinance_impact/web/README.md)과 보건복지부 누리집 구성(2026-11-18 열람).
 - 아래 색상·배치는 새 도구의 설계 결정이며 [가상 화면 시제품](prototype/ordinance_impact/web/README.md)으로 구현했다.
   [목록](design/ordinance-impact/queue-desktop.png), [근거 비교](design/ordinance-impact/comparison-desktop.png), [모바일](design/ordinance-impact/comparison-mobile.png) 캡처를 남겼다.
   실제 담당자의 사용성·업무 효과 검증은 아직 없다.
@@ -17,7 +16,7 @@
 
 - Personality: 차분하고 읽기 쉬운 업무 문서. AI 대화창보다 근거와 검토 동작을 앞에 둔다.
 - Trust signals: 원문 URL, 관할·버전, 공포/시행일, 수집 시각, 인용 위치, 담당자 결정 이력.
-- Avoid: 이음등 명칭·로고·가구 위기 색상 의미, 수상·정확도 보장 배지, 설명 없는 위험 점수.
+- Avoid: 정부 상징·기관 로고, 수상·정확도 보장 배지, 설명 없는 위험 점수.
 - 서비스명 미정. 제목은 “조례 변경 영향 검토”로 짧게 표시하고 전체 주제는 소개에 둔다.
 
 ## Product goals
@@ -84,8 +83,7 @@
 
 ## Components
 
-- Existing components to reuse: 기존 웹의 테이블·필터·페이지 헤더·기록 표현 패턴을 참고한다.
-  코드를 공유할지는 구현 때 부수효과를 확인하며 이음등 전용 데이터 타입을 가져오지 않는다.
+- Existing components to reuse: 시제품의 표·필터·페이지 제목·기록 표현을 재사용한다.
 - New/changed components: ChangeQueue, EvidenceComparison, ApplicabilityPanel, CitationLink,
   LinkReview, CorrectionEditor, ReviewActions, RevisionHistory, SourceStatus.
 - Variants and states: 인용 확인/실패, 적용 중/시행 예정/미확인, 최신/재확인 필요, 승인/수정 확인.
@@ -142,7 +140,7 @@
 ## Implementation constraints
 
 - Framework/styling system: 새 React/TypeScript 앱, 기존 CSS 패턴 우선. 구현 전 패키지·라우팅 세부 결정.
-- Design-token constraints: 새 앱 범위의 CSS 변수, 이음등의 긴급성 색상 의미·자산을 승계하지 않는다.
+- Design-token constraints: 앱 범위의 CSS 변수만 사용한다.
 - Performance constraints: 목록은 페이지 처리, 긴 근거는 필요한 문단부터 표시. 원문 전체 접근을 막지 않는다.
 - Compatibility constraints: 최신 Chrome/Edge 데스크톱을 우선 검증. 실제 기관 브라우저 버전은 미확인.
 - Test/screenshot expectations: 구현 후 목록·정상 비교·근거 부족·충돌·수정 확인 화면 캡처와 키보드 순서 확인.

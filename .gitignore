@@ -6,9 +6,7 @@ __pycache__/
 .omc/state/
 .omc/sessions/
 node_modules/
-prototype/web/dist/
 *.db
-prototype/api/server.log
 # 도구 상태 파일
 .fablize/
 .omc/artifacts/ask/.omc/

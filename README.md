@@ -45,11 +45,6 @@ flowchart LR
 
 초기 목표는 **한 지자체·복지사업 10개·조례 버전쌍 10개·안내자료 20개**다. 확보된 데이터 수나 달성 성능을 뜻하지 않는다. 먼저 실제 조례–사업–안내자료 연결 3건을 확보해 진행 가능성을 검증한다.
 
-## 기존 프로젝트와의 관계
+## 저장소 구성
 
-이음등과 별도 주제다. 기존 `prototype/web/`와 `prototype/api/`는 이음등 시제품이다. 새 화면은 `prototype/ordinance_impact/web/`에서 별도로 실행한다.
-
-- [기존 이음등 기획](docs/기획구상안.md)
-- [기존 작업 지침 보관본](docs/legacy/ieumdeung-project-harness.md)
-
-새 주제의 코드는 `prototype/ordinance_impact/`에 분리한다. 실제 원문 수집·읽기 API는 구현했고, AI 분석·기관 인증·실제 업무 승인은 설계 단계다.
+코드는 `prototype/ordinance_impact/`에 있다. `data/cache/`는 수집기가 수입하는 복지서비스 목록·상세 캐시다. 실제 원문 수집·읽기 API는 구현했고, AI 분석·기관 인증·실제 업무 승인은 설계 단계다.

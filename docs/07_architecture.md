@@ -6,7 +6,7 @@
 
 ## 1. 기술 선택과 배치
 
-기존 저장소의 FastAPI·Pydantic·React·TypeScript·Vite·Ollama 경험을 활용한다. 새 구현은 향후 prototype/ordinance_impact/에 분리하고 기존 이음등 API·가구 모델·화면은 수정하지 않는다.
+FastAPI·Pydantic·React·TypeScript·Vite·Ollama를 사용한다. 구현은 prototype/ordinance_impact/에 둔다.
 
 | 요소 | MVP 결정 | 이유·제약 |
 |---|---|---|
